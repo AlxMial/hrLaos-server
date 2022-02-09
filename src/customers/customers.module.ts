@@ -5,6 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { CustomersController } from './controllers/customers/customers.controller';
+import { ValidateCustomerAccountMiddleware } from './middlewares/validate-customer-account.middleware';
 import { ValidateCustomerMiddleware } from './middlewares/validate-customer.middleware';
 import { CustomersService } from './services/customers/customers.service';
 
@@ -15,7 +16,7 @@ import { CustomersService } from './services/customers/customers.service';
 export class CustomersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(ValidateCustomerMiddleware)
+      .apply(ValidateCustomerMiddleware, ValidateCustomerAccountMiddleware)
       .exclude(
         {
           path: 'api/customers/create',
