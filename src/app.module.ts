@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { PaymentsModule } from './payments/payments.module';
 import { RegisterModule } from './register/register.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import { RegisterModule } from './register/register.module';
     }),
     PaymentsModule,
     RegisterModule,
+    ConfigModule.forRoot({
+      isGlobal: true, // no need to import into other modules
+    }),
   ],
   controllers: [],
   providers: [],
