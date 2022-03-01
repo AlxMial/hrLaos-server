@@ -1,17 +1,11 @@
 import { Type } from 'class-transformer';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsNotEmptyObject,
-  IsNumberString,
-  ValidateNested,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CreateRegisterDto {
   @IsNotEmpty()
   CompanyName: string;
 
-  @IsNumberString()
+  @IsNotEmpty()
   TitleName: number;
 
   @IsNotEmpty()
