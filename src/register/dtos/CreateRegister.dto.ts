@@ -32,16 +32,4 @@ export class CreateRegisterDto {
 
   @IsNotEmpty()
   IsActivate: boolean;
-
-  // ,[CompanyName]
-  // ,[TitleName]
-  // ,[FirstName]
-  // ,[LastName]
-  // ,[Phone]
-  // ,[Email]
-  // ,[Password]
-  // ,[IsActivate]
-  // ,[ActivateDate]
-  // ,[RegisterDate]
-  // ,[NumberOfEmp]
 }
