@@ -1,12 +1,22 @@
-import { Controller, Get, Post, Req, Session, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  Session,
+  UseGuards,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthenticatedGuard, LocalAuthGuard } from 'src/auth/utils/LocalGuard';
 
 @Controller('auth')
 export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login() {}
+  async login() {
+    return console.log('Hello World');
+  }
 
   @Get('')
   async getAuthSession(@Session() session: Record<string, any>) {
@@ -18,5 +28,11 @@ export class AuthController {
   @Get('status')
   async getAuthStatus(@Req() req: Request) {
     return req.user;
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('NESTJS_SESSION_ID');
+    return console.log('Hello World');
   }
 }

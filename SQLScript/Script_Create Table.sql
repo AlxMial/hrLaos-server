@@ -1,5 +1,5 @@
 
-/****** Create Data Type ******/
+--/****** Create Data Type ******/
 
 CREATE TYPE [dbo].[IDIncrement] FROM [BIGINT]  NULL
 
@@ -50,7 +50,6 @@ CREATE TABLE [dbo].[tbRegister](
 ) ON [PRIMARY]
 GO
 
-
 CREATE TABLE [dbo].[tbOrg](
 	[OrgID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
 	[OrgCode] [dbo].[VeryShortString] NULL,
@@ -81,7 +80,6 @@ CREATE TABLE [dbo].[tbOrg](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-
 
 CREATE TABLE [dbo].[tbOrgAddress](
 	[OrgAddressID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
@@ -117,7 +115,6 @@ GO
 
 ALTER TABLE [dbo].[tbOrgAddress] CHECK CONSTRAINT [FK_tbOrgAddress_tbOrg]
 GO
-
 
 CREATE TABLE [dbo].[tbEmployee](
 	[EmpID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
@@ -171,7 +168,6 @@ GO
 
 ALTER TABLE [dbo].[tbEmployee] CHECK CONSTRAINT [FK_tbEmployee_tbRegister]
 GO
-
 
 CREATE TABLE [dbo].[tbUser](
 	[UserID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
@@ -235,6 +231,7 @@ CREATE TABLE [dbo].[tbEmpAddress](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
 
 ALTER TABLE [dbo].[tbEmpAddress]  WITH CHECK ADD  CONSTRAINT [FK_tbEmpAddress_tbEmployee] FOREIGN KEY([EmpID])
 REFERENCES [dbo].[tbEmployee] ([EmpID])

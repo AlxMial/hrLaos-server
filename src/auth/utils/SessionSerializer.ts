@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { User } from '../../typeorm';
+import { tbUser } from '../../typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 
 export class SessionSerializer extends PassportSerializer {
@@ -10,14 +10,17 @@ export class SessionSerializer extends PassportSerializer {
     super();
   }
 
-  serializeUser(user: User, done: (err, user: User) => void) {
+  serializeUser(UserName: tbUser, done: (err, UserName: tbUser) => void) {
     console.log('serializeUser');
-    return done(null, user);
+    return done(null, UserName);
   }
 
-  async deserializeUser(user: User, done: (err, user: User) => void) {
+  async deserializeUser(
+    UserName: tbUser,
+    done: (err, UserName: tbUser) => void,
+  ) {
     console.log('deserializeUser');
-    const userDB = await this.userService.findUserById(user.id);
+    const userDB = await this.userService.findUserById(UserName.UserID);
     return userDB ? done(null, userDB) : done(null, null);
   }
 }

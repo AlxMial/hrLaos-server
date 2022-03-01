@@ -11,7 +11,7 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const userDB = await this.userService.findUserByUsername(username);
     if (userDB) {
-      const matched = comparePasswords(password, userDB.password);
+      const matched = comparePasswords(password, userDB.Password);
       if (matched) {
         console.log('User Validation Success!');
         return userDB;

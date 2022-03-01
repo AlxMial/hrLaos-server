@@ -1,8 +1,13 @@
 import { SessionEntity } from './Session';
-import { User } from './User';
+import { tbUser } from './tbUser';
+import { tbRegister } from './tbRegister';
 
-const entities = [User, SessionEntity];
+const entities = [tbUser, SessionEntity, tbRegister];
 
-export { User };
+export { tbUser };
+
+export { SessionEntity };
+
+export { tbRegister };
 
 export default entities;

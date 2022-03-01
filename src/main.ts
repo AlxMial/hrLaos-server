@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import { TypeormStore } from 'connect-typeorm';
-import { getConnection, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { SessionEntity } from './typeorm/Session';
 
 async function bootstrap() {
@@ -17,9 +17,9 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 6000,
+        maxAge: 60000,
       },
-      store: new TypeormStore().connect(sessionReponsitory),
+      store: new TypeormStore({}).connect(sessionReponsitory),
     }),
   );
   app.use(passport.initialize());
