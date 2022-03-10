@@ -4,6 +4,7 @@ import { RegisterService } from './services/register/register.service';
 import { tbRegister } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
+import { EncryptService } from 'src/utils/crypto';
 
 @Module({
   imports: [TypeOrmModule.forFeature([tbRegister]), MailModule],
@@ -13,6 +14,7 @@ import { MailModule } from 'src/mail/mail.module';
       provide: 'REGISTER_SERVICE',
       useClass: RegisterService,
     },
+    EncryptService,
   ],
 })
 export class RegisterModule {}

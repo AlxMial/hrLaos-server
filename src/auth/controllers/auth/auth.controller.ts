@@ -14,8 +14,8 @@ import { AuthenticatedGuard, LocalAuthGuard } from 'src/auth/utils/LocalGuard';
 export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login() {
-    return console.log('Hello World');
+  async login(@Req() req: Request) {
+    return req.user;
   }
 
   @Get('')

@@ -46,7 +46,7 @@ export class tbUser {
     nullable: false,
     default: false,
   })
-  IsActivate: string;
+  IsActivate: boolean;
 
   @Column({
     nullable: false,
@@ -64,9 +64,9 @@ export class tbUser {
 
   @Column({
     nullable: true,
-    default: new Date(),
+    default: null,
   })
-  CreatedDate: boolean;
+  CreatedDate: Date;
 
   @Column({
     nullable: true,
@@ -77,9 +77,9 @@ export class tbUser {
 
   @Column({
     nullable: true,
-    default: new Date(),
+    default: null,
   })
-  ModifiedDate: boolean;
+  ModifiedDate: Date;
 
   @Column({
     nullable: false,

@@ -65,13 +65,13 @@ export class tbRegister {
 
   @Column({
     nullable: true,
-    default: new Date(),
+    default: null,
   })
   ActivateDate: Date;
 
   @Column({
     nullable: true,
-    default: new Date(),
+    default: null,
   })
   RegisterDate: Date;
 

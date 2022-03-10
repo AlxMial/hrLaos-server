@@ -17,13 +17,13 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 60000,
+        maxAge: 6000000000000,
       },
       store: new TypeormStore({}).connect(sessionReponsitory),
     }),
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  await app.listen(5001);
+  await app.listen(3000);
 }
 bootstrap();

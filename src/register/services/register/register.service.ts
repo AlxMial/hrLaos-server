@@ -1,22 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { tbRegister as Entity, tbRegister } from '../../../typeorm';
+import { tbRegister, tbUser, tbOrganization } from '../../../typeorm';
 import { Repository } from 'typeorm';
-import { SerializedRegister, Register } from '../../types';
+import { Register } from '../../types';
 import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { encodePassword } from 'src/utils/bcrypt';
 import { MailService } from '../../../mail/services/mail/mail.service';
-import { encryptStr, decryptStr } from 'src/utils/crypto';
+import { EncryptService } from 'src/utils/crypto';
 
 @Injectable()
 export class RegisterService {
   constructor(
-    @InjectRepository(Entity)
-    private readonly registerRepository: Repository<Entity>,
+    @InjectRepository(tbRegister)
+    private readonly registerRepository: Repository<tbRegister>,
     private mailService: MailService,
+    private encryptService: EncryptService,
   ) {}
 
   private register: Register[] = [];
+
+  findRegisterByID(id: any) {
+    return this.registerRepository.findOne(id);
+  }
+
+  async activeRegister(Register: any) {
+    console.log(Register);
+  }
 
   async createUser(createRegisterDto: CreateRegisterDto) {
     const Password = encodePassword(createRegisterDto.Password);
@@ -25,12 +34,11 @@ export class RegisterService {
       ...createRegisterDto,
       Password,
     });
-    const success = await this.registerRepository
-      .save(newRegister)
-      .then((e) => {
-        const token = encryptStr(e.RegisterID);
-        this.mailService.sendUserConfirmation(e, token);
-      });
-    return success;
+    await this.registerRepository.save(newRegister).then((e) => {
+      const token = this.encryptService.EncodeKey(e.RegisterID);
+      this.mailService.sendUserConfirmation(e, token);
+      console.log(token);
+    });
+    return newRegister;
   }
 }
