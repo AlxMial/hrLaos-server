@@ -1,119 +1,104 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tbOrganization' })
-export class tbOrganization {
+@Entity({ name: 'tbEmpAddress' })
+export class tbEmpAddress {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'OrgID',
+    name: 'EmpAddressID',
   })
-  OrgID: number;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  OrgCode: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-  })
-  OrgName: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  OrgNameEng: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  OrgType: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  BusinessType: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  BeginProgram: string;
+  EmpAddressID: number;
 
   @Column({
     nullable: false,
     default: null,
   })
-  Image: Buffer;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  TaxNo: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-  })
-  TaxBranchNo: string;
-
-  @Column({
-    nullable: false,
-    default: false,
-  })
-  IsFiscalYear: boolean;
-
-  @Column({
-    nullable: false,
-    default: false,
-  })
-  IsCalLeaveFiscalYear: boolean;
+  EmpID: number;
 
   @Column({
     nullable: true,
     default: '',
+    length: 25,
   })
-  DateStartYear: string;
+  AddressType: string;
 
   @Column({
     nullable: true,
     default: '',
+    length: 255,
   })
-  MonthStartYear: string;
+  AddressDetail: string;
 
   @Column({
     nullable: true,
     default: '',
+    length: 100,
   })
-  YearCount: string;
+  District: string;
 
   @Column({
     nullable: true,
     default: '',
+    length: 100,
   })
-  HourPerDay: string;
+  Amphur: string;
 
   @Column({
     nullable: true,
     default: '',
+    length: 100,
   })
-  DayPerMonth: string;
+  Province: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 25,
+  })
+  PostalCode: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  Country: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 50,
+  })
+  Phone: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 50,
+  })
+  Email: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  Latitude: number;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  Longtitude: number;
 
   @Column({
     nullable: false,
-    default: '',
+    default: null,
     type: 'bigint',
   })
   CompanyID: number;
 
   @Column({
     nullable: true,
-    default: '',
+    default: null,
     type: 'bigint',
   })
   CreatedBy: number;
@@ -126,7 +111,7 @@ export class tbOrganization {
 
   @Column({
     nullable: true,
-    default: '',
+    default: null,
     type: 'bigint',
   })
   ModifiedBy: number;
@@ -138,7 +123,7 @@ export class tbOrganization {
   ModifiedDate: Date;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: false,
   })
   IsDeleted: boolean;

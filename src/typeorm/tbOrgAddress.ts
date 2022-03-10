@@ -1,52 +1,101 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tbUser' })
-export class tbUser {
+@Entity({ name: 'tbOrgAddress' })
+export class tbOrgAddress {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'UserID',
+    name: 'OrgID',
   })
-  UserID: number;
+  OrgAddressID: number;
 
   @Column({
     nullable: false,
-    default: '',
+    default: null,
+    type: 'bigint',
   })
-  EmpID: string;
-
-  @Column({
-    nullable: false,
-    default: '',
-    length: 255,
-  })
-  UserName: string;
+  OrgID: number;
 
   @Column({
     nullable: false,
     default: '',
     length: 255,
   })
-  Email: string;
+  AddressDetail: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  District: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  Password: string;
+  Amphur: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 100,
+  })
+  Province: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  Role: string;
+  PostalCode: string;
 
   @Column({
     nullable: false,
-    default: false,
+    default: '',
+    length: 25,
   })
-  IsActivate: boolean;
+  Country: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 50,
+  })
+  Phone: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 50,
+  })
+  Email: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 50,
+  })
+  Fax: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 100,
+  })
+  Website: string;
+
+  @Column({
+    nullable: false,
+    default: null,
+  })
+  Latitude: number;
+
+  @Column({
+    nullable: false,
+    default: null,
+  })
+  Longtitude: number;
 
   @Column({
     nullable: false,

@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { tbRegister, tbUser, tbOrganization } from '../../../typeorm';
+import { tbRegister, tbUser, tbOrg } from '../../../typeorm';
 import { Repository } from 'typeorm';
 import { Register } from '../../types';
 import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { encodePassword } from 'src/utils/bcrypt';
 import { MailService } from '../../../mail/services/mail/mail.service';
 import { EncryptService } from 'src/utils/crypto';
+import { CreateOrg } from 'src/organization/dtos/CreateOrg.dto';
+import { OrganizationService } from 'src/organization/service/organization/organization.service';
 
 @Injectable()
 export class RegisterService {
@@ -15,12 +17,14 @@ export class RegisterService {
     private readonly registerRepository: Repository<tbRegister>,
     private mailService: MailService,
     private encryptService: EncryptService,
+    @Inject('ORGANIZATION_SERVICE')
+    private readonly organizationService: OrganizationService,
   ) {}
 
   private register: Register[] = [];
 
   findRegisterByID(id: any) {
-    return this.registerRepository.findOne(id);
+    return this.registerRepository.findOne({ RegisterID: id });
   }
 
   async activeRegister(Register: any) {
@@ -40,5 +44,18 @@ export class RegisterService {
       console.log(token);
     });
     return newRegister;
+  }
+
+  async activateRegister(data: any) {
+    const createOrg = new CreateOrg();
+    createOrg.CompanyID = data.RegisterID;
+    createOrg.IsCalFiscalYear = false;
+    createOrg.IsDeleted = false;
+    createOrg.IsFiscalYear = false;
+    createOrg.IsCalLeaveFiscalYear = false;
+    createOrg.OrgName = data.CompanyName;
+    createOrg.OrgType = 'HeadOffice';
+    const org = await this.organizationService.createOrg(createOrg);
+    return org;
   }
 }

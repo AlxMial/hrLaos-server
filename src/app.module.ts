@@ -8,6 +8,8 @@ import { PassportModule } from '@nestjs/passport';
 import { PaymentsModule } from './payments/payments.module';
 import { RegisterModule } from './register/register.module';
 import { ConfigModule } from '@nestjs/config';
+import { EmployeeModule } from './employee/employee.module';
+import { OrganizationModule } from './organization/organization.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true, // no need to import into other modules
     }),
+    EmployeeModule,
+    OrganizationModule,
   ],
   controllers: [],
   providers: [],

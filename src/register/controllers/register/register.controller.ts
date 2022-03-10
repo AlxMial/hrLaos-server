@@ -10,10 +10,12 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
+  Res,
 } from '@nestjs/common';
 import { RegisterService } from 'src/register/services/register/register.service';
 import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { EncryptService } from 'src/utils/crypto';
+import { Response } from 'express';
 
 @Controller('register')
 export class RegisterController {
@@ -29,13 +31,16 @@ export class RegisterController {
   }
 
   @Get('/active/:id')
-  activeRegister(@Param('id') id: any) {
-    const register = this.registerService.findRegisterByID(
+  async activeRegister(@Param('id') id: any, @Res() res: Response) {
+    const Register = await this.registerService.findRegisterByID(
       this.encryptService.DecodeKey(id),
     );
-    // if (register) {
-    //   this.registerService.activeRegister(register);
-    // } else
-    //   throw new HttpException('Customer Not Found!', HttpStatus.BAD_REQUEST);
+
+    try {
+      await this.registerService.activateRegister(Register);
+      return res.status(200).send({ msg: 'Active Successfully' });
+    } catch (err) {
+      return res.status(400).send({ msg: err });
+    }
   }
 }
