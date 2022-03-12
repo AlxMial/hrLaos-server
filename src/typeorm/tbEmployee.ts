@@ -4,195 +4,195 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class tbEmployee {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'EmpID',
+    name: 'id',
   })
-  EmpID: number;
+  id: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Image: Buffer;
+  image: Buffer;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  EmpCode: string;
+  empCode: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Title: number;
+  title: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  FirstName: string;
+  firstName: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  LastName: string;
+  lastName: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  NickName: string;
+  nickName: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  FirstNameEng: string;
+  firstNameEng: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  LastNameEng: string;
+  lastNameEng: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  NickNameEng: string;
+  nickNameEng: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Gender: number;
+  gender: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  BirthDate: Date;
+  birthDate: Date;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Religion: number;
+  religion: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Nationality: number;
+  nationality: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  IdentificationNo: string;
+  identificationNo: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  IdentityExpire: Date;
+  identityExpire: Date;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  PassportNo: string;
+  passportNo: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  PassportExpire: Date;
+  passportExpire: Date;
 
   @Column({
     nullable: true,
     default: null,
   })
-  MaritalStatus: number;
+  maritalStatus: number;
 
   @Column({
     nullable: false,
     default: null,
   })
-  IsOver65: boolean;
+  isOver65: boolean;
 
   @Column({
     nullable: true,
     default: null,
   })
-  MaritalDate: Date;
+  maritalDate: Date;
 
   @Column({
     nullable: true,
     default: null,
   })
-  MilitaryStatus: number;
+  militaryStatus: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 255,
   })
-  ExemptReason: string;
+  exemptReason: string;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  OrgID: number;
+  orgId: number;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  CompanyID: number;
+  companyId: number;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  CreatedBy: number;
+  createdBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  CreatedDate: Date;
+  createdDate: Date;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  ModifiedBy: number;
+  modifiedBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  ModifiedDate: Date;
+  modifiedDate: Date;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

@@ -2,11 +2,11 @@ import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
 
 export class CreateOrgAddress {
   @IsNotEmpty()
-  OrgID: string;
+  orgId: string;
 
   @IsNotEmpty()
-  CompanyID: number;
+  companyId: number;
 
   @IsNotEmpty()
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

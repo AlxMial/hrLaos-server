@@ -32,7 +32,7 @@ export class RegisterService {
   private register: Register[] = [];
 
   findRegisterByID(id: any) {
-    return this.registerRepository.findOne({ RegisterID: id });
+    return this.registerRepository.findOne({ id: id });
   }
 
   async activeRegister(Register: any) {
@@ -40,14 +40,13 @@ export class RegisterService {
   }
 
   async createUser(createRegisterDto: CreateRegisterDto) {
-    const Password = encodePassword(createRegisterDto.Password);
-
+    const password = encodePassword(createRegisterDto.password);
     const newRegister = this.registerRepository.create({
       ...createRegisterDto,
-      Password,
+      password,
     });
     await this.registerRepository.save(newRegister).then((e) => {
-      const token = this.encryptService.EncodeKey(e.RegisterID);
+      const token = this.encryptService.EncodeKey(e.id);
       this.mailService.sendUserConfirmation(e, token);
       console.log(token);
     });
@@ -56,32 +55,31 @@ export class RegisterService {
 
   async activateRegister(data: any) {
     const createOrg = new CreateOrg();
-    createOrg.CompanyID = data.RegisterID;
-    createOrg.IsCalFiscalYear = false;
-    createOrg.IsDeleted = false;
-    createOrg.IsFiscalYear = false;
-    createOrg.IsCalLeaveFiscalYear = false;
-    createOrg.OrgName = data.CompanyName;
-    createOrg.OrgType = 'HeadOffice';
+    createOrg.companyId = data.id;
+    createOrg.isCalFiscalYear = false;
+    createOrg.isDeleted = false;
+    createOrg.isFiscalYear = false;
+    createOrg.isCalLeaveFiscalYear = false;
+    createOrg.orgName = data.companyName;
+    createOrg.orgType = 'HeadOffice';
     const org = await this.organizationService.createOrg(createOrg);
 
     const createEmp = new CreateEmployee();
-    createEmp.CompanyID = data.RegisterID;
-    createEmp.IsDeleted = false;
-    createEmp.IsOver65 = false;
-    createEmp.OrgID = org.OrgID;
-    console.log(createEmp);
+    createEmp.companyId = data.id;
+    createEmp.isDeleted = false;
+    createEmp.isOver65 = false;
+    createEmp.orgId = org.id;
     const emp = await this.employeeService.createEmp(createEmp);
 
     const createUser = new CreateUserDto();
-    createUser.CompanyID = data.RegisterID;
-    createUser.Email = data.Email;
-    createUser.EmpID = emp.EmpID;
-    createUser.IsActivate = true;
-    createUser.Password = data.Password;
-    createUser.Role = 'administrator';
-    createUser.UserName = data.Email;
-    createUser.IsDeleted = false;
+    createUser.companyId = data.id;
+    createUser.email = data.email;
+    createUser.empId = emp.id;
+    createUser.isActivate = true;
+    createUser.password = data.password;
+    createUser.role = 'administrator';
+    createUser.userName = data.email;
+    createUser.isDeleted = false;
     const user = await this.userService.createUserActivate(createUser);
     return 'Seccssfully';
   }

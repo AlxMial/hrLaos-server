@@ -3,27 +3,27 @@ import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CreateRegisterDto {
   @IsNotEmpty()
-  CompanyName: string;
+  companyName: string;
 
   @IsNotEmpty()
-  TitleName: number;
+  titleName: number;
 
   @IsNotEmpty()
-  FirstName: string;
+  firstName: string;
 
   @IsNotEmpty()
-  LastName: string;
+  lastName: string;
 
   @IsNotEmpty()
-  Phone: string;
+  phone: string;
 
   @IsEmail()
   @IsNotEmpty()
-  Email: string;
+  email: string;
 
   @IsNotEmpty()
-  Password: string;
+  password: string;
 
   @IsNotEmpty()
-  IsActivate: boolean;
+  isActivate: boolean;
 }

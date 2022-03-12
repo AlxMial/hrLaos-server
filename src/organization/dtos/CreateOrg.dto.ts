@@ -11,26 +11,26 @@ import { CreateOrgAddress } from './CreateOrgAddress.dto';
 export class CreateOrg {
   @IsNotEmpty()
   @MaxLength(100)
-  OrgName: string;
+  orgName: string;
 
   @IsNotEmpty()
   @MaxLength(25)
-  OrgType: string;
+  orgType: string;
 
   @IsNotEmpty()
-  IsFiscalYear: boolean;
+  isFiscalYear: boolean;
 
   @IsNotEmpty()
-  IsCalFiscalYear: boolean;
+  isCalFiscalYear: boolean;
 
   @IsNotEmpty()
-  IsCalLeaveFiscalYear: boolean;
+  isCalLeaveFiscalYear: boolean;
 
   @IsNotEmpty()
-  CompanyID: number;
+  companyId: number;
 
   @IsNotEmpty()
-  IsDeleted: boolean;
+  isDeleted: boolean;
 
   //   @ValidateNested()
   //   @Type(() => CreateOrgAddress)

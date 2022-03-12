@@ -2,11 +2,11 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateEmpAddress {
   @IsNotEmpty()
-  EmpID: number;
+  empId: number;
 
   @IsNotEmpty()
-  CompanyID: number;
+  companyId: number;
 
   @IsNotEmpty()
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

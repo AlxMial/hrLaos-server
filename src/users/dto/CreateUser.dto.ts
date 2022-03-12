@@ -1,30 +1,30 @@
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
-  UserID: number;
+  id: number;
 
   @IsNotEmpty()
-  EmpID: number;
+  empId: number;
 
   @IsNotEmpty()
   @MaxLength(100)
-  UserName: string;
+  userName: string;
 
   @IsNotEmpty()
-  Email: string;
+  email: string;
 
   @IsNotEmpty()
-  Password: string;
+  password: string;
 
   @IsNotEmpty()
-  Role: string;
+  role: string;
 
   @IsNotEmpty()
-  IsActivate: boolean;
+  isActivate: boolean;
 
   @IsNotEmpty()
-  CompanyID: number;
+  companyId: number;
 
   @IsNotEmpty()
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

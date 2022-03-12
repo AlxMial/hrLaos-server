@@ -4,81 +4,81 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class tbRegister {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'RegisterID',
+    name: 'id',
   })
-  RegisterID: number;
+  id: number;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  CompanyName: string;
+  companyName: string;
 
   @Column({
     type: 'bigint',
     nullable: false,
     default: null,
   })
-  TitleName: number;
+  titleName: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  FirstName: string;
+  firstName: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  LastName: string;
+  lastName: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 50,
   })
-  Phone: string;
+  phone: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  Email: string;
+  email: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 1000,
   })
-  Password: string;
+  password: string;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsActivate: boolean;
+  isActivate: boolean;
 
   @Column({
     nullable: true,
     default: null,
   })
-  ActivateDate: Date;
+  activateDate: Date;
 
   @Column({
     nullable: true,
     default: null,
   })
-  RegisterDate: Date;
+  registerDate: Date;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  NumberOfEmp: string;
+  numberOfEmp: string;
 }

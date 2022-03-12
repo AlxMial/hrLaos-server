@@ -4,127 +4,127 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class tbEmpAddress {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'EmpAddressID',
+    name: 'id',
   })
-  EmpAddressID: number;
+  id: number;
 
   @Column({
     nullable: false,
     default: null,
   })
-  EmpID: number;
+  empId: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  AddressType: string;
+  addressType: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 255,
   })
-  AddressDetail: string;
+  addressDetail: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  District: string;
+  district: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  Amphur: string;
+  amphur: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  Province: string;
+  province: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  PostalCode: string;
+  postalCode: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  Country: string;
+  country: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  Phone: string;
+  phone: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  Email: string;
+  email: string;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Latitude: number;
+  latitude: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  Longtitude: number;
+  longtitude: number;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  CompanyID: number;
+  companyId: number;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  CreatedBy: number;
+  createdBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  CreatedDate: Date;
+  createdDate: Date;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  ModifiedBy: number;
+  modifiedBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  ModifiedDate: Date;
+  modifiedDate: Date;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

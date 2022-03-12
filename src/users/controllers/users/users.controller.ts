@@ -64,4 +64,10 @@ export class UsersController {
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
+
+  @Post('update')
+  @UsePipes(ValidationPipe)
+  updateUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
+  }
 }

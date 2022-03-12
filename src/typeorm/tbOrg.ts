@@ -4,150 +4,150 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class tbOrg {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'OrgID',
+    name: 'id',
   })
-  OrgID: number;
+  id: number;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  OrgCode: string;
+  orgCode: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  OrgName: string;
+  orgName: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  OrgNameEng: string;
+  orgNameEng: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  OrgType: string;
+  orgType: string;
 
   @Column({
     nullable: false,
     default: null,
   })
-  BusinessType: number;
+  businessType: number;
 
   @Column({
     nullable: false,
     default: null,
   })
-  BeginProgram: Date;
+  beginProgram: Date;
 
   @Column({
     nullable: false,
     default: null,
   })
-  Image: Buffer;
+  image: Buffer;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  TaxNo: string;
+  taxNo: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  TaxBranchNo: string;
+  taxBranchNo: string;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsFiscalYear: boolean;
+  isFiscalYear: boolean;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsCalLeaveFiscalYear: boolean;
+  isCalLeaveFiscalYear: boolean;
 
   @Column({
     nullable: true,
     default: null,
   })
-  DateStartYear: Date;
+  dateStartYear: Date;
 
   @Column({
     nullable: true,
     default: null,
   })
-  MonthStartYear: number;
+  monthStartYear: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  YearCount: number;
+  yearCount: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  HourPerDay: string;
+  hourPerDay: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 25,
   })
-  DayPerMonth: string;
+  dayPerMonth: string;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  CompanyID: number;
+  companyId: number;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  CreatedBy: number;
+  createdBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  CreatedDate: Date;
+  createdDate: Date;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  ModifiedBy: number;
+  modifiedBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  ModifiedDate: Date;
+  modifiedDate: Date;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

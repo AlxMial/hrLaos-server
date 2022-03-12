@@ -5,37 +5,37 @@ export interface User {
   // username: string;
   // password: string;
   // email: string;
-  UserID: number;
-  EmpID: number;
-  UserName: string;
-  Email: string;
-  Password: string;
-  Role: string;
-  IsActivate: boolean;
-  CompanyID: number;
-  CreatedBy: number;
-  CreatedDate: Date;
-  ModifiedBy: number;
-  ModifiedDate: Date;
-  IsDeleted: boolean;
+  id: number;
+  empId: number;
+  userName: string;
+  email: string;
+  password: string;
+  role: string;
+  isActivate: boolean;
+  companyId: number;
+  createdBy: number;
+  createdDate: Date;
+  modifiedBy: number;
+  modifiedDate: Date;
+  isDeleted: boolean;
 }
 
 export class SerializedUser {
   // id: number;
   // username: string;
   // email: string;
-  UserID: number;
-  EmpID: number;
-  UserName: string;
-  Email: string;
-  Role: string;
-  IsActivate: boolean;
-  CompanyID: number;
-  CreatedBy: number;
-  CreatedDate: Date;
-  ModifiedBy: number;
-  ModifiedDate: Date;
-  IsDeleted: boolean;
+  id: number;
+  empId: number;
+  userName: string;
+  email: string;
+  role: string;
+  isActivate: boolean;
+  companyId: number;
+  createdBy: number;
+  createdDate: Date;
+  modifiedBy: number;
+  modifiedDate: Date;
+  isDeleted: boolean;
 
   @Exclude()
   Password: string;

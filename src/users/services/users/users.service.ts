@@ -21,19 +21,19 @@ export class UsersService {
   }
 
   getUserByUsername(username: string) {
-    return this.users.find((user) => user.UserName === username);
+    return this.users.find((user) => user.userName === username);
   }
 
   getUserByID(id: number) {
-    return this.users.find((user) => user.UserID === id);
+    return this.users.find((user) => user.id === id);
   }
 
   findUserByUsername(username: string) {
-    return this.userRepository.findOne({ UserName: username });
+    return this.userRepository.findOne({ userName: username });
   }
 
   findUserByEmail(email: string) {
-    return this.userRepository.findOne({ Email: email });
+    return this.userRepository.findOne({ email: email });
   }
 
   findUserById(id: number) {
@@ -41,8 +41,8 @@ export class UsersService {
   }
 
   createUser(createuserDto: CreateUserDto) {
-    const Password = encodePassword(createuserDto.Password);
-    const newUser = this.userRepository.create({ ...createuserDto, Password });
+    const password = encodePassword(createuserDto.password);
+    const newUser = this.userRepository.create({ ...createuserDto, password });
     return this.userRepository.save(newUser);
   }
 
@@ -52,7 +52,7 @@ export class UsersService {
   }
 
   async updateUser(createuserDto: CreateUserDto) {
-    const updatePhoto = await this.userRepository.findOne(createuserDto.UserID);
-    //await this.userRepository.save(updatePhoto);
+    const updatePhoto = await this.userRepository.findOne(createuserDto.id);
+    return await this.userRepository.save(updatePhoto);
   }
 }

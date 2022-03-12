@@ -4,87 +4,87 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class tbUser {
   @PrimaryGeneratedColumn({
     type: 'bigint',
-    name: 'UserID',
+    name: 'id',
   })
-  UserID: number;
+  id: number;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  EmpID: number;
+  empId: number;
 
   @Column({
     nullable: false,
     default: '',
     length: 255,
   })
-  UserName: string;
+  userName: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 255,
   })
-  Email: string;
+  email: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  Password: string;
+  password: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 25,
   })
-  Role: string;
+  role: string;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsActivate: boolean;
+  isActivate: boolean;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  CompanyID: number;
+  companyId: number;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  CreatedBy: number;
+  createdBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  CreatedDate: Date;
+  createdDate: Date;
 
   @Column({
     nullable: true,
     default: null,
     type: 'bigint',
   })
-  ModifiedBy: number;
+  modifiedBy: number;
 
   @Column({
     nullable: true,
     default: null,
   })
-  ModifiedDate: Date;
+  modifiedDate: Date;
 
   @Column({
     nullable: false,
     default: false,
   })
-  IsDeleted: boolean;
+  isDeleted: boolean;
 }

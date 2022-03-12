@@ -4,16 +4,16 @@ import { CreateEmpAddress } from './CreateEmpAddress.dto';
 
 export class CreateEmployee {
   @IsNotEmpty()
-  IsOver65: boolean;
+  isOver65: boolean;
 
   @IsNotEmpty()
-  OrgID: number;
+  orgId: number;
 
   @IsNotEmpty()
-  CompanyID: number;
+  companyId: number;
 
   @IsNotEmpty()
-  IsDeleted: boolean;
+  isDeleted: boolean;
 
   //   @ValidateNested()
   //   @Type(() => CreateEmpAddress)

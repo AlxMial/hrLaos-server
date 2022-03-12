@@ -10,12 +10,12 @@ export class MailService {
     const url = `example.com/auth/confirm?token=${token}`;
 
     await this.mailerService.sendMail({
-      to: register.Email,
+      to: register.email,
       // from: '"Support Team" <support@example.com>', // override default from
       subject: 'HR Laos Confirmation Register',
       template: '../../templates/confirmation', // `.hbs` extension is appended automatically
       context: {
-        name: register.FirstName + ' ' + register.LastName,
+        name: register.firstName + ' ' + register.lastName,
         url,
       },
     });
