@@ -129,7 +129,7 @@ export class tbEmployee {
     nullable: false,
     default: null,
   })
-  IsOver64: boolean;
+  IsOver65: boolean;
 
   @Column({
     nullable: true,

@@ -15,8 +15,8 @@ export class CreateEmployee {
   @IsNotEmpty()
   IsDeleted: boolean;
 
-  @ValidateNested()
-  @Type(() => CreateEmpAddress)
-  @IsNotEmptyObject()
-  address: CreateEmpAddress;
+  //   @ValidateNested()
+  //   @Type(() => CreateEmpAddress)
+  //   @IsNotEmptyObject()
+  //   address: CreateEmpAddress;
 }

@@ -34,6 +34,11 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
+  createUserActivate(createuserDto: CreateUserDto) {
+    const newUser = this.userRepository.create(createuserDto);
+    return this.userRepository.save(newUser);
+  }
+
   findUserByUsername(username: string) {
     return this.userRepository.findOne({ UserName: username });
   }

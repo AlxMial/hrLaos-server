@@ -9,6 +9,10 @@ import { MailService } from '../../../mail/services/mail/mail.service';
 import { EncryptService } from 'src/utils/crypto';
 import { CreateOrg } from 'src/organization/dtos/CreateOrg.dto';
 import { OrganizationService } from 'src/organization/service/organization/organization.service';
+import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
+import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { CreateUserDto } from 'src/users/dto/CreateUser.dto';
+import { UsersService } from 'src/users/services/users/users.service';
 
 @Injectable()
 export class RegisterService {
@@ -19,6 +23,10 @@ export class RegisterService {
     private encryptService: EncryptService,
     @Inject('ORGANIZATION_SERVICE')
     private readonly organizationService: OrganizationService,
+    @Inject('EMPLOYEE_SERVICE')
+    private readonly employeeService: EmployeeService,
+    @Inject('USER_SERVICE')
+    private readonly userService: UsersService,
   ) {}
 
   private register: Register[] = [];
@@ -56,6 +64,25 @@ export class RegisterService {
     createOrg.OrgName = data.CompanyName;
     createOrg.OrgType = 'HeadOffice';
     const org = await this.organizationService.createOrg(createOrg);
-    return org;
+
+    const createEmp = new CreateEmployee();
+    createEmp.CompanyID = data.RegisterID;
+    createEmp.IsDeleted = false;
+    createEmp.IsOver65 = false;
+    createEmp.OrgID = org.OrgID;
+    console.log(createEmp);
+    const emp = await this.employeeService.createEmp(createEmp);
+
+    const createUser = new CreateUserDto();
+    createUser.CompanyID = data.RegisterID;
+    createUser.Email = data.Email;
+    createUser.EmpID = emp.EmpID;
+    createUser.IsActivate = true;
+    createUser.Password = data.Password;
+    createUser.Role = 'administrator';
+    createUser.UserName = data.Email;
+    createUser.IsDeleted = false;
+    const user = await this.userService.createUserActivate(createUser);
+    return 'Seccssfully';
   }
 }

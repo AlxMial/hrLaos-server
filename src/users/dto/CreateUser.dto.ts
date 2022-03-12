@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  EmpID: string;
+  EmpID: number;
 
   @IsNotEmpty()
   @MaxLength(100)
@@ -22,4 +22,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   CompanyID: number;
+
+  @IsNotEmpty()
+  IsDeleted: boolean;
 }

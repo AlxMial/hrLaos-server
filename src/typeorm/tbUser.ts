@@ -9,10 +9,11 @@ export class tbUser {
   UserID: number;
 
   @Column({
-    nullable: false,
-    default: '',
+    nullable: true,
+    default: null,
+    type: 'bigint',
   })
-  EmpID: string;
+  EmpID: number;
 
   @Column({
     nullable: false,
