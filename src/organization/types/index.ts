@@ -5,7 +5,7 @@ export interface tbOrg {
   orgNameEng: string;
   orgType: string;
   businessType: number;
-  beginProgram: string;
+  beginProgram: Date;
   image: Buffer;
   taxNo: string;
   taxBranchNo: string;

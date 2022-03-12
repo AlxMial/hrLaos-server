@@ -11,6 +11,7 @@ export class CreateUserDto {
   userName: string;
 
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsNotEmpty()
@@ -25,6 +26,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   companyId: number;
 
+  createdBy: number;
+  createdDate: Date;
+  modifiedBy: number;
+  modifiedDate: Date;
+
   @IsNotEmpty()
   isDeleted: boolean;
+
+  userId: number;
 }

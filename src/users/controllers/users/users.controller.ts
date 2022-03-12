@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -10,6 +11,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -17,7 +19,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/auth/utils/LocalGuard';
-import { CreateUserDto } from 'src/users/dto/CreateUser.dto';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound.exception';
 import { HttpExceptionFilter } from 'src/users/filters/HttpException.filter';
 import { UsersService } from 'src/users/services/users/users.service';
@@ -59,15 +62,25 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
-  @Post('update')
+  @UseGuards(AuthenticatedGuard)
+  @Put('update')
   @UsePipes(ValidationPipe)
   updateUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+    return this.userService.updateUser(createUserDto);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Delete('delete')
+  @UsePipes(ValidationPipe)
+  // deleteUser(@Param('id', ParseIntPipe) id: number) {
+  deleteUser(@Body() user: deleteDto) {
+    return this.userService.deleteUser(user);
   }
 }

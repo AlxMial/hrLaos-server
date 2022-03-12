@@ -11,7 +11,7 @@ import { CreateOrg } from 'src/organization/dtos/CreateOrg.dto';
 import { OrganizationService } from 'src/organization/service/organization/organization.service';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
-import { CreateUserDto } from 'src/users/dto/CreateUser.dto';
+import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 
 @Injectable()
@@ -56,7 +56,6 @@ export class RegisterService {
   async activateRegister(data: any) {
     const createOrg = new CreateOrg();
     createOrg.companyId = data.id;
-    createOrg.isCalFiscalYear = false;
     createOrg.isDeleted = false;
     createOrg.isFiscalYear = false;
     createOrg.isCalLeaveFiscalYear = false;
