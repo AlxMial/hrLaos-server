@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Post,
   Req,
   Res,
@@ -33,6 +35,6 @@ export class AuthController {
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('NESTJS_SESSION_ID');
-    return console.log('Hello World');
+    return new HttpException('Logout Success', HttpStatus.OK);
   }
 }

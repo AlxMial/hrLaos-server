@@ -18,4 +18,9 @@ export class OrganizationService {
     const newUser = this.orgRepository.create(createOrg);
     return this.orgRepository.save(newUser);
   }
+
+  getOrgAll() {
+    const Organization = this.orgRepository.find();
+    return Organization;
+  }
 }

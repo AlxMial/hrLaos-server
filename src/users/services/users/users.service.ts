@@ -28,6 +28,18 @@ export class UsersService {
     return this.users.find((user) => user.UserID === id);
   }
 
+  findUserByUsername(username: string) {
+    return this.userRepository.findOne({ UserName: username });
+  }
+
+  findUserByEmail(email: string) {
+    return this.userRepository.findOne({ Email: email });
+  }
+
+  findUserById(id: number) {
+    return this.userRepository.findOne(id);
+  }
+
   createUser(createuserDto: CreateUserDto) {
     const Password = encodePassword(createuserDto.Password);
     const newUser = this.userRepository.create({ ...createuserDto, Password });
@@ -39,15 +51,8 @@ export class UsersService {
     return this.userRepository.save(newUser);
   }
 
-  findUserByUsername(username: string) {
-    return this.userRepository.findOne({ UserName: username });
-  }
-
-  findUserByEmail(email: string) {
-    return this.userRepository.findOne({ Email: email });
-  }
-
-  findUserById(id: number) {
-    return this.userRepository.findOne(id);
+  async updateUser(createuserDto: CreateUserDto) {
+    const updatePhoto = await this.userRepository.findOne(createuserDto.UserID);
+    //await this.userRepository.save(updatePhoto);
   }
 }

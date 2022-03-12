@@ -14,7 +14,12 @@ export class EmployeeService {
   ) {}
 
   createEmp(createEmp: CreateEmployee) {
-    const newUser = this.empRepository.create(createEmp);
-    return this.empRepository.save(newUser);
+    const newEmp = this.empRepository.create(createEmp);
+    return this.empRepository.save(newEmp);
+  }
+
+  getEmployeeAll() {
+    const employee = this.empRepository.find();
+    return employee;
   }
 }
