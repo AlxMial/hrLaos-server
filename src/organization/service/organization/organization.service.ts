@@ -39,7 +39,7 @@ export class OrganizationService {
       const data = await this.orgRepository.findOne(updateOrg.id);
       data.orgCode = updateOrg.orgCode;
       data.orgName = updateOrg.orgName;
-      data.orgNameEng = updateOrg.orgNameEng;
+      data.orgNameEn = updateOrg.orgNameEn;
       data.orgType = updateOrg.orgType;
       data.businessType = updateOrg.businessType;
       data.beginProgram = updateOrg.beginProgram;
@@ -63,12 +63,12 @@ export class OrganizationService {
 
   async deleteOrg(data: any) {
     try {
-      const updateUser = await this.orgRepository.findOne(data.id);
-      updateUser.isDeleted = true;
-      updateUser.modifiedBy = data.userId;
-      updateUser.modifiedDate = new Date();
+      const deleteUser = await this.orgRepository.findOne(data.id);
+      deleteUser.isDeleted = true;
+      deleteUser.modifiedBy = data.userId;
+      deleteUser.modifiedDate = new Date();
       // this.userRepository.delete(id);
-      return await this.orgRepository.save(updateUser);
+      return await this.orgRepository.save(deleteUser);
     } catch (e) {
       return { message: (e as Error).message };
     }

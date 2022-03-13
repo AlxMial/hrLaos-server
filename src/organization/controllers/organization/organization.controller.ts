@@ -34,18 +34,21 @@ export class OrganizationController {
     return this.orgService.getOrgAll();
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createOrg(@Body() createOrg: CreateOrg) {
     return this.orgService.createOrg(createOrg);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
   updateOrg(@Body() updateOrg: CreateOrg) {
     return this.orgService.updateOrg(updateOrg);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Delete('delete')
   @UsePipes(ValidationPipe)
   deleteOrg(@Body() data: deleteDto) {

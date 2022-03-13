@@ -9,4 +9,6 @@ export class CreateEmpAddress {
 
   @IsNotEmpty()
   isDeleted: boolean;
+
+  userId: number;
 }

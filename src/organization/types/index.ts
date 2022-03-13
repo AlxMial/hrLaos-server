@@ -2,7 +2,7 @@ export interface tbOrg {
   id: number;
   orgCode: string;
   orgName: string;
-  orgNameEng: string;
+  orgNameEn: string;
   orgType: string;
   businessType: number;
   beginProgram: Date;

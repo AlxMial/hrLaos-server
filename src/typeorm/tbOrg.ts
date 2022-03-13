@@ -27,7 +27,7 @@ export class tbOrg {
     default: '',
     length: 100,
   })
-  orgNameEng: string;
+  orgNameEn: string;
 
   @Column({
     nullable: false,

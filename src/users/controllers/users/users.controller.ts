@@ -49,7 +49,7 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @UseFilters(HttpExceptionFilter)
-  @Get('/id/:id')
+  @Get('/:id')
   getById(@Param('id', ParseIntPipe) id: number) {
     try {
       const user = this.userService.getUserByID(id);

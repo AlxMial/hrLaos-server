@@ -124,6 +124,7 @@ CREATE TABLE [dbo].[tbEmployee](
 	[FirstName] [dbo].[ShortString] NULL,
 	[LastName] [dbo].[ShortString] NULL,
 	[NickName] [dbo].[ShortString] NULL,
+	[TitleEn] [dbo].[IDIncrement] NULL,
 	[FirstNameEng] [dbo].[ShortString] NULL,
 	[LastNameEng] [dbo].[ShortString] NULL,
 	[NickNameEng] [dbo].[ShortString] NULL,

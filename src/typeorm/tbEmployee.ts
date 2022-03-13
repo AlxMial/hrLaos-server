@@ -50,24 +50,30 @@ export class tbEmployee {
 
   @Column({
     nullable: true,
-    default: '',
-    length: 50,
+    default: null,
   })
-  firstNameEng: string;
+  titleEn: number;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  lastNameEng: string;
+  firstNameEn: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 50,
   })
-  nickNameEng: string;
+  lastNameEn: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 50,
+  })
+  nickNameEn: string;
 
   @Column({
     nullable: true,

@@ -16,7 +16,7 @@ export class CreateOrg {
   @MaxLength(100)
   orgName: string;
 
-  orgNameEng: string;
+  orgNameEn: string;
 
   @IsNotEmpty()
   @MaxLength(25)

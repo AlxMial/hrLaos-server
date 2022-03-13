@@ -6,6 +6,7 @@ export interface employee {
   firstName: string;
   lastName: string;
   nickName: string;
+  titleEn: number;
   firstNameEng: string;
   lastNameEng: string;
   nickNameEng: string;

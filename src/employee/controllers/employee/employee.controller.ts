@@ -4,6 +4,8 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
+  ParseIntPipe,
   Post,
   UseGuards,
   UseInterceptors,
@@ -22,15 +24,21 @@ export class EmployeeController {
     private readonly employeeService: EmployeeService,
   ) {}
 
-  @Post('create')
-  @UsePipes(ValidationPipe)
-  createOrg(@Body() createEmp: CreateEmployee) {
-    return this.employeeService.createEmp(createEmp);
-  }
-
   @UseGuards(AuthenticatedGuard)
   @Get('')
   getUsers() {
     return this.employeeService.getEmployeeAll();
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get('/:companyId')
+  getUsersByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
+    return this.employeeService.getEmployeeByCompanyId(id);
+  }
+
+  @Post('create')
+  @UsePipes(ValidationPipe)
+  createOrg(@Body() createEmp: CreateEmployee) {
+    return this.employeeService.createEmp(createEmp);
   }
 }
