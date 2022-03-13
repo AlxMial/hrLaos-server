@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { response } from 'express';
 import { CreateOrg } from 'src/organization/dtos/CreateOrg.dto';
 import { CreateOrgAddress } from 'src/organization/dtos/CreateOrgAddress.dto';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 import { tbOrg, tbOrgAddress } from '../../../typeorm';
 
 @Injectable()
@@ -13,6 +13,7 @@ export class OrganizationService {
     private readonly orgRepository: Repository<tbOrg>,
     @InjectRepository(tbOrgAddress)
     private readonly addressRepository: Repository<tbOrgAddress>,
+    private readonly connection: Connection,
   ) {}
 
   getOrgAll() {
@@ -63,12 +64,19 @@ export class OrganizationService {
 
   async deleteOrg(data: any) {
     try {
-      const deleteUser = await this.orgRepository.findOne(data.id);
-      deleteUser.isDeleted = true;
-      deleteUser.modifiedBy = data.userId;
-      deleteUser.modifiedDate = new Date();
-      // this.userRepository.delete(id);
-      return await this.orgRepository.save(deleteUser);
+      const result = await this.connection.query(
+        "up_selectAllUse @SearchStr='" + data.id + "',@Column='orgId'",
+      );
+      if (result) {
+        return { message: 'data is used' };
+      } else {
+        const deleteUser = await this.orgRepository.findOne(data.id);
+        deleteUser.isDeleted = true;
+        deleteUser.modifiedBy = data.userId;
+        deleteUser.modifiedDate = new Date();
+        // this.userRepository.delete(id);
+        return await this.orgRepository.save(deleteUser);
+      }
     } catch (e) {
       return { message: (e as Error).message };
     }

@@ -35,22 +35,46 @@ export class RegisterService {
     return this.registerRepository.findOne({ id: id });
   }
 
-  async activeRegister(Register: any) {
-    console.log(Register);
+  async findDuplicateRegister(createRegisterDto: CreateRegisterDto) {
+    const data = { email: '', companyName: '' };
+    const register = await this.registerRepository
+      .createQueryBuilder('tbRegister')
+      .where(
+        'tbRegister.email = :email or tbRegister.companyName = :companyName',
+        {
+          email: createRegisterDto.email,
+          companyName: createRegisterDto.companyName,
+        },
+      )
+      .getOne();
+    if (register) {
+      if (register.email === createRegisterDto.email) {
+        data['email'] = 'email is used';
+      }
+      if (register.companyName === createRegisterDto.companyName) {
+        data['companyName'] = 'company name is used';
+      }
+    }
+    return data;
   }
 
   async createUser(createRegisterDto: CreateRegisterDto) {
-    const password = encodePassword(createRegisterDto.password);
-    const newRegister = this.registerRepository.create({
-      ...createRegisterDto,
-      password,
-    });
-    await this.registerRepository.save(newRegister).then((e) => {
-      const token = this.encryptService.EncodeKey(e.id);
-      this.mailService.sendUserConfirmation(e, token);
-      console.log(token);
-    });
-    return newRegister;
+    const register = await this.findDuplicateRegister(createRegisterDto);
+    if (register.email !== '' || register.companyName !== '') {
+      return register;
+    } else {
+      const password = encodePassword(createRegisterDto.password);
+      const newRegister = this.registerRepository.create({
+        ...createRegisterDto,
+        password,
+      });
+      await this.registerRepository.save(newRegister).then((e) => {
+        const token = this.encryptService.EncodeKey(e.id);
+        this.mailService.sendUserConfirmation(e, token);
+        console.log(token);
+      });
+      return newRegister;
+    }
   }
 
   async activateRegister(data: any) {

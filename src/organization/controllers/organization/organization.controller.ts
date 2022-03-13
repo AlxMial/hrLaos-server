@@ -48,7 +48,6 @@ export class OrganizationController {
     return this.orgService.updateOrg(updateOrg);
   }
 
-  @UseGuards(AuthenticatedGuard)
   @Delete('delete')
   @UsePipes(ValidationPipe)
   deleteOrg(@Body() data: deleteDto) {

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { tbEmpAddress, tbEmployee } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
-import { Repository } from 'typeorm';
+import { Repository, Connection } from 'typeorm';
 
 @Injectable()
 export class EmployeeService {
@@ -12,6 +12,7 @@ export class EmployeeService {
     private readonly empRepository: Repository<tbEmployee>,
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
+    private readonly connection: Connection,
   ) {}
 
   getEmployeeAll() {
@@ -64,11 +65,18 @@ export class EmployeeService {
 
   async deleteEmp(data: deleteDto) {
     try {
-      const deleteEmp = await this.empRepository.findOne(data.id);
-      deleteEmp.isDeleted = true;
-      deleteEmp.modifiedBy = data.userId;
-      deleteEmp.modifiedDate = new Date();
-      return await this.empRepository.save(deleteEmp);
+      const result = await this.connection.query(
+        "up_selectAllUse @SearchStr='" + data.id + "',@Column='empId'",
+      );
+      if (result) {
+        return { message: 'data is used' };
+      } else {
+        const deleteEmp = await this.empRepository.findOne(data.id);
+        deleteEmp.isDeleted = true;
+        deleteEmp.modifiedBy = data.userId;
+        deleteEmp.modifiedDate = new Date();
+        return await this.empRepository.save(deleteEmp);
+      }
     } catch (e) {
       return { message: (e as Error).message };
     }
