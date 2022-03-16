@@ -4,7 +4,7 @@ import { CreateEmpAddress } from './CreateEmpAddress.dto';
 
 export class CreateEmployee {
   id: number;
-  image: Buffer;
+  image: string;
   empCode: string;
   title: number;
   firstName: string;

@@ -26,19 +26,19 @@ export class EmployeeController {
     private readonly employeeService: EmployeeService,
   ) {}
 
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Get('')
   getUsers() {
     return this.employeeService.getEmployeeAll();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Get('/:companyId')
   getUsersByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.employeeService.getEmployeeByCompanyId(id);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createEmp(@Body() createEmp: CreateEmployee) {

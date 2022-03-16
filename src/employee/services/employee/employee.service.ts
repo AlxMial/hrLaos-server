@@ -15,19 +15,40 @@ export class EmployeeService {
     private readonly connection: Connection,
   ) {}
 
-  getEmployeeAll() {
-    const employee = this.empRepository.find();
+  async getEmployeeAll() {
+    const employee = await this.empRepository.find();
+    employee.forEach(
+      (data) =>
+        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+    );
     return employee;
   }
 
-  getEmployeeByCompanyId(companyId: number) {
-    const employee = this.empRepository.findOne({ companyId: companyId });
+  async getEmployeeByCompanyId(companyId: number) {
+    const employee = await this.empRepository.find({ companyId: companyId });
+    employee.forEach(
+      (data) =>
+        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+    );
     return employee;
   }
 
-  createEmp(createEmp: CreateEmployee) {
+  async createEmp(createEmp: CreateEmployee) {
+    const Image = createEmp.image;
+    createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
-    return this.empRepository.save(newEmp);
+    const SaveEmp = await this.empRepository.save(newEmp);
+    const sql =
+      'update tbEmployee set image = (CAST( ' +
+      "'" +
+      Image.toString() +
+      "'" +
+      ' AS varbinary(max)))  where id = ' +
+      SaveEmp.id +
+      '';
+    const result = await this.connection.query(sql);
+    SaveEmp.image = Image;
+    return SaveEmp;
   }
 
   async updateEmp(updateEmp: CreateEmployee) {

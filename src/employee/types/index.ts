@@ -1,6 +1,6 @@
 export interface employee {
   id: number;
-  image: Buffer;
+  image: string;
   empCode: string;
   title: number;
   firstName: string;

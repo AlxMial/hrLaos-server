@@ -11,8 +11,9 @@ export class tbEmployee {
   @Column({
     nullable: true,
     default: null,
+    type: 'varbinary',
   })
-  image: Buffer;
+  image: string;
 
   @Column({
     nullable: true,
