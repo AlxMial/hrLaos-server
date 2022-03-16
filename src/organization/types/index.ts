@@ -28,8 +28,8 @@ export interface tbOrgAddress {
   id: number;
   orgId: number;
   addressDetail: string;
+  subDistrict: string;
   district: string;
-  amphur: string;
   province: string;
   postalCode: string;
   country: string;

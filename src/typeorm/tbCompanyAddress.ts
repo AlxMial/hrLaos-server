@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tbEmpAddress' })
-export class tbEmpAddress {
+@Entity({ name: 'tbCompanyAddress' })
+export class tbCompanyAddress {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     name: 'id',
@@ -11,18 +11,12 @@ export class tbEmpAddress {
   @Column({
     nullable: false,
     default: null,
+    type: 'bigint',
   })
-  empId: number;
+  companyId: number;
 
   @Column({
-    nullable: true,
-    default: '',
-    length: 25,
-  })
-  addressType: string;
-
-  @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 255,
   })
@@ -36,65 +30,72 @@ export class tbEmpAddress {
   subDistrict: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 100,
   })
   district: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 100,
   })
   province: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 25,
   })
   postalCode: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
-    length: 100,
+    length: 25,
   })
   country: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 50,
   })
   phone: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 50,
   })
   email: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
+    default: '',
+    length: 50,
+  })
+  fax: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 100,
+  })
+  website: string;
+
+  @Column({
+    nullable: false,
     default: null,
   })
   latitude: number;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: null,
   })
   longitude: number;
-
-  @Column({
-    nullable: false,
-    default: null,
-    type: 'bigint',
-  })
-  companyId: number;
 
   @Column({
     nullable: true,

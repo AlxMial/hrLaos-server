@@ -7,8 +7,8 @@ export class CreateOrgAddress {
   orgId: string;
 
   addressDetail: string;
+  subDistrict: string;
   district: string;
-  amphur: string;
   province: string;
   postalCode: string;
   country: string;

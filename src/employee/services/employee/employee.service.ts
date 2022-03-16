@@ -51,10 +51,6 @@ export class EmployeeService {
       data.identityExpire = updateEmp.identityExpire;
       data.passportNo = updateEmp.passportNo;
       data.passportExpire = updateEmp.passportExpire;
-      data.maritalDate = updateEmp.maritalDate;
-      data.maritalStatus = updateEmp.maritalStatus;
-      data.exemptReason = updateEmp.exemptReason;
-      data.orgId = updateEmp.orgId;
       data.modifiedBy = updateEmp.userId;
       data.modifiedDate = new Date();
       return await this.empRepository.save(data);

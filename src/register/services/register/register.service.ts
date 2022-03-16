@@ -1,18 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { tbRegister, tbUser, tbOrg } from '../../../typeorm';
+import { tbRegister } from '../../../typeorm';
 import { Repository } from 'typeorm';
 import { Register } from '../../types';
 import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { encodePassword } from 'src/utils/bcrypt';
 import { MailService } from '../../../mail/services/mail/mail.service';
 import { EncryptService } from 'src/utils/crypto';
-import { CreateOrg } from 'src/organization/dtos/CreateOrg.dto';
-import { OrganizationService } from 'src/organization/service/organization/organization.service';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
+import { CompanyService } from 'src/company/services/company/company.service';
+import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
 
 @Injectable()
 export class RegisterService {
@@ -21,8 +21,8 @@ export class RegisterService {
     private readonly registerRepository: Repository<tbRegister>,
     private mailService: MailService,
     private encryptService: EncryptService,
-    @Inject('ORGANIZATION_SERVICE')
-    private readonly organizationService: OrganizationService,
+    @Inject('COMPANY_SERVICE')
+    private readonly companyService: CompanyService,
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService,
     @Inject('USER_SERVICE')
@@ -78,24 +78,20 @@ export class RegisterService {
   }
 
   async activateRegister(data: any) {
-    const createOrg = new CreateOrg();
-    createOrg.companyId = data.id;
+    const createOrg = new CreateCompany();
+    createOrg.registerId = data.id;
     createOrg.isDeleted = false;
-    createOrg.isFiscalYear = false;
-    createOrg.isCalLeaveFiscalYear = false;
-    createOrg.orgName = data.companyName;
-    createOrg.orgType = 'HeadOffice';
-    const org = await this.organizationService.createOrg(createOrg);
+    createOrg.companyName = data.companyName;
+    createOrg.companyType = '1';
+    const org = await this.companyService.createCompany(createOrg);
 
     const createEmp = new CreateEmployee();
-    createEmp.companyId = data.id;
+    createEmp.companyId = org.id;
     createEmp.isDeleted = false;
-    createEmp.isOver65 = false;
-    createEmp.orgId = org.id;
     const emp = await this.employeeService.createEmp(createEmp);
 
     const createUser = new CreateUserDto();
-    createUser.companyId = data.id;
+    createUser.companyId = org.id;
     createUser.email = data.email;
     createUser.empId = emp.id;
     createUser.isActivate = true;

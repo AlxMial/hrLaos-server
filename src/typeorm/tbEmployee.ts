@@ -126,44 +126,6 @@ export class tbEmployee {
   passportExpire: Date;
 
   @Column({
-    nullable: true,
-    default: null,
-  })
-  maritalStatus: number;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isOver65: boolean;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  maritalDate: Date;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  militaryStatus: number;
-
-  @Column({
-    nullable: true,
-    default: '',
-    length: 255,
-  })
-  exemptReason: string;
-
-  @Column({
-    nullable: false,
-    default: null,
-    type: 'bigint',
-  })
-  orgId: number;
-
-  @Column({
     nullable: false,
     default: null,
     type: 'bigint',

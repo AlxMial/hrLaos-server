@@ -22,17 +22,6 @@ export class CreateEmployee {
   identityExpire: Date;
   passportNo: string;
   passportExpire: Date;
-  maritalStatus: number;
-
-  @IsNotEmpty()
-  isOver65: boolean;
-
-  @IsNotEmpty()
-  orgId: number;
-
-  maritalDate: Date;
-  militaryStatus: number;
-  exemptReason: string;
 
   @IsNotEmpty()
   companyId: number;

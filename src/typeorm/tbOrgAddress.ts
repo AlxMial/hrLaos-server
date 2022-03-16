@@ -27,14 +27,14 @@ export class tbOrgAddress {
     default: '',
     length: 100,
   })
-  district: string;
+  subDistrict: string;
 
   @Column({
     nullable: false,
     default: '',
     length: 100,
   })
-  amphur: string;
+  district: string;
 
   @Column({
     nullable: false,
@@ -95,7 +95,7 @@ export class tbOrgAddress {
     nullable: false,
     default: null,
   })
-  longtitude: number;
+  longitude: number;
 
   @Column({
     nullable: false,

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tbEmpAddress' })
-export class tbEmpAddress {
+@Entity({ name: 'tbCompany' })
+export class tbCompany {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     name: 'id',
@@ -10,91 +10,71 @@ export class tbEmpAddress {
 
   @Column({
     nullable: false,
-    default: null,
-  })
-  empId: number;
-
-  @Column({
-    nullable: true,
     default: '',
     length: 25,
   })
-  addressType: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-    length: 255,
-  })
-  addressDetail: string;
+  companyCode: string;
 
   @Column({
     nullable: true,
     default: '',
     length: 100,
   })
-  subDistrict: string;
+  companyName: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 100,
   })
-  district: string;
+  companyNameEn: string;
 
   @Column({
-    nullable: true,
-    default: '',
-    length: 100,
-  })
-  province: string;
-
-  @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 25,
   })
-  postalCode: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-    length: 100,
-  })
-  country: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-    length: 50,
-  })
-  phone: string;
-
-  @Column({
-    nullable: true,
-    default: '',
-    length: 50,
-  })
-  email: string;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  latitude: number;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  longitude: number;
+  companyType: string;
 
   @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
-  companyId: number;
+  businessType: number;
+
+  @Column({
+    nullable: false,
+    default: null,
+  })
+  programStartDate: Date;
+
+  @Column({
+    nullable: false,
+    default: null,
+  })
+  image: Buffer;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 25,
+  })
+  taxNo: string;
+
+  @Column({
+    nullable: false,
+    default: '',
+    length: 25,
+  })
+  taxBranchNo: string;
+
+  @Column({
+    nullable: false,
+    default: null,
+    type: 'bigint',
+  })
+  registerId: number;
 
   @Column({
     nullable: true,

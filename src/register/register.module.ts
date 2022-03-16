@@ -1,27 +1,20 @@
 import { Module } from '@nestjs/common';
 import { RegisterController } from './controllers/register/register.controller';
 import { RegisterService } from './services/register/register.service';
-import {
-  tbEmpAddress,
-  tbEmployee,
-  tbOrg,
-  tbOrgAddress,
-  tbRegister,
-  tbUser,
-} from 'src/typeorm';
+import { tbEmpAddress, tbEmployee, tbRegister, tbUser } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
 import { EncryptService } from 'src/utils/crypto';
-import { OrganizationService } from 'src/organization/service/organization/organization.service';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
 import { UsersService } from 'src/users/services/users/users.service';
+import { tbCompany } from 'src/typeorm/tbCompany';
+import { CompanyService } from 'src/company/services/company/company.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       tbRegister,
-      tbOrg,
-      tbOrgAddress,
+      tbCompany,
       tbEmployee,
       tbEmpAddress,
       tbUser,
@@ -35,8 +28,8 @@ import { UsersService } from 'src/users/services/users/users.service';
       useClass: RegisterService,
     },
     {
-      provide: 'ORGANIZATION_SERVICE',
-      useClass: OrganizationService,
+      provide: 'COMPANY_SERVICE',
+      useClass: CompanyService,
     },
     {
       provide: 'EMPLOYEE_SERVICE',

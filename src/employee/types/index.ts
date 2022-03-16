@@ -18,12 +18,6 @@ export interface employee {
   identityExpire: Date;
   passportNo: string;
   passportExpire: Date;
-  maritalStatus: number;
-  isOver65: boolean;
-  maritalDate: Date;
-  militaryStatus: number;
-  exemptReason: string;
-  orgId: number;
   companyId: number;
   createdBy: number;
   createdDate: Date;
@@ -37,8 +31,8 @@ export interface address {
   empId: number;
   addressType: string;
   addressDetail: string;
+  subDistrict: string;
   district: string;
-  amphur: string;
   province: string;
   postalCode: string;
   country: string;

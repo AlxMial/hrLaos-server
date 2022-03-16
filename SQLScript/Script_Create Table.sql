@@ -22,6 +22,7 @@ CREATE TYPE [dbo].[ShortFloat] FROM [DECIMAL](10, 4) NULL
 CREATE TYPE [dbo].[MediumFloat] FROM [DECIMAL](16, 6) NULL
 CREATE TYPE [dbo].[LongFloat] FROM [DECIMAL](28, 6) NULL
 CREATE TYPE [dbo].[MoneyFloat] FROM [decimal](10, 2) NULL
+CREATE TYPE [dbo].[Byte] FROM [VARBINARY](max) NULL
 
 /****** Create Table ******/
 SET ANSI_NULLS ON
@@ -50,100 +51,102 @@ CREATE TABLE [dbo].[tbRegister](
 ) ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[tbOrg](
-	[OrgID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
-	[OrgCode] [dbo].[VeryShortString] NULL,
-	[OrgName] [dbo].[MediumString] NOT NULL,
-	[OrgNameEng] [dbo].[MediumString] NULL,
-	[OrgType] [dbo].[VeryShortString] NOT NULL,
-	[BusinessType] [dbo].[IDIncrement] NULL,
-	[BeginProgram] [datetime] NULL,
-	[Image] [dbo].[ImageFile] NULL,
-	[TaxNo] [dbo].[VeryShortString] NULL,
-	[TaxBranchNo] [dbo].[VeryShortString] NULL,
-	[IsFiscalYear] [dbo].[YesNo] NOT NULL,
-	[IsCalLeaveFiscalYear] [dbo].[YesNo] NOT NULL,
-	[DateStartYear] [datetime] NULL,
-	[MonthStartYear] [dbo].[LongNumber] NULL,
-	[YearCount] [dbo].[LongNumber] NULL,
-	[HourPerDay] [dbo].[VeryShortString] NULL,
-	[DayPerMonth] [dbo].[VeryShortString] NULL,
-	[CompanyID] [dbo].[IDIncrement] NOT NULL,
+CREATE TABLE [dbo].[tbCompany](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[companyCode] [dbo].[VeryShortString] NULL,
+	[companyName] [dbo].[MediumString] NOT NULL,
+	[companyNameEn] [dbo].[MediumString] NULL,
+	[companyType] [dbo].[VeryShortString] NOT NULL,
+	[businessType] [dbo].[IDIncrement] NULL,
+	[programStartDate] [datetime] NULL,
+	[Image] [dbo].[Byte] NULL,
+	[taxNo] [dbo].[VeryShortString] NULL,
+	[taxBranchNo] [dbo].[VeryShortString] NULL,
 	[CreatedBy] [dbo].[IDIncrement] NULL,
 	[CreatedDate] [datetime] NULL,
 	[ModifiedBy] [dbo].[IDIncrement] NULL,
 	[ModifiedDate] [datetime] NULL,
 	[IsDeleted] [dbo].[YesNo] NOT NULL,
- CONSTRAINT [PK_tbOrg] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_tbCompany] PRIMARY KEY CLUSTERED 
 (
-	[OrgID] ASC
+	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-CREATE TABLE [dbo].[tbOrgAddress](
-	[OrgAddressID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
-	[OrgID] [dbo].[IDIncrement] NOT NULL,
-	[AddressDetail] [dbo].[LongString] NULL,
-	[District] [dbo].[MediumString] NULL,
-	[Amphur] [dbo].[MediumString] NULL,
-	[Province] [dbo].[MediumString] NULL,
-	[PostalCode] [dbo].[VeryShortString] NULL,
-	[Country] [dbo].[MediumString] NULL,
-	[Phone] [dbo].[ShortString] NULL,
-	[Email] [dbo].[ShortString] NULL,
-	[Fax] [dbo].[ShortString] NULL,
-	[Website] [dbo].[MediumString] NULL,
-	[Latitude] [dbo].[LongFloat] NULL,
-	[Longtitude] [dbo].[LongFloat] NULL,
-	[CompanyID] [dbo].[IDIncrement] NOT NULL,
+CREATE TABLE [dbo].[tbCompanyAddress](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[companyID] [dbo].[IDIncrement] NOT NULL,
+	[addressDetail] [dbo].[LongString] NULL,
+	[subDistrict] [dbo].[MediumString] NULL,
+	[district] [dbo].[MediumString] NULL,
+	[province] [dbo].[MediumString] NULL,
+	[postalCode] [dbo].[VeryShortString] NULL,
+	[country] [dbo].[MediumString] NULL,
+	[phone] [dbo].[ShortString] NULL,
+	[email] [dbo].[ShortString] NULL,
+	[fax] [dbo].[ShortString] NULL,
+	[website] [dbo].[MediumString] NULL,
+	[latitude] [dbo].[LongFloat] NULL,
+	[longitude] [dbo].[LongFloat] NULL,
 	[CreatedBy] [dbo].[IDIncrement] NULL,
 	[CreatedDate] [datetime] NULL,
 	[ModifiedBy] [dbo].[IDIncrement] NULL,
 	[ModifiedDate] [datetime] NULL,
 	[IsDeleted] [dbo].[YesNo] NOT NULL,
- CONSTRAINT [PK_tbOrgAddress] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_tbCompanyAddress] PRIMARY KEY CLUSTERED 
 (
-	[OrgAddressID] ASC
+	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[tbOrgAddress]  WITH CHECK ADD  CONSTRAINT [FK_tbOrgAddress_tbOrg] FOREIGN KEY([OrgID])
-REFERENCES [dbo].[tbOrg] ([OrgID])
-GO
-
-ALTER TABLE [dbo].[tbOrgAddress] CHECK CONSTRAINT [FK_tbOrgAddress_tbOrg]
-GO
+CREATE TABLE [dbo].[tbCompanyWorkingDay](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[companyID] [dbo].[IDIncrement] NOT NULL,
+	[startTime] [datetime] NULL,
+	[endTime] [datetime] NULL,
+	[hourPerDay] [dbo].[ShortNumber] NULL,
+	[dayPerMonth] [dbo].[ShortNumber] NULL,
+	[isMon] [dbo].[YesNo] NOT NULL,
+	[isTue] [dbo].[YesNo] NOT NULL,
+	[isWed] [dbo].[YesNo] NOT NULL,
+	[isThu] [dbo].[YesNo] NOT NULL,
+	[isFri] [dbo].[YesNo] NOT NULL,
+	[isSat] [dbo].[YesNo] NOT NULL,
+	[isSun] [dbo].[YesNo] NOT NULL,
+	[CreatedBy] [dbo].[IDIncrement] NULL,
+	[CreatedDate] [datetime] NULL,
+	[ModifiedBy] [dbo].[IDIncrement] NULL,
+	[ModifiedDate] [datetime] NULL,
+	[IsDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbCompanyWorkingDay] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)
 
 CREATE TABLE [dbo].[tbEmployee](
-	[EmpID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
-	[Image] [dbo].[ImageFile] NULL,
-	[EmpCode] [dbo].[VeryShortString] NULL,
-	[Title] [dbo].[IDIncrement] NULL,
-	[FirstName] [dbo].[ShortString] NULL,
-	[LastName] [dbo].[ShortString] NULL,
-	[NickName] [dbo].[ShortString] NULL,
-	[TitleEn] [dbo].[IDIncrement] NULL,
-	[FirstNameEng] [dbo].[ShortString] NULL,
-	[LastNameEng] [dbo].[ShortString] NULL,
-	[NickNameEng] [dbo].[ShortString] NULL,
-	[Gender] [dbo].[IDIncrement] NULL,
-	[BirthDate] [datetime] NULL,
-	[Religion] [dbo].[IDIncrement] NULL,
-	[Nationality] [dbo].[IDIncrement] NULL,
-	[IdentificationNo] [dbo].[VeryShortString] NULL,
-	[IdentityExpire] [datetime] NULL,
-	--[TaxID] [dbo].[VeryShortString] NULL,
-	[PassportNo] [dbo].[VeryShortString] NULL,
-	[PassportExpire] [datetime] NULL,
-	[MaritalStatus] [dbo].[IDIncrement] NULL,
-	[IsOver65] [dbo].[YesNo] NOT NULL,
-	[MaritalDate] [datetime] NULL,
-	[MilitaryStatus] [dbo].[IDIncrement] NULL,
-	[ExemptReason] [dbo].[LongString] NULL,
-	[OrgID] [dbo].[IDIncrement] NOT NULL,
-	[CompanyID] [dbo].[IDIncrement] NOT NULL,
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[image] [dbo].[Byte] NULL,
+	[empCode] [dbo].[VeryShortString] NULL,
+	[title] [dbo].[IDIncrement] NULL,
+	[firstName] [dbo].[ShortString] NULL,
+	[lastName] [dbo].[ShortString] NULL,
+	[nickName] [dbo].[ShortString] NULL,
+	[titleEn] [dbo].[IDIncrement] NULL,
+	[firstNameEn] [dbo].[ShortString] NULL,
+	[lastNameEn] [dbo].[ShortString] NULL,
+	[nickNameEn] [dbo].[ShortString] NULL,
+	[gender] [dbo].[IDIncrement] NULL,
+	[birthDate] [datetime] NULL,
+	[religion] [dbo].[IDIncrement] NULL,
+	[nationality] [dbo].[IDIncrement] NULL,
+	[identificationNo] [dbo].[VeryShortString] NULL,
+	[identityExpire] [datetime] NULL,
+	[passportNo] [dbo].[VeryShortString] NULL,
+	[passportExpire] [datetime] NULL,
+	[companyID] [dbo].[IDIncrement] NOT NULL,
 	[CreatedBy] [dbo].[IDIncrement] NULL,
 	[CreatedDate] [datetime] NULL,
 	[ModifiedBy] [dbo].[IDIncrement] NULL,
@@ -151,23 +154,16 @@ CREATE TABLE [dbo].[tbEmployee](
 	[IsDeleted] [dbo].[YesNo] NOT NULL,
  CONSTRAINT [PK_tbEmployee] PRIMARY KEY CLUSTERED 
 (
-	[EmpID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[tbEmployee]  WITH CHECK ADD  CONSTRAINT [FK_tbEmployee_tbOrg] FOREIGN KEY([OrgID])
-REFERENCES [dbo].[tbOrg] ([OrgID])
+ALTER TABLE [dbo].[tbEmployee]  WITH CHECK ADD  CONSTRAINT [FK_tbEmployee_tbCompany] FOREIGN KEY([companyID])
+REFERENCES [dbo].[tbCompany] ([id])
 GO
 
-ALTER TABLE [dbo].[tbEmployee] CHECK CONSTRAINT [FK_tbEmployee_tbOrg]
-GO
-
-ALTER TABLE [dbo].[tbEmployee]  WITH CHECK ADD  CONSTRAINT [FK_tbEmployee_tbRegister] FOREIGN KEY([CompanyID])
-REFERENCES [dbo].[tbRegister] ([RegisterID])
-GO
-
-ALTER TABLE [dbo].[tbEmployee] CHECK CONSTRAINT [FK_tbEmployee_tbRegister]
+ALTER TABLE [dbo].[tbEmployee] CHECK CONSTRAINT [FK_tbEmployee_tbCompany]
 GO
 
 CREATE TABLE [dbo].[tbUser](
@@ -191,35 +187,21 @@ CREATE TABLE [dbo].[tbUser](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[tbUser]  WITH CHECK ADD  CONSTRAINT [FK_tbUser_tbEmployee] FOREIGN KEY([EmpID])
-REFERENCES [dbo].[tbEmployee] ([EmpID])
-GO
-
-ALTER TABLE [dbo].[tbUser] CHECK CONSTRAINT [FK_tbUser_tbEmployee]
-GO
-
-ALTER TABLE [dbo].[tbUser]  WITH CHECK ADD  CONSTRAINT [FK_tbUser_tbRegister] FOREIGN KEY([CompanyID])
-REFERENCES [dbo].[tbRegister] ([RegisterID])
-GO
-
-ALTER TABLE [dbo].[tbUser] CHECK CONSTRAINT [FK_tbUser_tbRegister]
-GO
-
 
 CREATE TABLE [dbo].[tbEmpAddress](
-	[EmpAddressID] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
 	[EmpID] [dbo].[IDIncrement] NOT NULL,
 	[AddressType] [dbo].[VeryShortString] NULL,
 	[AddressDetail] [dbo].[LongString] NULL,
-	[District] [dbo].[MediumString] NULL,
-	[Amphur] [dbo].[MediumString] NULL,
+	[subDistrict] [dbo].[MediumString] NULL,
+	[district] [dbo].[MediumString] NULL,
 	[Province] [dbo].[MediumString] NULL,
 	[PostalCode] [dbo].[VeryShortString] NULL,
 	[Country] [dbo].[MediumString] NULL,
 	[Phone] [dbo].[ShortString] NULL,
 	[Email] [dbo].[ShortString] NULL,
 	[Latitude] [dbo].[LongFloat] NULL,
-	[Longtitude] [dbo].[LongFloat] NULL,
+	[Longitude] [dbo].[LongFloat] NULL,
 	[CompanyID] [dbo].[IDIncrement] NOT NULL,
 	[CreatedBy] [dbo].[IDIncrement] NULL,
 	[CreatedDate] [datetime] NULL,
@@ -240,3 +222,24 @@ GO
 
 ALTER TABLE [dbo].[tbEmpAddress] CHECK CONSTRAINT [FK_tbEmpAddress_tbEmployee]
 GO
+
+ALTER TABLE tbCompany ADD CONSTRAINT FK_tbCompany_tbRegister
+FOREIGN KEY (registerId) REFERENCES tbRegister(id);
+
+ALTER TABLE tbCompanyAddress ADD CONSTRAINT FK_tbCompanyAddress_tbCompany
+FOREIGN KEY (companyId) REFERENCES tbCompany(id);
+
+ALTER TABLE tbCompanyWorkingDay ADD CONSTRAINT FK_tbCompanyWorkingDay_tbCompany
+FOREIGN KEY (companyId) REFERENCES tbCompany(id);
+
+ALTER TABLE tbCompanyWorkingDay ADD CONSTRAINT FK_tbCompanyWorkingDay_tbCompany
+FOREIGN KEY (companyId) REFERENCES tbCompany(id);
+
+ALTER TABLE tbEmployee ADD CONSTRAINT FK_tbEmployee_tbCompany
+FOREIGN KEY (companyId) REFERENCES tbCompany(id);
+
+ALTER TABLE tbUser ADD CONSTRAINT FK_tbUser_tbCompany
+FOREIGN KEY (companyId) REFERENCES tbCompany(id);
+
+ALTER TABLE tbUser ADD CONSTRAINT FK_tbUser_tbEmployee
+FOREIGN KEY (empId) REFERENCES tbEmployee(id);

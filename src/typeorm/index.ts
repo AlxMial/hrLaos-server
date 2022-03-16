@@ -5,6 +5,7 @@ import { tbOrg } from './tbOrg';
 import { tbOrgAddress } from './tbOrgAddress';
 import { tbEmployee } from './tbEmployee';
 import { tbEmpAddress } from './tbEmpAddress';
+import { tbCompany } from './tbCompany';
 
 const entities = [
   tbUser,
@@ -14,6 +15,7 @@ const entities = [
   tbOrgAddress,
   tbEmployee,
   tbEmpAddress,
+  tbCompany,
 ];
 
 export { tbUser };
@@ -29,5 +31,7 @@ export { tbOrgAddress };
 export { tbEmployee };
 
 export { tbEmpAddress };
+
+export { tbCompany };
 
 export default entities;

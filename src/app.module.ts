@@ -10,6 +10,7 @@ import { RegisterModule } from './register/register.module';
 import { ConfigModule } from '@nestjs/config';
 import { EmployeeModule } from './employee/employee.module';
 import { OrganizationModule } from './organization/organization.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { OrganizationModule } from './organization/organization.module';
     }),
     EmployeeModule,
     OrganizationModule,
+    CompanyModule,
   ],
   controllers: [],
   providers: [],
