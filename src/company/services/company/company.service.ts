@@ -37,16 +37,17 @@ export class CompanyService {
     createCompany.image = null;
     const newCompany = this.companyRepository.create(createCompany);
     const SaveEmp = await this.companyRepository.save(newCompany);
-
-    const sql =
-      'update tbEmployee set image = (CAST( ' +
-      "'" +
-      Image.toString() +
-      "'" +
-      ' AS varbinary(max)))  where id = ' +
-      SaveEmp.id +
-      '';
-    const result = await this.connection.query(sql);
+    if (createCompany.image) {
+      const sql =
+        'update tbCompany set image = (CAST( ' +
+        "'" +
+        Image.toString() +
+        "'" +
+        ' AS varbinary(max)))  where id = ' +
+        SaveEmp.id +
+        '';
+      const result = await this.connection.query(sql);
+    }
     SaveEmp.image = Image;
     return SaveEmp;
   }
@@ -58,11 +59,13 @@ export class CompanyService {
       // console.log(updateOrg);
       // return await this.orgRepository.update(updateOrg.id, updateOrg);
       const sql =
-        'update tbEmployee set image = (CAST( ' +
+        'update tbCompany set image = (CAST( ' +
         "'" +
-        updateCompany.image +
+        (updateCompany.image !== undefined
+          ? updateCompany.image.toString()
+          : null) +
         "'" +
-        ' AS varbinary(max)))  where id = ' +
+        ' AS varbinary(max))) where id = ' +
         updateCompany.id +
         '';
       const result = await this.connection.query(sql);

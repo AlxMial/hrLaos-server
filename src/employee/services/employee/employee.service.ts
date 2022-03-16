@@ -38,15 +38,17 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
-    const sql =
-      'update tbEmployee set image = (CAST( ' +
-      "'" +
-      Image.toString() +
-      "'" +
-      ' AS varbinary(max)))  where id = ' +
-      SaveEmp.id +
-      '';
-    const result = await this.connection.query(sql);
+    if (createEmp.image) {
+      const sql =
+        'update tbEmployee set image = (CAST( ' +
+        "'" +
+        Image.toString() +
+        "'" +
+        ' AS varbinary(max)))  where id = ' +
+        SaveEmp.id +
+        '';
+      const result = await this.connection.query(sql);
+    }
     SaveEmp.image = Image;
     return SaveEmp;
   }
