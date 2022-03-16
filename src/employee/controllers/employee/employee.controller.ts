@@ -2,11 +2,13 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -36,9 +38,24 @@ export class EmployeeController {
     return this.employeeService.getEmployeeByCompanyId(id);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
-  createOrg(@Body() createEmp: CreateEmployee) {
+  createEmp(@Body() createEmp: CreateEmployee) {
     return this.employeeService.createEmp(createEmp);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Put('update')
+  @UsePipes(ValidationPipe)
+  updateEmp(@Body() createEmp: CreateEmployee) {
+    return this.employeeService.updateEmp(createEmp);
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Delete('delete')
+  @UsePipes(ValidationPipe)
+  deleteEmp(@Body() createEmp: CreateEmployee) {
+    return this.employeeService.deleteEmp(createEmp);
   }
 }
