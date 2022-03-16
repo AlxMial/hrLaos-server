@@ -56,7 +56,7 @@ export class EmployeeService {
       const sql =
         'update tbEmployee set image = (CAST( ' +
         "'" +
-        Image.toString() +
+        (updateEmp.image !== undefined ? updateEmp.image.toString() : null) +
         "'" +
         ' AS varbinary(max)))  where id = ' +
         updateEmp.id +

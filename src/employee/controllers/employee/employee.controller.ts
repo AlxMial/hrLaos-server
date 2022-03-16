@@ -45,7 +45,7 @@ export class EmployeeController {
     return this.employeeService.createEmp(createEmp);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
   updateEmp(@Body() createEmp: CreateEmployee) {
