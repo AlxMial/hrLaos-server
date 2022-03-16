@@ -52,8 +52,9 @@ export class tbCompany {
   @Column({
     nullable: false,
     default: null,
+    type: 'varbinary',
   })
-  image: Buffer;
+  image: string;
 
   @Column({
     nullable: false,

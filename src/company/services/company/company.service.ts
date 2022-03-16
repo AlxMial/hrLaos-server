@@ -12,21 +12,43 @@ export class CompanyService {
     private readonly connection: Connection,
   ) {}
 
-  getOrgAll() {
-    const Organization = this.companyRepository.find();
+  async getOrgAll() {
+    const Organization = await this.companyRepository.find();
+    Organization.forEach(
+      (data) =>
+        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+    );
     return Organization;
   }
 
-  getCompanyByRegisterId(registerId: number) {
-    const Organization = this.companyRepository.findOne({
+  async getCompanyByRegisterId(registerId: number) {
+    const Organization = await this.companyRepository.find({
       registerId: registerId,
     });
+    Organization.forEach(
+      (data) =>
+        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+    );
     return Organization;
   }
 
-  createCompany(createCompany: CreateCompany) {
+  async createCompany(createCompany: CreateCompany) {
+    const Image = createCompany.image;
+    createCompany.image = null;
     const newCompany = this.companyRepository.create(createCompany);
-    return this.companyRepository.save(newCompany);
+    const SaveEmp = await this.companyRepository.save(newCompany);
+
+    const sql =
+      'update tbEmployee set image = (CAST( ' +
+      "'" +
+      Image.toString() +
+      "'" +
+      ' AS varbinary(max)))  where id = ' +
+      SaveEmp.id +
+      '';
+    const result = await this.connection.query(sql);
+    SaveEmp.image = Image;
+    return SaveEmp;
   }
 
   async updateCompany(updateCompany: CreateCompany) {
@@ -35,6 +57,15 @@ export class CompanyService {
       // updateOrg.modifiedDate = new Date();
       // console.log(updateOrg);
       // return await this.orgRepository.update(updateOrg.id, updateOrg);
+      const sql =
+        'update tbEmployee set image = (CAST( ' +
+        "'" +
+        updateCompany.image +
+        "'" +
+        ' AS varbinary(max)))  where id = ' +
+        updateCompany.id +
+        '';
+      const result = await this.connection.query(sql);
       const data = await this.companyRepository.findOne(updateCompany.id);
       data.companyCode = updateCompany.companyCode;
       data.companyName = updateCompany.companyName;
@@ -42,7 +73,6 @@ export class CompanyService {
       data.companyType = updateCompany.companyType;
       data.businessType = updateCompany.businessType;
       data.programStartDate = updateCompany.programStartDate;
-      data.image = updateCompany.image;
       data.taxNo = updateCompany.taxNo;
       data.taxBranchNo = updateCompany.taxBranchNo;
       data.modifiedBy = updateCompany.userId;

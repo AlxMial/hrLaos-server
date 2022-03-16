@@ -6,7 +6,7 @@ export interface Company {
   companyType: string;
   businessType: string;
   programStartDate: Date;
-  image: Buffer;
+  image: string;
   taxNo: string;
   taxBranchNo: string;
   registerId: number;

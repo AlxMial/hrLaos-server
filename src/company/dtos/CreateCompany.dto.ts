@@ -17,7 +17,7 @@ export class CreateCompany {
   businessType: number;
 
   programStartDate: Date;
-  image: Buffer;
+  image: string;
   taxNo: string;
   taxBranchNo: string;
   registerId: number;
