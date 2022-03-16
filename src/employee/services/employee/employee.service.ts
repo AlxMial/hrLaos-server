@@ -53,8 +53,17 @@ export class EmployeeService {
 
   async updateEmp(updateEmp: CreateEmployee) {
     try {
+      const sql =
+        'update tbEmployee set image = (CAST( ' +
+        "'" +
+        Image.toString() +
+        "'" +
+        ' AS varbinary(max)))  where id = ' +
+        updateEmp.id +
+        '';
+      const result = await this.connection.query(sql);
+
       const data = await this.empRepository.findOne(updateEmp.id);
-      data.image = updateEmp.image;
       data.empCode = updateEmp.empCode;
       data.title = updateEmp.title;
       data.firstName = updateEmp.firstName;
