@@ -16,6 +16,7 @@ import { RegisterService } from 'src/register/services/register/register.service
 import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { EncryptService } from 'src/utils/crypto';
 import { Response } from 'express';
+import { StatusMessage } from 'src/utils/StatusMessage';
 
 @Controller('register')
 export class RegisterController {
@@ -30,16 +31,16 @@ export class RegisterController {
     return this.registerService.createUser(createUserDto);
   }
 
-  @Get('/active/:id')
-  async activeRegister(@Param('id') id: any, @Res() res: Response) {
+  @Get('/activate/:id')
+  async activeRegister(@Param('id') id: any) {
     const Register = await this.registerService.findRegisterByID(
       this.encryptService.DecodeKey(id),
     );
     try {
-      const status = await this.registerService.activateRegister(Register.data);
-      return res.status(200).send({ msg: status.message });
+      // const status = await this.registerService.activateRegister(Register.data);
+      return await this.registerService.activateRegister(Register.data);
     } catch (err) {
-      return res.status(400).send({ msg: err });
+      return StatusMessage(true, (err as Error).message, null);
     }
   }
 }
