@@ -5,6 +5,7 @@ import { SerializedUser, User } from '../../types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { encodePassword } from 'src/utils/bcrypt';
+import { StatusMessage } from 'src/utils/StatusMessage';
 
 @Injectable()
 export class UsersService {
@@ -15,56 +16,123 @@ export class UsersService {
 
   private users: User[] = [];
 
-  getUsers() {
+  async getUsers() {
     // return this.users.map((user) => new SerializedUser(user));
-    return this.userRepository.find();
+    try {
+      return StatusMessage(true, null, await this.userRepository.find());
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  getUsersByCompanyId(companyId: number) {
-    return this.userRepository.findOne({ companyId: companyId });
+  async getUsersByCompanyId(companyId: number) {
+    try {
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.find({ companyId: companyId }),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  getUserByUsername(username: string) {
-    return this.users.find((user) => user.userName === username);
+  async getUserByUsername(username: string) {
+    try {
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.find({ userName: username }),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  getUserByID(id: number) {
-    return this.users.find((user) => user.id === id);
+  async getUserByID(id: number) {
+    try {
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.find({ id: id }),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  findUserByUsername(username: string) {
-    return this.userRepository.findOne({ userName: username });
+  async findUserByUsername(username: string) {
+    try {
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.findOne({ userName: username }),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  findUserByEmail(email: string) {
-    return this.userRepository.findOne({ email: email });
+  async findUserByEmail(email: string) {
+    try {
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.findOne({ email: email }),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  findUserById(id: number) {
-    return this.userRepository.findOne(id);
+  async findUserById(id: number) {
+    try {
+      return StatusMessage(true, null, await this.userRepository.findOne(id));
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  createUser(createuserDto: CreateUserDto) {
-    const password = encodePassword(createuserDto.password);
-    const newUser = this.userRepository.create({ ...createuserDto, password });
-    return this.userRepository.save(newUser);
+  async createUser(createuserDto: CreateUserDto) {
+    try {
+      const password = encodePassword(createuserDto.password);
+      const newUser = this.userRepository.create({
+        ...createuserDto,
+        password,
+      });
+      return StatusMessage(true, null, await this.userRepository.save(newUser));
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
-  createUserActivate(createuserDto: CreateUserDto) {
-    const newUser = this.userRepository.create(createuserDto);
-    return this.userRepository.save(newUser);
+  async createUserActivate(createuserDto: CreateUserDto) {
+    try {
+      const newUser = this.userRepository.create(createuserDto);
+      return StatusMessage(true, null, await this.userRepository.save(newUser));
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async updateUser(createUserDto: CreateUserDto) {
-    const updateUser = await this.userRepository.findOne(createUserDto.id);
-    updateUser.userName = createUserDto.userName;
-    updateUser.email = createUserDto.email;
-    updateUser.password = createUserDto.password;
-    updateUser.role = createUserDto.role;
-    updateUser.isActivate = createUserDto.isActivate;
-    updateUser.modifiedBy = createUserDto.userId;
-    updateUser.modifiedDate = new Date();
-    return await this.userRepository.save(updateUser);
+    try {
+      const updateUser = await this.userRepository.findOne(createUserDto.id);
+      updateUser.userName = createUserDto.userName;
+      updateUser.email = createUserDto.email;
+      updateUser.password = createUserDto.password;
+      updateUser.role = createUserDto.role;
+      updateUser.isActivate = createUserDto.isActivate;
+      updateUser.modifiedBy = createUserDto.userId;
+      updateUser.modifiedDate = new Date();
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.save(updateUser),
+      );
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async deleteUser(data: any) {
@@ -74,9 +142,13 @@ export class UsersService {
       updateUser.modifiedBy = data.userId;
       updateUser.modifiedDate = new Date();
       // this.userRepository.delete(id);
-      return this.userRepository.save(updateUser);
+      return StatusMessage(
+        true,
+        null,
+        await this.userRepository.save(updateUser),
+      );
     } catch (e) {
-      return { message: (e as Error).message };
+      return StatusMessage(false, (e as Error).message, null);
     }
   }
 }

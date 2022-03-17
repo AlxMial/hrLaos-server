@@ -4,6 +4,7 @@ import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { tbEmpAddress, tbEmployee } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { StatusMessage } from 'src/utils/StatusMessage';
 import { Repository, Connection } from 'typeorm';
 
 @Injectable()
@@ -17,45 +18,59 @@ export class EmployeeService {
   ) {}
 
   async getEmployeeAll() {
-    const employee = await this.empRepository.find();
-    employee.forEach(
-      (data) =>
-        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
-    );
-    return employee;
+    try {
+      const employee = await this.empRepository.find();
+      employee.forEach(
+        (data) =>
+          (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+      );
+      return StatusMessage(true, null, employee);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async getEmployeeByCompanyId(companyId: number) {
-    const employee = await this.empRepository.find({ companyId: companyId });
-    employee.forEach(
-      (data) =>
-        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
-    );
-    return employee;
+    try {
+      const employee = await this.empRepository.find({ companyId: companyId });
+      employee.forEach(
+        (data) =>
+          (data.image = data.image
+            ? Buffer.from(data.image, 'base64').toString('utf8')
+            : data.image),
+      );
+      return StatusMessage(true, null, employee);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async createEmp(createEmp: CreateEmployee) {
-    const Image = createEmp.image;
-    createEmp.image = null;
-    const newEmp = this.empRepository.create(createEmp);
-    const SaveEmp = await this.empRepository.save(newEmp);
-    if (createEmp.address !== undefined) {
-      createEmp.address.empId = SaveEmp.id;
-      await this.addressRepository.save(createEmp.address);
+    try {
+      const Image = createEmp.image;
+      createEmp.image = null;
+      const newEmp = this.empRepository.create(createEmp);
+      const SaveEmp = await this.empRepository.save(newEmp);
+      if (createEmp.address !== undefined) {
+        createEmp.address.empId = SaveEmp.id;
+        await this.addressRepository.save(createEmp.address);
+      }
+      if (createEmp.image) {
+        const sql =
+          'update tbEmployee set image = (CAST( ' +
+          "'" +
+          Image.toString() +
+          "'" +
+          ' AS varbinary(max)))  where id = ' +
+          SaveEmp.id +
+          '';
+        const result = await this.connection.query(sql);
+      }
+      SaveEmp.image = Image;
+      return StatusMessage(true, null, SaveEmp);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
     }
-    if (createEmp.image) {
-      const sql =
-        'update tbEmployee set image = (CAST( ' +
-        "'" +
-        Image.toString() +
-        "'" +
-        ' AS varbinary(max)))  where id = ' +
-        SaveEmp.id +
-        '';
-      const result = await this.connection.query(sql);
-    }
-    SaveEmp.image = Image;
-    return SaveEmp;
   }
 
   async updateEmp(updateEmp: CreateEmployee) {
@@ -69,7 +84,6 @@ export class EmployeeService {
         updateEmp.id +
         '';
       const result = await this.connection.query(sql);
-
       const data = await this.empRepository.findOne(updateEmp.id);
       data.empCode = updateEmp.empCode;
       data.title = updateEmp.title;
@@ -130,10 +144,14 @@ export class EmployeeService {
         deleteEmp.isDeleted = true;
         deleteEmp.modifiedBy = data.userId;
         deleteEmp.modifiedDate = new Date();
-        return await this.empRepository.save(deleteEmp);
+        return StatusMessage(
+          true,
+          null,
+          await this.empRepository.save(deleteEmp),
+        );
       }
     } catch (e) {
-      return { message: (e as Error).message };
+      return StatusMessage(false, (e as Error).message, null);
     }
   }
 }

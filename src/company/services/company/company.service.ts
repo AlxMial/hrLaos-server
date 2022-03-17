@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
 import { tbCompany } from 'src/typeorm/tbCompany';
+import { StatusMessage } from 'src/utils/StatusMessage';
 import { Connection, Repository } from 'typeorm';
 
 @Injectable()
@@ -13,43 +14,57 @@ export class CompanyService {
   ) {}
 
   async getOrgAll() {
-    const Organization = await this.companyRepository.find();
-    Organization.forEach(
-      (data) =>
-        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
-    );
-    return Organization;
+    try {
+      const Organization = await this.companyRepository.find();
+      Organization.forEach(
+        (data) =>
+          (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+      );
+      return StatusMessage(true, null, Organization);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async getCompanyByRegisterId(registerId: number) {
-    const Organization = await this.companyRepository.find({
-      registerId: registerId,
-    });
-    Organization.forEach(
-      (data) =>
-        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
-    );
-    return Organization;
+    try {
+      const Organization = await this.companyRepository.find({
+        registerId: registerId,
+      });
+      Organization.forEach(
+        (data) =>
+          (data.image = data.image
+            ? Buffer.from(data.image, 'base64').toString('utf8')
+            : data.image),
+      );
+      return StatusMessage(true, null, Organization);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 
   async createCompany(createCompany: CreateCompany) {
-    const Image = createCompany.image;
-    createCompany.image = null;
-    const newCompany = this.companyRepository.create(createCompany);
-    const SaveEmp = await this.companyRepository.save(newCompany);
-    if (createCompany.image) {
-      const sql =
-        'update tbCompany set image = (CAST( ' +
-        "'" +
-        Image.toString() +
-        "'" +
-        ' AS varbinary(max)))  where id = ' +
-        SaveEmp.id +
-        '';
-      const result = await this.connection.query(sql);
+    try {
+      const Image = createCompany.image;
+      createCompany.image = null;
+      const newCompany = this.companyRepository.create(createCompany);
+      const SaveEmp = await this.companyRepository.save(newCompany);
+      if (createCompany.image) {
+        const sql =
+          'update tbCompany set image = (CAST( ' +
+          "'" +
+          Image.toString() +
+          "'" +
+          ' AS varbinary(max)))  where id = ' +
+          SaveEmp.id +
+          '';
+        const result = await this.connection.query(sql);
+      }
+      SaveEmp.image = Image;
+      return StatusMessage(true, null, SaveEmp);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
     }
-    SaveEmp.image = Image;
-    return SaveEmp;
   }
 
   async updateCompany(updateCompany: CreateCompany) {
@@ -80,9 +95,9 @@ export class CompanyService {
       data.taxBranchNo = updateCompany.taxBranchNo;
       data.modifiedBy = updateCompany.userId;
       data.modifiedDate = new Date();
-      return await this.companyRepository.save(data);
+      return StatusMessage(true, null, await this.companyRepository.save(data));
     } catch (e) {
-      return { message: (e as Error).message };
+      return StatusMessage(false, (e as Error).message, null);
     }
   }
 
@@ -99,10 +114,14 @@ export class CompanyService {
         deleteCompany.modifiedBy = data.userId;
         deleteCompany.modifiedDate = new Date();
         // this.userRepository.delete(id);
-        return await this.companyRepository.save(deleteCompany);
+        return StatusMessage(
+          true,
+          null,
+          await this.companyRepository.save(deleteCompany),
+        );
       }
     } catch (e) {
-      return { message: (e as Error).message };
+      return StatusMessage(false, (e as Error).message, null);
     }
   }
 }

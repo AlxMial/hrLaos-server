@@ -35,10 +35,9 @@ export class RegisterController {
     const Register = await this.registerService.findRegisterByID(
       this.encryptService.DecodeKey(id),
     );
-
     try {
-      await this.registerService.activateRegister(Register);
-      return res.status(200).send({ msg: 'Active Successfully' });
+      const status = await this.registerService.activateRegister(Register.data);
+      return res.status(200).send({ msg: status.message });
     } catch (err) {
       return res.status(400).send({ msg: err });
     }

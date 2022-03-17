@@ -13,6 +13,7 @@ import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 import { CompanyService } from 'src/company/services/company/company.service';
 import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
+import { StatusMessage } from 'src/utils/StatusMessage';
 
 @Injectable()
 export class RegisterService {
@@ -31,8 +32,12 @@ export class RegisterService {
 
   private register: Register[] = [];
 
-  findRegisterByID(id: any) {
-    return this.registerRepository.findOne({ id: id });
+  async findRegisterByID(id: any) {
+    return StatusMessage(
+      true,
+      null,
+      await this.registerRepository.findOne({ id: id }),
+    );
   }
 
   async findDuplicateRegister(createRegisterDto: CreateRegisterDto) {
@@ -59,50 +64,65 @@ export class RegisterService {
   }
 
   async createUser(createRegisterDto: CreateRegisterDto) {
-    const register = await this.findDuplicateRegister(createRegisterDto);
-    if (register.email !== '' || register.companyName !== '') {
-      return register;
-    } else {
-      const password = encodePassword(createRegisterDto.password);
-      const newRegister = this.registerRepository.create({
-        ...createRegisterDto,
-        password,
-      });
-      await this.registerRepository.save(newRegister).then((e) => {
-        const token = this.encryptService.EncodeKey(e.id);
-        this.mailService.sendUserConfirmation(e, token);
-        console.log(token);
-      });
-      return newRegister;
+    try {
+      const register = await this.findDuplicateRegister(createRegisterDto);
+      if (register.email !== '' || register.companyName !== '') {
+        return StatusMessage(false, register, null);
+      } else {
+        const password = encodePassword(createRegisterDto.password);
+        const newRegister = this.registerRepository.create({
+          ...createRegisterDto,
+          password,
+        });
+        await this.registerRepository.save(newRegister).then((e) => {
+          const token = this.encryptService.EncodeKey(e.id);
+          this.mailService.sendUserConfirmation(e, token);
+          console.log(token);
+        });
+        return StatusMessage(true, null, newRegister);
+      }
+    } catch (e) {
+      StatusMessage(false, (e as Error).message, null);
     }
   }
 
   async activateRegister(data: any) {
-    const createOrg = new CreateCompany();
-    createOrg.registerId = data.id;
-    createOrg.isDeleted = false;
-    createOrg.companyName = data.companyName;
-    createOrg.companyType = '1';
-    createOrg.createdDate = new Date();
-    const org = await this.companyService.createCompany(createOrg);
+    try {
+      const CheckRegister = await this.companyService.getCompanyByRegisterId(
+        data.id,
+      );
+      if (CheckRegister.data.toString() !== '') {
+        return StatusMessage(false, 'has already been registered', null);
+      } else {
+        const createOrg = new CreateCompany();
+        createOrg.registerId = data.id;
+        createOrg.isDeleted = false;
+        createOrg.companyName = data.companyName;
+        createOrg.companyType = '1';
+        createOrg.createdDate = new Date();
+        const org = await this.companyService.createCompany(createOrg);
 
-    const createEmp = new CreateEmployee();
-    createEmp.companyId = org.id;
-    createEmp.isDeleted = false;
-    createEmp.createdDate = new Date();
-    const emp = await this.employeeService.createEmp(createEmp);
+        const createEmp = new CreateEmployee();
+        createEmp.companyId = org.data.id;
+        createEmp.isDeleted = false;
+        createEmp.createdDate = new Date();
+        const emp = await this.employeeService.createEmp(createEmp);
 
-    const createUser = new CreateUserDto();
-    createUser.companyId = org.id;
-    createUser.email = data.email;
-    createUser.empId = emp.id;
-    createUser.isActivate = true;
-    createUser.password = data.password;
-    createUser.role = 'administrator';
-    createUser.userName = data.email;
-    createUser.isDeleted = false;
-    createUser.createdDate = new Date();
-    const user = await this.userService.createUserActivate(createUser);
-    return 'Seccssfully';
+        const createUser = new CreateUserDto();
+        createUser.companyId = org.data.id;
+        createUser.email = data.email;
+        createUser.empId = emp.data.id;
+        createUser.isActivate = true;
+        createUser.password = data.password;
+        createUser.role = 'administrator';
+        createUser.userName = data.email;
+        createUser.isDeleted = false;
+        createUser.createdDate = new Date();
+        const user = await this.userService.createUserActivate(createUser);
+        return StatusMessage(true, null, null);
+      }
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, null);
+    }
   }
 }
