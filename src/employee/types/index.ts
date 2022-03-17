@@ -40,7 +40,6 @@ export interface address {
   email: string;
   latitude: number;
   longitude: number;
-  companyId: number;
   createdBy: number;
   createdDate: Date;
   modifiedBy: number;

@@ -36,8 +36,7 @@ export class CreateEmployee {
 
   userId: number;
 
-  //   @ValidateNested()
-  //   @Type(() => CreateEmpAddress)
-  //   @IsNotEmptyObject()
-  //   address: CreateEmpAddress;
+  @ValidateNested()
+  @Type(() => CreateEmpAddress)
+  address: CreateEmpAddress;
 }

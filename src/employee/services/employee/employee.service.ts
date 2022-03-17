@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { tbEmpAddress, tbEmployee } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
@@ -38,6 +39,10 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
+    if (createEmp.address !== undefined) {
+      createEmp.address.empId = SaveEmp.id;
+      await this.addressRepository.save(createEmp.address);
+    }
     if (createEmp.image) {
       const sql =
         'update tbEmployee set image = (CAST( ' +
@@ -85,6 +90,28 @@ export class EmployeeService {
       data.passportExpire = updateEmp.passportExpire;
       data.modifiedBy = updateEmp.userId;
       data.modifiedDate = new Date();
+      const dataAddress = await this.addressRepository.findOne({
+        empId: updateEmp.id,
+      });
+      if (dataAddress === undefined && updateEmp.address !== undefined) {
+        updateEmp.address.empId = updateEmp.id;
+        await this.addressRepository.save(updateEmp.address);
+      } else if (dataAddress !== undefined && updateEmp.address !== undefined) {
+        dataAddress.addressDetail = updateEmp.address.addressDetail;
+        dataAddress.addressType = updateEmp.address.addressType;
+        dataAddress.country = updateEmp.address.country;
+        dataAddress.postalCode = updateEmp.address.postalCode;
+        dataAddress.province = updateEmp.address.province;
+        dataAddress.district = updateEmp.address.district;
+        dataAddress.subDistrict = updateEmp.address.subDistrict;
+        dataAddress.latitude = updateEmp.address.latitude;
+        dataAddress.longitude = updateEmp.address.longitude;
+        dataAddress.email = updateEmp.address.email;
+        dataAddress.phone = updateEmp.address.phone;
+        dataAddress.modifiedBy = updateEmp.userId;
+        dataAddress.modifiedDate = new Date();
+      }
+      // await this.addressRepository.save(dataAddress);
       return await this.empRepository.save(data);
     } catch (e) {
       return { message: (e as Error).message };

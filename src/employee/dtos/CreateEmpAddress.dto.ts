@@ -4,8 +4,21 @@ export class CreateEmpAddress {
   @IsNotEmpty()
   empId: number;
 
-  @IsNotEmpty()
-  companyId: number;
+  addressType: string;
+  addressDetail: string;
+  subDistrict: string;
+  district: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  phone: string;
+  email: string;
+  latitude: number;
+  longitude: number;
+  createdBy: number;
+  createdDate: Date;
+  modifiedBy: number;
+  modifiedDate: Date;
 
   @IsNotEmpty()
   isDeleted: boolean;

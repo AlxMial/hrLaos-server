@@ -90,13 +90,6 @@ export class tbEmpAddress {
   longitude: number;
 
   @Column({
-    nullable: false,
-    default: null,
-    type: 'bigint',
-  })
-  companyId: number;
-
-  @Column({
     nullable: true,
     default: null,
     type: 'bigint',

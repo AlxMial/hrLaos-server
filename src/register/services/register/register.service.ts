@@ -83,11 +83,13 @@ export class RegisterService {
     createOrg.isDeleted = false;
     createOrg.companyName = data.companyName;
     createOrg.companyType = '1';
+    createOrg.createdDate = new Date();
     const org = await this.companyService.createCompany(createOrg);
 
     const createEmp = new CreateEmployee();
     createEmp.companyId = org.id;
     createEmp.isDeleted = false;
+    createEmp.createdDate = new Date();
     const emp = await this.employeeService.createEmp(createEmp);
 
     const createUser = new CreateUserDto();
@@ -99,6 +101,7 @@ export class RegisterService {
     createUser.role = 'administrator';
     createUser.userName = data.email;
     createUser.isDeleted = false;
+    createUser.createdDate = new Date();
     const user = await this.userService.createUserActivate(createUser);
     return 'Seccssfully';
   }
