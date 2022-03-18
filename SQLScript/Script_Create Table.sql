@@ -243,3 +243,205 @@ FOREIGN KEY (companyId) REFERENCES tbCompany(id);
 
 ALTER TABLE tbUser ADD CONSTRAINT FK_tbUser_tbEmployee
 FOREIGN KEY (empId) REFERENCES tbEmployee(id);
+
+CREATE TABLE [dbo].[tbHolidayHD](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[year] [dbo].[VeryShortString] NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbHolidayHD] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbHolidayDT](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[holidayId] [dbo].[IDIncrement] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[name] [dbo].[MediumString] NOT NULL,
+	[nameEn] [dbo].[MediumString] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbHolidayDT] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbDepartment](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[departmentCode] [dbo].[VeryShortString] NULL,
+	[departmentName] [dbo].[ShortString] NULL,
+	[departmentNameEn] [dbo].[ShortString] NULL,
+	[mainDepartmentId] [dbo].[IDIncrement] NULL,
+	[description] [dbo].[Description] NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbDepartment] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbPosition](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[positionCode] [dbo].[ShortString] NULL,
+	[positionName] [dbo].[ShortString] NULL,
+	[positionNameEn] [dbo].[ShortString] NULL,
+	[mainPositionId] [dbo].[IDIncrement] NULL,
+	[description] [dbo].[Description] NULL,
+	[jobDescription] [dbo].[Description] NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbPosition] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[tbShift](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[shiftCode] [dbo].[VeryShortString] NOT NULL,
+	[shiftName] [dbo].[ShortString] NOT NULL,	
+	[shiftType] [dbo].[VeryShortString] NOT NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbShift] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbShiftDetail](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[shiftId] [dbo].[IDIncrement] NOT NULL,
+	[timeStamp] [dbo].[Number] NULL,	
+	[in1] [dbo].[LongNumber] NULL,
+	[out1] [dbo].[LongNumber] NULL,
+	[breakStart] [dbo].[LongNumber] NULL,
+	[breakEnd] [dbo].[LongNumber] NULL,
+	[in2] [dbo].[LongNumber] NULL,
+	[out2] [dbo].[LongNumber] NULL,
+	[breakHour] [dbo].[LongNumber] NULL,
+	[workHour] [dbo].[Number] NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+ CONSTRAINT [PK_tbShiftDetail] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbSetTimeStamp](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[isAllowTimeStamp] [dbo].[YesNo] NOT NULL,
+	[isAllowInside] [dbo].[YesNo] NOT NULL,
+	[isOrg] [dbo].[YesNo] NOT NULL,
+	[orgRadius] [dbo].[Number] NULL,	
+	[isAllOrg] [dbo].[YesNo] NOT NULL, 	
+	[allOrgRadius] [dbo].[Number] NULL,	
+	[isAllowOutside] [dbo].[YesNo] NOT NULL, 	
+	[isAnywhere] [dbo].[YesNo] NOT NULL, 	
+	[isSetPlace] [dbo].[YesNo] NOT NULL,
+	[isAllowCurrentAddress] [dbo].[YesNo] NOT NULL, 
+	[isPhoto] [dbo].[YesNo] NOT NULL, 	 	
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbSetTimeStampDT](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[setTimeStampId] [dbo].[IDIncrement] NOT NULL,
+	[placeName] [dbo].[LongString] NOT NULL,
+	[latitude] [dbo].[LongNumber] NULL,
+	[longtitude] [dbo].[LongNumber] NULL,
+	[radius] [dbo].[Number] NULL,	
+	[description] [dbo].[Description] NULL,
+	[isActive] [dbo].[YesNo] NOT NULL,	
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[tbTime](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[empId]	[dbo].[IDIncrement] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[dateType] [dbo].[ShortString] NOT NULL,	
+	[status] [dbo].[ShortString] NOT NULL,	
+	[shiftId]	[dbo].[IDIncrement] NOT NULL,
+	[timeIn1]  [dbo].[LongNumber] NULL,
+	[timeOut1] [dbo].[LongNumber] NULL,
+	[timeIn2] [dbo].[LongNumber] NULL,
+	[timeOut2]  [dbo].[LongNumber] NULL,
+	[late1] [dbo].[Number] NULL,	
+	[late2] [dbo].[Number] NULL,	
+	[early1] [dbo].[Number] NULL,	
+	[early2] [dbo].[Number] NULL,	
+	[workHour] [dbo].[Number] NULL,	
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL) ON [PRIMARY]
+GO
+
+
+CREATE TABLE [dbo].[tbEmpEmployment](
+	[id] [dbo].[IDIncrement] IDENTITY(1,1) NOT NULL,
+	[empId]	[dbo].[IDIncrement] NOT NULL,
+	[startWorkingDate] [datetime] NULL,
+	[departmentId] [dbo].[IDIncrement]  ,
+	[positionId] [dbo].[IDIncrement] ,
+	[supervisorId] [dbo].[IDIncrement] ,
+	[shiftId] [dbo].[IDIncrement] ,
+	[IsAddressStamp] [dbo].[YesNo] NOT NULL,
+	[companyId] [dbo].[IDIncrement] NOT NULL,
+	[createdBy] [dbo].[IDIncrement] NULL,
+	[createdDate] [datetime] NULL,
+	[modifiedBy] [dbo].[IDIncrement] NULL,
+	[modifiedDate] [datetime] NULL,
+	[isDeleted] [dbo].[YesNo] NOT NULL,
+) ON [PRIMARY]
+GO

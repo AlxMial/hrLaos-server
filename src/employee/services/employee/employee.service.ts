@@ -30,6 +30,16 @@ export class EmployeeService {
     }
   }
 
+  async getEmployeeByEmpId(empId: number) {
+    try {
+      const employee = await this.empRepository.findOne({ id: empId });
+      employee.image = Buffer.from(employee.image, 'base64').toString('utf8');
+      return employee;
+    } catch (e) {
+      return (e as Error).message;
+    }
+  }
+
   async getEmployeeByCompanyId(companyId: number) {
     try {
       const employee = await this.empRepository.find({ companyId: companyId });

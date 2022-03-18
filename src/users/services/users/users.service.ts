@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { tbUser as UserEntity } from '../../../typeorm';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { SerializedUser, User } from '../../types';
@@ -6,12 +6,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { encodePassword } from 'src/utils/bcrypt';
 import { StatusMessage } from 'src/utils/StatusMessage';
+import { EmployeeService } from 'src/employee/services/employee/employee.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    @Inject('EMPLOYEE_SERVICE')
+    private readonly employeeService: EmployeeService,
   ) {}
 
   private users: User[] = [];
@@ -63,11 +66,12 @@ export class UsersService {
 
   async findUserByUsername(username: string) {
     try {
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.findOne({ userName: username }),
+      const tbUser = await this.userRepository.findOne({ userName: username });
+      const tbEmployee = await this.employeeService.getEmployeeByEmpId(
+        tbUser.empId,
       );
+      const data = { tbUser, tbEmployee };
+      return StatusMessage(true, null, data);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, null);
     }

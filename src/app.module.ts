@@ -15,7 +15,6 @@ import { CompanyModule } from './company/company.module';
 @Module({
   imports: [
     CustomersModule,
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: `undefined.ddns.net\\sql2019`,
@@ -37,6 +36,7 @@ import { CompanyModule } from './company/company.module';
       isGlobal: true, // no need to import into other modules
     }),
     EmployeeModule,
+    UsersModule,
     OrganizationModule,
     CompanyModule,
   ],
