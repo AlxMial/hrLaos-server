@@ -99,10 +99,13 @@ export class RegisterService {
         createOrg.isDeleted = false;
         createOrg.companyName = data.companyName;
         createOrg.companyType = '1';
+        createOrg.programStartDate = data.registerDate;
         createOrg.createdDate = new Date();
         const org = await this.companyService.createCompany(createOrg);
 
         const createEmp = new CreateEmployee();
+        createEmp.firstName = data.firstName;
+        createEmp.lastName = data.lastName;
         createEmp.companyId = org.data.id;
         createEmp.isDeleted = false;
         createEmp.createdDate = new Date();
