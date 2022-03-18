@@ -22,7 +22,9 @@ export class EmployeeService {
       const employee = await this.empRepository.find();
       employee.forEach(
         (data) =>
-          (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+          (data.image = data.image
+            ? Buffer.from(data.image, 'base64').toString('utf8')
+            : data.image),
       );
       return StatusMessage(true, null, employee);
     } catch (e) {
@@ -33,7 +35,9 @@ export class EmployeeService {
   async getEmployeeByEmpId(empId: number) {
     try {
       const employee = await this.empRepository.findOne({ id: empId });
-      employee.image = Buffer.from(employee.image, 'base64').toString('utf8');
+      employee.image = employee.image
+        ? Buffer.from(employee.image, 'base64').toString('utf8')
+        : null;
       return employee;
     } catch (e) {
       return (e as Error).message;
