@@ -91,7 +91,7 @@ export class RegisterService {
       const CheckRegister = await this.companyService.getCompanyByRegisterId(
         data.id,
       );
-      if (CheckRegister.data.toString() !== '') {
+      if (CheckRegister.toString() !== '') {
         return StatusMessage(false, 'has already been registered', null);
       } else {
         const createOrg = new CreateCompany();
@@ -106,15 +106,15 @@ export class RegisterService {
         const createEmp = new CreateEmployee();
         createEmp.firstName = data.firstName;
         createEmp.lastName = data.lastName;
-        createEmp.companyId = org.data.id;
+        createEmp.companyId = org.id;
         createEmp.isDeleted = false;
         createEmp.createdDate = new Date();
         const emp = await this.employeeService.createEmp(createEmp);
 
         const createUser = new CreateUserDto();
-        createUser.companyId = org.data.id;
+        createUser.companyId = org.id;
         createUser.email = data.email;
-        createUser.empId = emp.data.id;
+        createUser.empId = emp.id;
         createUser.isActivate = true;
         createUser.password = data.password;
         createUser.role = 'administrator';

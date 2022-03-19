@@ -12,13 +12,13 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const userDB = await this.userService.findUserByUsername(username);
     if (userDB) {
-      const matched = comparePasswords(password, userDB.data.tbUser.password);
+      const matched = comparePasswords(password, userDB.tbUser.password);
       if (matched) {
-        return StatusMessage(true, null, userDB.data);
+        return userDB; //StatusMessage(true, null, userDB.data);
       } else {
-        return StatusMessage(false, 'Password do not match', null);
+        return { message: 'Password do not match' }; //StatusMessage(false, 'Password do not match', null);
       }
     }
-    return StatusMessage(false, 'User Validation Failed!', null);
+    return { message: 'User Validation Failed!' }; //StatusMessage(false, 'User Validation Failed!', null);
   }
 }

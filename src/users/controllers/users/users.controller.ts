@@ -39,28 +39,28 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get('/username/:username')
-  async getByUsername(@Param('username') username: string) {
-    const user = await this.userService.getUserByUsername(username);
-    if (user) return new SerializedUser(user.data);
-    else throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
-  }
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Get('/username/:username')
+  // async getByUsername(@Param('username') username: string) {
+  //   const user = await this.userService.getUserByUsername(username);
+  //   if (user) return new SerializedUser(user);
+  //   else throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+  // }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UseFilters(HttpExceptionFilter)
-  @Get('/:id')
-  async getById(@Param('id', ParseIntPipe) id: number) {
-    try {
-      const user = await this.userService.getUserByID(id);
-      if (user) return new SerializedUser(user.data);
-      else {
-        throw new UserNotFoundException();
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @UseFilters(HttpExceptionFilter)
+  // @Get('/:id')
+  // async getById(@Param('id', ParseIntPipe) id: number) {
+  //   try {
+  //     const user = await this.userService.getUserByID(id);
+  //     if (user) return new SerializedUser(user);
+  //     else {
+  //       throw new UserNotFoundException();
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 
   @UseGuards(AuthenticatedGuard)
   @Post('create')

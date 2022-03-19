@@ -14,57 +14,57 @@ export class CompanyService {
   ) {}
 
   async getOrgAll() {
-    try {
-      const Organization = await this.companyRepository.find();
-      Organization.forEach(
-        (data) =>
-          (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
-      );
-      return StatusMessage(true, null, Organization);
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const Organization = await this.companyRepository.find();
+    Organization.forEach(
+      (data) =>
+        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+    );
+    return Organization; //StatusMessage(true, null, Organization);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async getCompanyByRegisterId(registerId: number) {
-    try {
-      const Organization = await this.companyRepository.find({
-        registerId: registerId,
-      });
-      Organization.forEach(
-        (data) =>
-          (data.image = data.image
-            ? Buffer.from(data.image, 'base64').toString('utf8')
-            : data.image),
-      );
-      return StatusMessage(true, null, Organization);
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const Organization = await this.companyRepository.find({
+      registerId: registerId,
+    });
+    Organization.forEach(
+      (data) =>
+        (data.image = data.image
+          ? Buffer.from(data.image, 'base64').toString('utf8')
+          : data.image),
+    );
+    return Organization; //StatusMessage(true, null, Organization);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async createCompany(createCompany: CreateCompany) {
-    try {
-      const Image = createCompany.image;
-      createCompany.image = null;
-      const newCompany = this.companyRepository.create(createCompany);
-      const SaveEmp = await this.companyRepository.save(newCompany);
-      if (createCompany.image) {
-        const sql =
-          'update tbCompany set image = (CAST( ' +
-          "'" +
-          Image.toString() +
-          "'" +
-          ' AS varbinary(max)))  where id = ' +
-          SaveEmp.id +
-          '';
-        const result = await this.connection.query(sql);
-      }
-      SaveEmp.image = Image;
-      return StatusMessage(true, null, SaveEmp);
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
+    //try {
+    const Image = createCompany.image;
+    createCompany.image = null;
+    const newCompany = this.companyRepository.create(createCompany);
+    const SaveEmp = await this.companyRepository.save(newCompany);
+    if (createCompany.image) {
+      const sql =
+        'update tbCompany set image = (CAST( ' +
+        "'" +
+        Image.toString() +
+        "'" +
+        ' AS varbinary(max)))  where id = ' +
+        SaveEmp.id +
+        '';
+      const result = await this.connection.query(sql);
     }
+    SaveEmp.image = Image;
+    return SaveEmp; //StatusMessage(true, null, SaveEmp);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async updateCompany(updateCompany: CreateCompany) {
@@ -95,33 +95,34 @@ export class CompanyService {
       data.taxBranchNo = updateCompany.taxBranchNo;
       data.modifiedBy = updateCompany.userId;
       data.modifiedDate = new Date();
-      return StatusMessage(true, null, await this.companyRepository.save(data));
+      return await this.companyRepository.save(data); //StatusMessage(true, null, await this.companyRepository.save(data));
     } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
+      return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     }
   }
 
   async deleteCompany(data: any) {
-    try {
-      const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + data.id + "',@Column='companyId'",
-      );
-      if (result) {
-        return { message: 'data is used' };
-      } else {
-        const deleteCompany = await this.companyRepository.findOne(data.id);
-        deleteCompany.isDeleted = true;
-        deleteCompany.modifiedBy = data.userId;
-        deleteCompany.modifiedDate = new Date();
-        // this.userRepository.delete(id);
-        return StatusMessage(
-          true,
-          null,
-          await this.companyRepository.save(deleteCompany),
-        );
-      }
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
+    // try {
+    const result = await this.connection.query(
+      "up_selectAllUse @SearchStr='" + data.id + "',@Column='companyId'",
+    );
+    if (result) {
+      return { message: 'data is used' };
+    } else {
+      const deleteCompany = await this.companyRepository.findOne(data.id);
+      deleteCompany.isDeleted = true;
+      deleteCompany.modifiedBy = data.userId;
+      deleteCompany.modifiedDate = new Date();
+      // this.userRepository.delete(id);
+      // return StatusMessage(
+      //   true,
+      //   null,
+      //   await this.companyRepository.save(deleteCompany),
+      // );
+      return await this.companyRepository.save(deleteCompany);
+      //}
+      // } catch (e) {
+      //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     }
   }
 }

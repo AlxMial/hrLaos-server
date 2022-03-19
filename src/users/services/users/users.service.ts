@@ -21,138 +21,155 @@ export class UsersService {
 
   async getUsers() {
     // return this.users.map((user) => new SerializedUser(user));
-    try {
-      return StatusMessage(true, null, await this.userRepository.find());
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    //return StatusMessage(true, null, await this.userRepository.find());
+    return await this.userRepository.find();
+    // } catch (e) {
+    //   return StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async getUsersByCompanyId(companyId: number) {
-    try {
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.find({ companyId: companyId }),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    // return StatusMessage(
+    //   true,
+    //   null,
+    //   await this.userRepository.find({ companyId: companyId }),
+    // );
+    return await this.userRepository.find({ companyId: companyId });
+    // } catch (e) {
+    //   return StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
-  async getUserByUsername(username: string) {
-    try {
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.find({ userName: username }),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
-  }
+  // async getUserByUsername(username: string) {
+  //   //try {
+  //   // return StatusMessage(
+  //   //   true,
+  //   //   null,
+  //   //   await this.userRepository.find({ userName: username }),
+  //   // );
+  //   return await this.userRepository.find({ userName: username });
+  //   // } catch (e) {
+  //   //   return StatusMessage(false, (e as Error).message, null);
+  //   // }
+  // }
 
-  async getUserByID(id: number) {
-    try {
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.find({ id: id }),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
-  }
+  // async getUserByID(id: number) {
+  //   //try {
+  //   // return StatusMessage(
+  //   //   true,
+  //   //   null,
+  //   //   await this.userRepository.find({ id: id }),
+  //   // );
+  //   const data = await this.userRepository.find({ id: id });
+  //   return data;
+  //   // } catch (e) {
+  //   //   return StatusMessage(false, (e as Error).message, null);
+  //   // }
+  // }
+
+  // getUserByUsername(username: string) {
+  //   return this.users.find((user) => user.userName === username);
+  // }
+
+  // async getUserByID(id: number) {
+  //   return this.users.find((user) => user.id === id);
+  // }
 
   async findUserByUsername(username: string) {
-    try {
-      const tbUser = await this.userRepository.findOne({ userName: username });
-      const tbEmployee = await this.employeeService.getEmployeeByEmpId(
-        tbUser.empId,
-      );
-      const data = { tbUser, tbEmployee };
-      return StatusMessage(true, null, data);
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const tbUser = await this.userRepository.findOne({ userName: username });
+    const tbEmployee = await this.employeeService.getEmployeeByEmpId(
+      tbUser.empId,
+    );
+    const data = { tbUser, tbEmployee };
+    return data; //StatusMessage(true, null, data);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async findUserByEmail(email: string) {
-    try {
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.findOne({ email: email }),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    return await this.userRepository.findOne({ email: email });
+    // return StatusMessage(
+    //   true,
+    //   null,
+    //   await this.userRepository.findOne({ email: email }),
+    // );
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async findUserById(id: number) {
-    try {
-      return StatusMessage(true, null, await this.userRepository.findOne(id));
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    return await this.userRepository.findOne(id);
+    //return StatusMessage(true, null, await ;
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async createUser(createuserDto: CreateUserDto) {
-    try {
-      const password = encodePassword(createuserDto.password);
-      const newUser = this.userRepository.create({
-        ...createuserDto,
-        password,
-      });
-      return StatusMessage(true, null, await this.userRepository.save(newUser));
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const password = encodePassword(createuserDto.password);
+    const newUser = this.userRepository.create({
+      ...createuserDto,
+      password,
+    });
+    return await this.userRepository.save(newUser); //StatusMessage(true, null, await this.userRepository.save(newUser));
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async createUserActivate(createuserDto: CreateUserDto) {
-    try {
-      const newUser = this.userRepository.create(createuserDto);
-      return StatusMessage(true, null, await this.userRepository.save(newUser));
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const newUser = this.userRepository.create(createuserDto);
+    return await this.userRepository.save(newUser); //StatusMessage(true, null, await this.userRepository.save(newUser));
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async updateUser(createUserDto: CreateUserDto) {
-    try {
-      const updateUser = await this.userRepository.findOne(createUserDto.id);
-      updateUser.userName = createUserDto.userName;
-      updateUser.email = createUserDto.email;
-      updateUser.password = createUserDto.password;
-      updateUser.role = createUserDto.role;
-      updateUser.isActivate = createUserDto.isActivate;
-      updateUser.modifiedBy = createUserDto.userId;
-      updateUser.modifiedDate = new Date();
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.save(updateUser),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const updateUser = await this.userRepository.findOne(createUserDto.id);
+    updateUser.userName = createUserDto.userName;
+    updateUser.email = createUserDto.email;
+    updateUser.password = createUserDto.password;
+    updateUser.role = createUserDto.role;
+    updateUser.isActivate = createUserDto.isActivate;
+    updateUser.modifiedBy = createUserDto.userId;
+    updateUser.modifiedDate = new Date();
+    // return StatusMessage(
+    //   true,
+    //   null,
+    //   await this.userRepository.save(updateUser),
+    // );
+    return await this.userRepository.save(updateUser);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async deleteUser(data: any) {
-    try {
-      const updateUser = await this.userRepository.findOne(data.id);
-      updateUser.isDeleted = true;
-      updateUser.modifiedBy = data.userId;
-      updateUser.modifiedDate = new Date();
-      // this.userRepository.delete(id);
-      return StatusMessage(
-        true,
-        null,
-        await this.userRepository.save(updateUser),
-      );
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, null);
-    }
+    //try {
+    const updateUser = await this.userRepository.findOne(data.id);
+    updateUser.isDeleted = true;
+    updateUser.modifiedBy = data.userId;
+    updateUser.modifiedDate = new Date();
+    // this.userRepository.delete(id);
+    // return StatusMessage(
+    //   true,
+    //   null,
+    //   await this.userRepository.save(updateUser),
+    // );
+    return await this.userRepository.save(updateUser);
+    // } catch (e) {
+    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
+    // }
   }
 }

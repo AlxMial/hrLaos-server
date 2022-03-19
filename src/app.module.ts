@@ -37,7 +37,7 @@ import { CompanyModule } from './company/company.module';
     }),
     EmployeeModule,
     UsersModule,
-    OrganizationModule,
+    // OrganizationModule,
     CompanyModule,
   ],
   controllers: [],
