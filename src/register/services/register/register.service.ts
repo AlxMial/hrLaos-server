@@ -33,11 +33,7 @@ export class RegisterService {
   private register: Register[] = [];
 
   async findRegisterByID(id: any) {
-    return StatusMessage(
-      true,
-      null,
-      await this.registerRepository.findOne({ id: id }),
-    );
+    return await this.registerRepository.findOne({ id: id });
   }
 
   async findDuplicateRegister(createRegisterDto: CreateRegisterDto) {
@@ -64,26 +60,27 @@ export class RegisterService {
   }
 
   async createUser(createRegisterDto: CreateRegisterDto) {
-    try {
-      const register = await this.findDuplicateRegister(createRegisterDto);
-      if (register.email !== '' || register.companyName !== '') {
-        return StatusMessage(false, register, null);
-      } else {
-        const password = encodePassword(createRegisterDto.password);
-        const newRegister = this.registerRepository.create({
-          ...createRegisterDto,
-          password,
-        });
-        await this.registerRepository.save(newRegister).then((e) => {
-          const token = this.encryptService.EncodeKey(e.id);
-          this.mailService.sendUserConfirmation(e, token);
-          console.log(token);
-        });
-        return StatusMessage(true, null, newRegister);
-      }
-    } catch (e) {
-      StatusMessage(false, (e as Error).message, null);
+    //try {
+    createRegisterDto.isActivate = false;
+    const register = await this.findDuplicateRegister(createRegisterDto);
+    if (register.email !== '' || register.companyName !== '') {
+      return register; //StatusMessage(false, register, null);
+    } else {
+      const password = encodePassword(createRegisterDto.password);
+      const newRegister = this.registerRepository.create({
+        ...createRegisterDto,
+        password,
+      });
+      await this.registerRepository.save(newRegister).then((e) => {
+        const token = this.encryptService.EncodeKey(e.id);
+        this.mailService.sendUserConfirmation(e, token);
+        console.log(token);
+      });
+      return newRegister;
     }
+    // } catch (e) {
+    //   StatusMessage(false, (e as Error).message, null);
+    // }
   }
 
   async activateRegister(data: any) {

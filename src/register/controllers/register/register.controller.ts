@@ -38,9 +38,9 @@ export class RegisterController {
     );
     try {
       // const status = await this.registerService.activateRegister(Register.data);
-      return await this.registerService.activateRegister(Register.data);
+      return await this.registerService.activateRegister(Register);
     } catch (err) {
-      return StatusMessage(true, (err as Error).message, null);
+      return (err as Error).message; //StatusMessage(true, (err as Error).message, null);
     }
   }
 }

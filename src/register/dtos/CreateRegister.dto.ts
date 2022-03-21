@@ -24,6 +24,5 @@ export class CreateRegisterDto {
   @IsNotEmpty()
   password: string;
 
-  @IsNotEmpty()
   isActivate: boolean;
 }
