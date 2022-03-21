@@ -79,12 +79,21 @@ export class UsersService {
 
   async findUserByUsername(username: string) {
     //try {
-    const tbUser = await this.userRepository.findOne({ userName: username });
-    const tbEmployee = await this.employeeService.getEmployeeByEmpId(
-      tbUser.empId,
-    );
-    const data = { tbUser, tbEmployee };
-    return data; //StatusMessage(true, null, data);
+    const User = await this.userRepository.findOne({ userName: username });
+    const Employee = await this.employeeService.getEmployeeByEmpId(User.empId);
+    const tbUser = {
+      id: User.id,
+      empId: User.empId,
+      userName: User.userName,
+      password: User.password,
+      role: User.role,
+      isActivate: User.isActivate,
+      companyId: User.companyId,
+      isDeleted: User.isDeleted,
+      img: Employee.image,
+    };
+    // const data = { tbUser, tbEmployee };
+    return tbUser; //StatusMessage(true, null, data);
     // } catch (e) {
     //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     // }

@@ -33,15 +33,15 @@ export class EmployeeService {
   }
 
   async getEmployeeByEmpId(empId: number) {
-    try {
-      const employee = await this.empRepository.findOne({ id: empId });
-      employee.image = employee.image
-        ? Buffer.from(employee.image, 'base64').toString('utf8')
-        : null;
-      return employee;
-    } catch (e) {
-      return { message: (e as Error).message };
-    }
+    //try {
+    const employee = await this.empRepository.findOne({ id: empId });
+    employee.image = employee.image
+      ? Buffer.from(employee.image, 'base64').toString('utf8')
+      : null;
+    return employee;
+    // } catch (e) {
+    //   return { message: (e as Error).message };
+    // }
   }
 
   async getEmployeeByCompanyId(companyId: number) {

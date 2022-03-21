@@ -12,7 +12,7 @@ export class AuthService {
   async validateUser(username: string, password: string) {
     const userDB = await this.userService.findUserByUsername(username);
     if (userDB) {
-      const matched = comparePasswords(password, userDB.tbUser.password);
+      const matched = comparePasswords(password, userDB.password);
       if (matched) {
         return userDB; //StatusMessage(true, null, userDB.data);
       } else {
