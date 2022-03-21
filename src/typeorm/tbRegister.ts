@@ -77,8 +77,7 @@ export class tbRegister {
 
   @Column({
     nullable: true,
-    default: '',
-    length: 50,
+    default: null,
   })
-  numberOfEmp: string;
+  numberOfEmp: number;
 }

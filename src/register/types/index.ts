@@ -12,7 +12,7 @@ export interface Register {
   isActivate: boolean;
   activateDate: Date;
   registerDate: Date;
-  numberOfEmp: string;
+  numberOfEmp: number;
 }
 
 export class SerializedRegister {
@@ -26,7 +26,7 @@ export class SerializedRegister {
   isActivate: boolean;
   activateDate: Date;
   registerDate: Date;
-  numberOfEmp: string;
+  numberOfEmp: number;
 
   @Exclude()
   password: string;
