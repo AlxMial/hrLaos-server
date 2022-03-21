@@ -89,8 +89,13 @@ export class RegisterService {
         data.id,
       );
       if (CheckRegister.toString() !== '') {
-        return StatusMessage(false, 'has already been registered', null);
+        return { message: 'has already been registered' }; //StatusMessage(false, 'has already been registered', null);
       } else {
+        const Update = await this.findRegisterByID(data.id);
+        Update.activateDate = new Date();
+        Update.isActivate = true;
+        await this.registerRepository.save(Update);
+
         const createOrg = new CreateCompany();
         createOrg.registerId = data.id;
         createOrg.isDeleted = false;

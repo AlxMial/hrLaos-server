@@ -25,4 +25,6 @@ export class CreateRegisterDto {
   password: string;
 
   isActivate: boolean;
+
+  activateDate: Date;
 }
