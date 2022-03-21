@@ -37,7 +37,7 @@ export class RegisterService {
   }
 
   async findDuplicateRegister(createRegisterDto: CreateRegisterDto) {
-    const data = { email: '', companyName: '', isResult: true };
+    const data = { message: '', isResult: true };
     const register = await this.registerRepository
       .createQueryBuilder('tbRegister')
       .where(
@@ -50,11 +50,14 @@ export class RegisterService {
       .getOne();
     if (register) {
       if (register.email === createRegisterDto.email) {
-        data['email'] = 'email is used';
+        data['message'] = 'email is used';
         data['isResult'] = false;
       }
+      if (data['message'] !== '') {
+        data['message'] += '<br/>';
+      }
       if (register.companyName === createRegisterDto.companyName) {
-        data['companyName'] = 'company name is used';
+        data['message'] += 'company name is used';
         data['isResult'] = false;
       }
     }
@@ -65,7 +68,7 @@ export class RegisterService {
     //try {
     createRegisterDto.isActivate = false;
     const register = await this.findDuplicateRegister(createRegisterDto);
-    if (register.email !== '' || register.companyName !== '') {
+    if (register.message !== '') {
       return register; //StatusMessage(false, register, null);
     } else {
       const password = encodePassword(createRegisterDto.password);
