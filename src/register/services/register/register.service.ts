@@ -54,7 +54,7 @@ export class RegisterService {
         data['isResult'] = false;
       }
       if (data['message'] !== '') {
-        data['message'] += '<br/>';
+        data['message'] += ' ';
       }
       if (register.companyName === createRegisterDto.companyName) {
         data['message'] += 'company name is used';
