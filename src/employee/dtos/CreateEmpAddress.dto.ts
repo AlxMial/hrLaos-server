@@ -1,9 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateEmpAddress {
-  @IsNotEmpty()
   empId: number;
-
   addressType: string;
   addressDetail: string;
   subDistrict: string;
@@ -19,9 +17,6 @@ export class CreateEmpAddress {
   createdDate: Date;
   modifiedBy: number;
   modifiedDate: Date;
-
-  @IsNotEmpty()
   isDeleted: boolean;
-
   userId: number;
 }

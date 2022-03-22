@@ -65,9 +65,13 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
-    if (createEmp.address !== undefined) {
-      createEmp.address.empId = SaveEmp.id;
-      await this.addressRepository.save(createEmp.address);
+    if (createEmp.empAddress !== undefined) {
+      createEmp.empAddress.empId = SaveEmp.id;
+      createEmp.empAddress.isDeleted = false;
+      const empAddress = await this.addressRepository.save(
+        createEmp.empAddress,
+      );
+      SaveEmp['empAddress'] = empAddress;
     }
     if (Image) {
       const sql =
@@ -121,21 +125,24 @@ export class EmployeeService {
     const dataAddress = await this.addressRepository.findOne({
       empId: updateEmp.id,
     });
-    if (dataAddress === undefined && updateEmp.address !== undefined) {
-      updateEmp.address.empId = updateEmp.id;
-      await this.addressRepository.save(updateEmp.address);
-    } else if (dataAddress !== undefined && updateEmp.address !== undefined) {
-      dataAddress.addressDetail = updateEmp.address.addressDetail;
-      dataAddress.addressType = updateEmp.address.addressType;
-      dataAddress.country = updateEmp.address.country;
-      dataAddress.postalCode = updateEmp.address.postalCode;
-      dataAddress.province = updateEmp.address.province;
-      dataAddress.district = updateEmp.address.district;
-      dataAddress.subDistrict = updateEmp.address.subDistrict;
-      dataAddress.latitude = updateEmp.address.latitude;
-      dataAddress.longitude = updateEmp.address.longitude;
-      dataAddress.email = updateEmp.address.email;
-      dataAddress.phone = updateEmp.address.phone;
+    if (dataAddress === undefined && updateEmp.empAddress !== undefined) {
+      updateEmp.empAddress.empId = updateEmp.id;
+      await this.addressRepository.save(updateEmp.empAddress);
+    } else if (
+      dataAddress !== undefined &&
+      updateEmp.empAddress !== undefined
+    ) {
+      dataAddress.addressDetail = updateEmp.empAddress.addressDetail;
+      dataAddress.addressType = updateEmp.empAddress.addressType;
+      dataAddress.country = updateEmp.empAddress.country;
+      dataAddress.postalCode = updateEmp.empAddress.postalCode;
+      dataAddress.province = updateEmp.empAddress.province;
+      dataAddress.district = updateEmp.empAddress.district;
+      dataAddress.subDistrict = updateEmp.empAddress.subDistrict;
+      dataAddress.latitude = updateEmp.empAddress.latitude;
+      dataAddress.longitude = updateEmp.empAddress.longitude;
+      dataAddress.email = updateEmp.empAddress.email;
+      dataAddress.phone = updateEmp.empAddress.phone;
       dataAddress.modifiedBy = updateEmp.userId;
       dataAddress.modifiedDate = new Date();
     }
