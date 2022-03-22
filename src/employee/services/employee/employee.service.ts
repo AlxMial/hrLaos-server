@@ -125,13 +125,11 @@ export class EmployeeService {
     const dataAddress = await this.addressRepository.findOne({
       empId: updateEmp.id,
     });
-    if (dataAddress === undefined && updateEmp.empAddress !== undefined) {
+    if (dataAddress === undefined && updateEmp.empAddress) {
       updateEmp.empAddress.empId = updateEmp.id;
+      updateEmp.empAddress.isDeleted = false;
       await this.addressRepository.save(updateEmp.empAddress);
-    } else if (
-      dataAddress !== undefined &&
-      updateEmp.empAddress !== undefined
-    ) {
+    } else if (dataAddress && updateEmp.empAddress) {
       dataAddress.addressDetail = updateEmp.empAddress.addressDetail;
       dataAddress.addressType = updateEmp.empAddress.addressType;
       dataAddress.country = updateEmp.empAddress.country;
@@ -145,6 +143,7 @@ export class EmployeeService {
       dataAddress.phone = updateEmp.empAddress.phone;
       dataAddress.modifiedBy = updateEmp.userId;
       dataAddress.modifiedDate = new Date();
+      dataAddress.isDeleted = false;
     }
     // await this.addressRepository.save(dataAddress);
     return await this.empRepository.save(data);
