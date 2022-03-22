@@ -48,14 +48,14 @@ export class EmployeeController {
   //@UseGuards(AuthenticatedGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
-  updateEmp(@Body() createEmp: CreateEmployee) {
-    return this.employeeService.updateEmp(createEmp);
+  updateEmp(@Body() updateEmp: CreateEmployee) {
+    return this.employeeService.updateEmp(updateEmp);
   }
 
   @UseGuards(AuthenticatedGuard)
   @Delete('delete')
   @UsePipes(ValidationPipe)
-  deleteEmp(@Body() createEmp: CreateEmployee) {
-    return this.employeeService.deleteEmp(createEmp);
+  deleteEmp(@Body() deleteEmp: CreateEmployee) {
+    return this.employeeService.deleteEmp(deleteEmp);
   }
 }

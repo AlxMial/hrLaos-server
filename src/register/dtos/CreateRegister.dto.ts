@@ -27,6 +27,4 @@ export class CreateRegisterDto {
   isActivate: boolean;
 
   activateDate: Date;
-
-  isResult: boolean;
 }

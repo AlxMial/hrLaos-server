@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import { EmployeeModule } from './employee/employee.module';
 import { OrganizationModule } from './organization/organization.module';
 import { CompanyModule } from './company/company.module';
+import { PositionModule } from './position/position.module';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -39,6 +41,8 @@ import { CompanyModule } from './company/company.module';
     UsersModule,
     // OrganizationModule,
     CompanyModule,
+    PositionModule,
+    DepartmentModule,
   ],
   controllers: [],
   providers: [],
