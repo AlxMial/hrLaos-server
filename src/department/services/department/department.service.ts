@@ -57,6 +57,7 @@ export class DepartmentService {
       data.description = updateDepartment.description;
       data.modifiedBy = updateDepartment.userId;
       data.modifiedDate = new Date();
+      data.isDeleted = false;
       return StatusMessage(
         true,
         null,

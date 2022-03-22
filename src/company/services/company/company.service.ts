@@ -95,6 +95,7 @@ export class CompanyService {
       data.taxBranchNo = updateCompany.taxBranchNo;
       data.modifiedBy = updateCompany.userId;
       data.modifiedDate = new Date();
+      data.isDeleted = false;
       return await this.companyRepository.save(data); //StatusMessage(true, null, await this.companyRepository.save(data));
     } catch (e) {
       return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);

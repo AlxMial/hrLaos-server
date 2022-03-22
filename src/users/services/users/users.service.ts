@@ -154,6 +154,7 @@ export class UsersService {
     updateUser.isActivate = createUserDto.isActivate;
     updateUser.modifiedBy = createUserDto.userId;
     updateUser.modifiedDate = new Date();
+    updateUser.isDeleted = false;
     // return StatusMessage(
     //   true,
     //   null,
