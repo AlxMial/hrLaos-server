@@ -69,7 +69,7 @@ export class EmployeeService {
       createEmp.address.empId = SaveEmp.id;
       await this.addressRepository.save(createEmp.address);
     }
-    if (createEmp.image) {
+    if (Image) {
       const sql =
         'update tbEmployee set image = (CAST( ' +
         "'" +
