@@ -65,7 +65,7 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
-    if (createEmp.empAddress !== undefined) {
+    if (createEmp.empAddress !== undefined && SaveEmp) {
       createEmp.empAddress.empId = SaveEmp.id;
       createEmp.empAddress.isDeleted = false;
       const empAddress = await this.addressRepository.save(
