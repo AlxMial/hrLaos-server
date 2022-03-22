@@ -81,19 +81,20 @@ export class UsersService {
     //try {
     const User = await this.userRepository.findOne({ userName: username });
     const Employee = await this.employeeService.getEmployeeByEmpId(User.empId);
-    const tbUser = {
-      id: User.id,
-      empId: User.empId,
-      userName: User.userName,
-      password: User.password,
-      role: User.role,
-      isActivate: User.isActivate,
-      companyId: User.companyId,
-      isDeleted: User.isDeleted,
-      img: Employee.image,
-    };
+    // const tbUser = {
+    //   id: User.id,
+    //   empId: User.empId,
+    //   userName: User.userName,
+    //   password: User.password,
+    //   role: User.role,
+    //   isActivate: User.isActivate,
+    //   companyId: User.companyId,
+    //   isDeleted: User.isDeleted,
+    //   img: Employee.image,
+    // };
+    User['img'] = Employee.image;
     // const data = { tbUser, tbEmployee };
-    return tbUser; //StatusMessage(true, null, data);
+    return User; //StatusMessage(true, null, data);
     // } catch (e) {
     //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     // }
