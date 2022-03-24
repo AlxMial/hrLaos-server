@@ -65,14 +65,14 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
-    if (createEmp.empAddress !== undefined && SaveEmp) {
-      createEmp.empAddress.empId = SaveEmp.id;
-      createEmp.empAddress.isDeleted = false;
-      const empAddress = await this.addressRepository.save(
-        createEmp.empAddress,
-      );
-      SaveEmp['empAddress'] = empAddress;
-    }
+    // if (createEmp.empAddress !== undefined && SaveEmp) {
+    //   createEmp.empAddress.empId = SaveEmp.id;
+    //   createEmp.empAddress.isDeleted = false;
+    //   const empAddress = await this.addressRepository.save(
+    //     createEmp.empAddress,
+    //   );
+    //   SaveEmp['empAddress'] = empAddress;
+    // }
     if (Image) {
       const sql =
         'update tbEmployee set image = (CAST( ' +
@@ -122,29 +122,30 @@ export class EmployeeService {
     data.passportExpire = updateEmp.passportExpire;
     data.modifiedBy = updateEmp.userId;
     data.modifiedDate = new Date();
-    const dataAddress = await this.addressRepository.findOne({
-      empId: updateEmp.id,
-    });
-    if (dataAddress === undefined && updateEmp.empAddress) {
-      updateEmp.empAddress.empId = updateEmp.id;
-      updateEmp.empAddress.isDeleted = false;
-      await this.addressRepository.save(updateEmp.empAddress);
-    } else if (dataAddress && updateEmp.empAddress) {
-      dataAddress.addressDetail = updateEmp.empAddress.addressDetail;
-      dataAddress.addressType = updateEmp.empAddress.addressType;
-      dataAddress.country = updateEmp.empAddress.country;
-      dataAddress.postalCode = updateEmp.empAddress.postalCode;
-      dataAddress.province = updateEmp.empAddress.province;
-      dataAddress.district = updateEmp.empAddress.district;
-      dataAddress.subDistrict = updateEmp.empAddress.subDistrict;
-      dataAddress.latitude = updateEmp.empAddress.latitude;
-      dataAddress.longitude = updateEmp.empAddress.longitude;
-      dataAddress.email = updateEmp.empAddress.email;
-      dataAddress.phone = updateEmp.empAddress.phone;
-      dataAddress.modifiedBy = updateEmp.userId;
-      dataAddress.modifiedDate = new Date();
-      dataAddress.isDeleted = false;
-    }
+
+    // const dataAddress = await this.addressRepository.findOne({
+    //   empId: updateEmp.id,
+    // });
+    // if (dataAddress === undefined && updateEmp.empAddress) {
+    //   updateEmp.empAddress.empId = updateEmp.id;
+    //   updateEmp.empAddress.isDeleted = false;
+    //   await this.addressRepository.save(updateEmp.empAddress);
+    // } else if (dataAddress && updateEmp.empAddress) {
+    //   dataAddress.addressDetail = updateEmp.empAddress.addressDetail;
+    //   dataAddress.addressType = updateEmp.empAddress.addressType;
+    //   dataAddress.country = updateEmp.empAddress.country;
+    //   dataAddress.postalCode = updateEmp.empAddress.postalCode;
+    //   dataAddress.province = updateEmp.empAddress.province;
+    //   dataAddress.district = updateEmp.empAddress.district;
+    //   dataAddress.subDistrict = updateEmp.empAddress.subDistrict;
+    //   dataAddress.latitude = updateEmp.empAddress.latitude;
+    //   dataAddress.longitude = updateEmp.empAddress.longitude;
+    //   dataAddress.email = updateEmp.empAddress.email;
+    //   dataAddress.phone = updateEmp.empAddress.phone;
+    //   dataAddress.modifiedBy = updateEmp.userId;
+    //   dataAddress.modifiedDate = new Date();
+    //   dataAddress.isDeleted = false;
+    // }
     // await this.addressRepository.save(dataAddress);
     return await this.empRepository.save(data);
     // } catch (e) {
@@ -152,7 +153,7 @@ export class EmployeeService {
     // }
   }
 
-  async deleteEmp(data: deleteDto) {
+  async deleteEmp(data: any) {
     //try {
     const result = await this.connection.query(
       "up_selectAllUse @SearchStr='" + data.id + "',@Column='empId'",
@@ -160,16 +161,13 @@ export class EmployeeService {
     if (result) {
       return { message: 'data is used' };
     } else {
-      const deleteEmp = await this.empRepository.findOne(data.id);
-      deleteEmp.isDeleted = true;
-      deleteEmp.modifiedBy = data.userId;
-      deleteEmp.modifiedDate = new Date();
-      // return StatusMessage(
-      //   true,
-      //   null,
-      //   await this.empRepository.save(deleteEmp),
-      // );
-      return await this.empRepository.save(deleteEmp);
+      data.id.forEach(async (value: any) => {
+        const deleteEmp = await this.empRepository.findOne(value);
+        deleteEmp.isDeleted = true;
+        deleteEmp.modifiedBy = data.userId;
+        deleteEmp.modifiedDate = new Date();
+        await this.empRepository.save(deleteEmp);
+      });
     }
     // } catch (e) {
     //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
