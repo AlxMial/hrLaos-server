@@ -38,6 +38,6 @@ export class CreateEmployee {
 
   @ValidateNested()
   @Type(() => CreateEmpAddress)
-  @IsNotEmptyObject()
+  // @IsNotEmptyObject()
   empAddress: CreateEmpAddress[];
 }
