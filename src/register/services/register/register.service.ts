@@ -132,7 +132,7 @@ export class RegisterService {
         createUser.createdDate = new Date();
         const user = await this.userService.createUserActivate(createUser);
         // return StatusMessage(true, 'Confirmation register successfully.', null);
-        return { status: true, message: 'Confirmation register successfully.' };
+        return { status: true, message: 'Confirmation register is successfully.' };
       }
     } catch (e) {
       return StatusMessage(false, (e as Error).message, null);
