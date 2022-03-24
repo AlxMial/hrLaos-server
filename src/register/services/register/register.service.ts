@@ -28,7 +28,7 @@ export class RegisterService {
     private readonly employeeService: EmployeeService,
     @Inject('USER_SERVICE')
     private readonly userService: UsersService,
-  ) {}
+  ) { }
 
   private register: Register[] = [];
 
@@ -95,7 +95,8 @@ export class RegisterService {
         data.id,
       );
       if (CheckRegister.toString() !== '') {
-        return { message: 'has already been registered' }; //StatusMessage(false, 'has already been registered', null);
+        return { status: false, message: 'You have been already registered.' }; //StatusMessage(false, 'has already been registered', null);
+        // return StatusMessage(false, 'You have been already registered', null);
       } else {
         const Update = await this.findRegisterByID(data.id);
         Update.activateDate = new Date();
@@ -130,7 +131,8 @@ export class RegisterService {
         createUser.isDeleted = false;
         createUser.createdDate = new Date();
         const user = await this.userService.createUserActivate(createUser);
-        return StatusMessage(true, null, null);
+        // return StatusMessage(true, 'Confirmation register successfully.', null);
+        return { status: true, message: 'Confirmation register successfully.' };
       }
     } catch (e) {
       return StatusMessage(false, (e as Error).message, null);
