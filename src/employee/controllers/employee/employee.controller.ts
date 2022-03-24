@@ -18,6 +18,7 @@ import { AuthenticatedGuard } from 'src/auth/utils/LocalGuard';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 
 @Controller('employee')
 export class EmployeeController {
@@ -52,10 +53,10 @@ export class EmployeeController {
     return this.employeeService.updateEmp(updateEmp);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Delete('delete')
-  @UsePipes(ValidationPipe)
-  deleteEmp(@Body() deleteEmp: CreateEmployee) {
-    return this.employeeService.deleteEmp(deleteEmp);
+  async deleteEmp(@Body() deleteEmp: deleteDto) {
+    const del = await this.employeeService.CheckEmp(deleteEmp);
+    return del;
   }
 }

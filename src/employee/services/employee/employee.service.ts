@@ -153,21 +153,54 @@ export class EmployeeService {
     // }
   }
 
-  async deleteEmp(data: any) {
-    //try {
-    data.id.forEach(async (value: any) => {
+  async CheckEmp(data: any) {
+    const message = new deleteDto();
+    // const val = await data.id.forEach(async (value: any) => {
+    //   const result = await this.connection.query(
+    //     "up_selectAllUse @SearchStr='" + value + "',@Column='empId'",
+    //   );
+    //   if (result) {
+    //     message['message'] = 'data is used';
+    //     message['isResult'] = false;
+    //   } else {
+    //     this.deleteEmp(value, data.userId);
+    //     message['message'] = 'Sucessfully';
+    //     message['isResult'] = true;
+    //   }
+    // });
+
+    for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + value + "',@Column='empId'",
+        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='empId'",
       );
       if (result) {
-        return { message: 'data is used' };
+        message['message'] = 'data is used';
+        message['isResult'] = false;
+        break;
       } else {
-        const deleteEmp = await this.empRepository.findOne(value);
-        deleteEmp.isDeleted = true;
-        deleteEmp.modifiedBy = parseInt(data.userId);
-        deleteEmp.modifiedDate = new Date();
-        await this.empRepository.save(deleteEmp);
+        this.deleteEmp(data.id[i], data.userId);
+        message['message'] = 'Sucessfully';
+        message['isResult'] = true;
       }
-    });
+    }
+    return message;
+  }
+
+  async deleteEmp(data: any, userId: any) {
+    const deleteEmp = await this.empRepository.findOne({ id: data });
+    deleteEmp.isDeleted = true;
+    deleteEmp.modifiedBy = parseInt(userId);
+    deleteEmp.modifiedDate = new Date();
+    const success = await this.empRepository.save(deleteEmp);
+    return success ? true : false;
+  }
+
+  async deleteEmpAddress(data: any, userId: any) {
+    const deleteAddress = await this.addressRepository.findOne({ empId: data });
+    deleteAddress.isDeleted = true;
+    deleteAddress.modifiedBy = parseInt(userId);
+    deleteAddress.modifiedDate = new Date();
+    const success = await this.addressRepository.save(deleteAddress);
+    return success ? true : false;
   }
 }
