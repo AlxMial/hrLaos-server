@@ -155,22 +155,19 @@ export class EmployeeService {
 
   async deleteEmp(data: any) {
     //try {
-    const result = await this.connection.query(
-      "up_selectAllUse @SearchStr='" + data.id + "',@Column='empId'",
-    );
-    if (result) {
-      return { message: 'data is used' };
-    } else {
-      data.id.forEach(async (value: any) => {
+    data.id.forEach(async (value: any) => {
+      const result = await this.connection.query(
+        "up_selectAllUse @SearchStr='" + value + "',@Column='empId'",
+      );
+      if (result) {
+        return { message: 'data is used' };
+      } else {
         const deleteEmp = await this.empRepository.findOne(value);
         deleteEmp.isDeleted = true;
-        deleteEmp.modifiedBy = data.userId;
+        deleteEmp.modifiedBy = parseInt(data.userId);
         deleteEmp.modifiedDate = new Date();
         await this.empRepository.save(deleteEmp);
-      });
-    }
-    // } catch (e) {
-    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
-    // }
+      }
+    });
   }
 }
