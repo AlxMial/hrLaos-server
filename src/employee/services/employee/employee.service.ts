@@ -32,13 +32,14 @@ export class EmployeeService {
     }
   }
 
-  async getEmployeeByEmpId(empId: number) {
+  async getEmployeeByEmpId(empId: number, companyId: number) {
     //try {
-    const employee = await this.empRepository.findOne({ id: empId });
+    const employee = await this.empRepository.findOne({ id: empId, companyId: companyId });
     employee.image = employee.image
       ? Buffer.from(employee.image, 'base64').toString('utf8')
       : null;
-    return employee;
+    let empAddress = await this.addressRepository.find({ empId: empId });
+    return { employee, empAddress };
     // } catch (e) {
     //   return { message: (e as Error).message };
     // }
@@ -65,14 +66,19 @@ export class EmployeeService {
     createEmp.image = null;
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
-    // if (createEmp.empAddress !== undefined && SaveEmp) {
-    //   createEmp.empAddress.empId = SaveEmp.id;
-    //   createEmp.empAddress.isDeleted = false;
-    //   const empAddress = await this.addressRepository.save(
-    //     createEmp.empAddress,
-    //   );
-    //   SaveEmp['empAddress'] = empAddress;
-    // }
+    if (createEmp.empAddress !== undefined && SaveEmp) {
+      createEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
+        data.empId = SaveEmp.id;
+        data.isDeleted = false;
+        data.modifiedDate = new Date();
+      });
+      // createEmp.empAddress.empId = SaveEmp.id;
+      // createEmp.empAddress.isDeleted = false;
+      const empAddress = await this.addressRepository.save(
+        createEmp.empAddress,
+      );
+      SaveEmp['empAddress'] = empAddress;
+    }
     if (Image) {
       const sql =
         'update tbEmployee set image = (CAST( ' +
@@ -96,7 +102,7 @@ export class EmployeeService {
     const sql =
       'update tbEmployee set image = (CAST( ' +
       "'" +
-      (updateEmp.image !== undefined ? updateEmp.image.toString() : null) +
+      (updateEmp.image ? updateEmp.image.toString() : null) +
       "'" +
       ' AS varbinary(max)))  where id = ' +
       updateEmp.id +

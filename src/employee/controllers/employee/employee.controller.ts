@@ -25,7 +25,7 @@ export class EmployeeController {
   constructor(
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService,
-  ) {}
+  ) { }
 
   //@UseGuards(AuthenticatedGuard)
   @Get('')
@@ -37,6 +37,14 @@ export class EmployeeController {
   @Get('/:companyId')
   getUsersByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.employeeService.getEmployeeByCompanyId(id);
+  }
+
+  //@UseGuards(AuthenticatedGuard)
+  @Get('getById/:empId/:companyId')
+  getById(
+    @Param('empId', ParseIntPipe) id: number,
+    @Param('companyId', ParseIntPipe) companyId: number) {
+    return this.employeeService.getEmployeeByEmpId(id, companyId);
   }
 
   // @UseGuards(AuthenticatedGuard)
