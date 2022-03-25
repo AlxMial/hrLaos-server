@@ -11,11 +11,11 @@ export class CompanyService {
     @InjectRepository(tbCompany)
     private readonly companyRepository: Repository<tbCompany>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getOrgAll() {
     //try {
-    const Organization = await this.companyRepository.find();
+    const Organization = await this.companyRepository.find({ isDeleted: false });
     Organization.forEach(
       (data) =>
         (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
@@ -33,9 +33,9 @@ export class CompanyService {
     });
     Organization.forEach(
       (data) =>
-        (data.image = data.image
-          ? Buffer.from(data.image, 'base64').toString('utf8')
-          : data.image),
+      (data.image = data.image
+        ? Buffer.from(data.image, 'base64').toString('utf8')
+        : data.image),
     );
     return Organization; //StatusMessage(true, null, Organization);
     // } catch (e) {

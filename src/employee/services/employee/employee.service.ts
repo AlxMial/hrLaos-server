@@ -15,16 +15,16 @@ export class EmployeeService {
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getEmployeeAll() {
     try {
-      const employee = await this.empRepository.find();
+      const employee = await this.empRepository.find({ isDeleted: false });
       employee.forEach(
         (data) =>
-          (data.image = data.image
-            ? Buffer.from(data.image, 'base64').toString('utf8')
-            : data.image),
+        (data.image = data.image
+          ? Buffer.from(data.image, 'base64').toString('utf8')
+          : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -49,9 +49,9 @@ export class EmployeeService {
       const employee = await this.empRepository.find({ companyId: companyId });
       employee.forEach(
         (data) =>
-          (data.image = data.image
-            ? Buffer.from(data.image, 'base64').toString('utf8')
-            : data.image),
+        (data.image = data.image
+          ? Buffer.from(data.image, 'base64').toString('utf8')
+          : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -171,9 +171,9 @@ export class EmployeeService {
 
     for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='empId'",
+        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='empId', @exceptTable='tbEmpAddress'",
       );
-      if (result) {
+      if (result && result.length > 0) {
         message['message'] = 'data is used';
         message['isResult'] = false;
         break;
@@ -186,6 +186,15 @@ export class EmployeeService {
     return message;
   }
 
+  async deleteEmpAddress(data: any, userId: any) {
+    const deleteAddress = await this.addressRepository.findOne({ empId: data });
+    deleteAddress.isDeleted = true;
+    deleteAddress.modifiedBy = parseInt(userId);
+    deleteAddress.modifiedDate = new Date();
+    const success = await this.addressRepository.save(deleteAddress);
+    return success ? true : false;
+  }
+
   async deleteEmp(data: any, userId: any) {
     const deleteEmp = await this.empRepository.findOne({ id: data });
     deleteEmp.isDeleted = true;
@@ -195,12 +204,4 @@ export class EmployeeService {
     return success ? true : false;
   }
 
-  async deleteEmpAddress(data: any, userId: any) {
-    const deleteAddress = await this.addressRepository.findOne({ empId: data });
-    deleteAddress.isDeleted = true;
-    deleteAddress.modifiedBy = parseInt(userId);
-    deleteAddress.modifiedDate = new Date();
-    const success = await this.addressRepository.save(deleteAddress);
-    return success ? true : false;
-  }
 }

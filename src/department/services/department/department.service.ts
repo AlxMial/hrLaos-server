@@ -11,12 +11,12 @@ export class DepartmentService {
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getDepartmentAll() {
     const department = this.departmentRepository;
     try {
-      const depart = await this.departmentRepository.find();
+      const depart = await this.departmentRepository.find({ isDeleted: false });
       return StatusMessage(true, null, depart);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);
