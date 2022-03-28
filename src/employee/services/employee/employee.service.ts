@@ -129,30 +129,34 @@ export class EmployeeService {
     data.modifiedBy = updateEmp.userId;
     data.modifiedDate = new Date();
 
-    // const dataAddress = await this.addressRepository.findOne({
-    //   empId: updateEmp.id,
-    // });
-    // if (dataAddress === undefined && updateEmp.empAddress) {
-    //   updateEmp.empAddress.empId = updateEmp.id;
-    //   updateEmp.empAddress.isDeleted = false;
-    //   await this.addressRepository.save(updateEmp.empAddress);
-    // } else if (dataAddress && updateEmp.empAddress) {
-    //   dataAddress.addressDetail = updateEmp.empAddress.addressDetail;
-    //   dataAddress.addressType = updateEmp.empAddress.addressType;
-    //   dataAddress.country = updateEmp.empAddress.country;
-    //   dataAddress.postalCode = updateEmp.empAddress.postalCode;
-    //   dataAddress.province = updateEmp.empAddress.province;
-    //   dataAddress.district = updateEmp.empAddress.district;
-    //   dataAddress.subDistrict = updateEmp.empAddress.subDistrict;
-    //   dataAddress.latitude = updateEmp.empAddress.latitude;
-    //   dataAddress.longitude = updateEmp.empAddress.longitude;
-    //   dataAddress.email = updateEmp.empAddress.email;
-    //   dataAddress.phone = updateEmp.empAddress.phone;
-    //   dataAddress.modifiedBy = updateEmp.userId;
-    //   dataAddress.modifiedDate = new Date();
-    //   dataAddress.isDeleted = false;
-    // }
-    // await this.addressRepository.save(dataAddress);
+    updateEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
+      const dataAddress = await this.addressRepository.findOne({
+        empId: updateEmp.id,
+        addressType: data.addressType,
+      });
+      if (dataAddress === undefined && data) {
+        data.empId = updateEmp.id;
+        data.isDeleted = false;
+        await this.addressRepository.save(data);
+      } else if (dataAddress && data) {
+        dataAddress.addressDetail = data.addressDetail;
+        dataAddress.addressType = data.addressType;
+        dataAddress.country = data.country;
+        dataAddress.postalCode = data.postalCode;
+        dataAddress.province = data.province;
+        dataAddress.district = data.district;
+        dataAddress.subDistrict = data.subDistrict;
+        dataAddress.latitude = data.latitude;
+        dataAddress.longitude = data.longitude;
+        dataAddress.email = data.email;
+        dataAddress.phone = data.phone;
+        dataAddress.modifiedBy = updateEmp.userId;
+        dataAddress.modifiedDate = new Date();
+        dataAddress.isDeleted = false;
+      }
+      await this.addressRepository.save(dataAddress);
+    });
+
     return await this.empRepository.save(data);
     // } catch (e) {
     //   return { message: (e as Error).message };
