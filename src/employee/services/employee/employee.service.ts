@@ -15,16 +15,16 @@ export class EmployeeService {
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
     private readonly connection: Connection,
-  ) { }
+  ) {}
 
   async getEmployeeAll() {
     try {
       const employee = await this.empRepository.find({ isDeleted: false });
       employee.forEach(
         (data) =>
-        (data.image = data.image
-          ? Buffer.from(data.image, 'base64').toString('utf8')
-          : data.image),
+          (data.image = data.image
+            ? Buffer.from(data.image, 'base64').toString('utf8')
+            : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -34,11 +34,14 @@ export class EmployeeService {
 
   async getEmployeeByEmpId(empId: number, companyId: number) {
     //try {
-    const employee = await this.empRepository.findOne({ id: empId, companyId: companyId });
+    const employee = await this.empRepository.findOne({
+      id: empId,
+      companyId: companyId,
+    });
     employee.image = employee.image
       ? Buffer.from(employee.image, 'base64').toString('utf8')
       : null;
-    let empAddress = await this.addressRepository.find({ empId: empId });
+    const empAddress = await this.addressRepository.find({ empId: empId });
     return { employee, empAddress };
     // } catch (e) {
     //   return { message: (e as Error).message };
@@ -50,9 +53,9 @@ export class EmployeeService {
       const employee = await this.empRepository.find({ companyId: companyId });
       employee.forEach(
         (data) =>
-        (data.image = data.image
-          ? Buffer.from(data.image, 'base64').toString('utf8')
-          : data.image),
+          (data.image = data.image
+            ? Buffer.from(data.image, 'base64').toString('utf8')
+            : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -180,8 +183,11 @@ export class EmployeeService {
     // });
 
     for (let i = 0; i < data.id.length; i++) {
+      this.deleteEmpAddress(data.id[i], data.userId);
       const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='empId', @exceptTable='tbEmpAddress'",
+        "up_selectAllUse @SearchStr='" +
+          data.id[i] +
+          "',@Column='empId', @exceptTable='tbEmpAddress'",
       );
       if (result && result.length > 0) {
         message['message'] = 'data is used';
@@ -213,5 +219,4 @@ export class EmployeeService {
     const success = await this.empRepository.save(deleteEmp);
     return success ? true : false;
   }
-
 }
