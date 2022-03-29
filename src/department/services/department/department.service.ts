@@ -11,7 +11,7 @@ export class DepartmentService {
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
-  ) { }
+  ) {}
 
   async getDepartmentAll() {
     const department = this.departmentRepository;

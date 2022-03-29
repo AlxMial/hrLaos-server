@@ -15,7 +15,7 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService,
-  ) { }
+  ) {}
 
   private users: User[] = [];
 
@@ -80,7 +80,14 @@ export class UsersService {
   async findUserByUsername(username: string) {
     //try {
     const User = await this.userRepository.findOne({ userName: username });
-    const emp = await this.employeeService.getEmployeeByEmpId(User.empId, User.companyId);
+    if (User) {
+      const emp = await this.employeeService.getEmployeeByEmpId(
+        User.empId,
+        User.companyId,
+      );
+      User['img'] = emp.employee.image;
+      return User;
+    } else return null;
     // const tbUser = {
     //   id: User.id,
     //   empId: User.empId,
@@ -92,9 +99,9 @@ export class UsersService {
     //   isDeleted: User.isDeleted,
     //   img: Employee.image,
     // };
-    User['img'] = emp.employee.image;
+    // User['img'] = emp.employee.image;
     // const data = { tbUser, tbEmployee };
-    return User; //StatusMessage(true, null, data);
+    // return User; //StatusMessage(true, null, data);
     // } catch (e) {
     //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     // }
