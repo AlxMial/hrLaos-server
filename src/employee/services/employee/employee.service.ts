@@ -15,16 +15,16 @@ export class EmployeeService {
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getEmployeeAll() {
     try {
       const employee = await this.empRepository.find({ isDeleted: false });
       employee.forEach(
         (data) =>
-          (data.image = data.image
-            ? Buffer.from(data.image, 'base64').toString('utf8')
-            : data.image),
+        (data.image = data.image
+          ? Buffer.from(data.image, 'base64').toString('utf8')
+          : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -53,9 +53,9 @@ export class EmployeeService {
       const employee = await this.empRepository.find({ companyId: companyId });
       employee.forEach(
         (data) =>
-          (data.image = data.image
-            ? Buffer.from(data.image, 'base64').toString('utf8')
-            : data.image),
+        (data.image = data.image
+          ? Buffer.from(data.image, 'base64').toString('utf8')
+          : data.image),
       );
       return employee; //StatusMessage(true, null, employee);
     } catch (e) {
@@ -186,8 +186,8 @@ export class EmployeeService {
       this.deleteEmpAddress(data.id[i], data.userId);
       const result = await this.connection.query(
         "up_selectAllUse @SearchStr='" +
-          data.id[i] +
-          "',@Column='empId', @exceptTable='tbEmpAddress'",
+        data.id[i] +
+        "',@Column='empId', @exceptTable='tbEmpAddress'",
       );
       if (result && result.length > 0) {
         message['message'] = 'data is used';
