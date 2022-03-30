@@ -18,7 +18,7 @@ import {
 // import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AuthenticatedGuard } from 'src/auth/utils/LocalGuard';
+// import { AuthenticatedGuard } from 'src/auth/utils/LocalGuard';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
@@ -34,7 +34,7 @@ export class EmployeeController {
   //@UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Get('')
-  async getUsers(@Req() request: Request) {
+  async get(@Req() request: Request) {
     // const cookie = request.cookies['jwt'];
     // const data = await this.jwtService.verifyAsync(cookie);
     return this.employeeService.getEmployeeAll();
@@ -43,7 +43,7 @@ export class EmployeeController {
   // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Get('/:companyId')
-  getUsersByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
+  getByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.employeeService.getEmployeeByCompanyId(id);
   }
 

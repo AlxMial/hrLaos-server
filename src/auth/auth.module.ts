@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
-import { tbEmpAddress, tbEmployee, tbUser } from 'src/typeorm';
+import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbUser } from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
@@ -10,10 +10,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { jwtConstants } from 'src/utils/constants';
 import { LocalStrategy } from './strategies/local.strategy';
+import { PositionService } from 'src/position/services/position/position.service';
+import { DepartmentService } from 'src/department/services/department/department.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress]),
+    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
@@ -38,6 +40,14 @@ import { LocalStrategy } from './strategies/local.strategy';
       provide: 'EMPLOYEE_SERVICE',
       useClass: EmployeeService,
     },
+    {
+      provide: 'POSITION_SERVICE',
+      useClass: PositionService,
+    },
+    {
+      provide: 'DEPARTMENT_SERVICE',
+      useClass: DepartmentService,
+    },
   ],
   // providers: [
   //   {
@@ -53,4 +63,4 @@ import { LocalStrategy } from './strategies/local.strategy';
   //   SessionSerializer,
   // ],
 })
-export class AuthModule {}
+export class AuthModule { }

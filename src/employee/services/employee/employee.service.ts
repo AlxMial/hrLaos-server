@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
-import { tbEmpAddress, tbEmployee } from 'src/typeorm';
+import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { Repository, Connection } from 'typeorm';
@@ -14,6 +14,10 @@ export class EmployeeService {
     private readonly empRepository: Repository<tbEmployee>,
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
+    @InjectRepository(tbPosition)
+    private readonly positionRepository: Repository<tbPosition>,
+    @InjectRepository(tbDepartment)
+    private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
   ) { }
 
@@ -38,11 +42,28 @@ export class EmployeeService {
       id: empId,
       companyId: companyId,
     });
-    employee.image = employee.image
-      ? Buffer.from(employee.image, 'base64').toString('utf8')
-      : null;
+    if (employee) {
+      employee.image = employee.image
+        ? Buffer.from(employee.image, 'base64').toString('utf8')
+        : null;
+    }
     const empAddress = await this.addressRepository.find({ empId: empId });
-    return { employee, empAddress };
+
+    //enum
+    const empEnum = [];
+    //position
+    const position = await this.positionRepository.find({ isDeleted: false });
+    //department
+    const department = await this.departmentRepository.find({ isDeleted: false });
+    //supervisor
+    const supervisor = await this.empRepository.find({
+      where: {
+        empId: { $ne: empId },
+        isDeleted: false,
+      }
+    });
+
+    return { employee, empAddress, position, supervisor, department, empEnum };
     // } catch (e) {
     //   return { message: (e as Error).message };
     // }
