@@ -11,7 +11,7 @@ export class DepartmentService {
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getDepartmentAll() {
     const department = this.departmentRepository;
@@ -33,13 +33,23 @@ export class DepartmentService {
     }
   }
 
+  async getDepartmentByEmpId(id: number, companyId: number) {
+    try {
+      const data = await this.departmentRepository.findOne({
+        id: id,
+        companyId: companyId,
+      });
+      return StatusMessage(true, null, data);;
+    } catch (e) {
+      return { message: (e as Error).message };
+    }
+  }
+
   async createDepartment(createDepartment: departmentDto) {
     const department = this.departmentRepository;
     try {
       const newDepartment = this.departmentRepository.create(createDepartment);
-      const SaveDepartment = await this.departmentRepository.save(
-        newDepartment,
-      );
+      const SaveDepartment = await this.departmentRepository.save(newDepartment);
       return StatusMessage(true, null, SaveDepartment);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);

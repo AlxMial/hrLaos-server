@@ -29,7 +29,7 @@ export class EmployeeController {
   constructor(
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService, // private jwtService: JwtService,
-  ) {}
+  ) { }
 
   //@UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
@@ -40,13 +40,15 @@ export class EmployeeController {
     return this.employeeService.getEmployeeAll();
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/:companyId')
   getUsersByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.employeeService.getEmployeeByCompanyId(id);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('getById/:empId/:companyId')
   getById(
     @Param('empId', ParseIntPipe) id: number,
@@ -55,21 +57,24 @@ export class EmployeeController {
     return this.employeeService.getEmployeeByEmpId(id, companyId);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createEmp(@Body() createEmp: CreateEmployee) {
     return this.employeeService.createEmp(createEmp);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
   updateEmp(@Body() updateEmp: CreateEmployee) {
     return this.employeeService.updateEmp(updateEmp);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  // @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete('delete')
   async deleteEmp(@Body() deleteEmp: deleteDto) {
     const del = await this.employeeService.CheckEmp(deleteEmp);
