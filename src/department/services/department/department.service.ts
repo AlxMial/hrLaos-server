@@ -47,14 +47,14 @@ export class DepartmentService {
 
   async createDepartment(createDepartment: departmentDto) {
     const department = this.departmentRepository;
-    return StatusMessage(false, 'test', department);
-    // try {
-    //   const newDepartment = this.departmentRepository.create(createDepartment);
-    //   const SaveDepartment = await this.departmentRepository.save(newDepartment);
-    //   return StatusMessage(true, null, SaveDepartment);
-    // } catch (e) {
-    //   return StatusMessage(false, (e as Error).message, department);
-    // }
+    // return StatusMessage(false, 'test', department);
+    try {
+      const newDepartment = this.departmentRepository.create(createDepartment);
+      const SaveDepartment = await this.departmentRepository.save(newDepartment);
+      return StatusMessage(true, null, SaveDepartment);
+    } catch (e) {
+      return StatusMessage(false, (e as Error).message, department);
+    }
   }
 
   async updateDepartment(updateDepartment: departmentDto) {
