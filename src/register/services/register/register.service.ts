@@ -28,7 +28,7 @@ export class RegisterService {
     private readonly employeeService: EmployeeService,
     @Inject('USER_SERVICE')
     private readonly userService: UsersService,
-  ) {}
+  ) { }
 
   private register: Register[] = [];
 
@@ -113,6 +113,7 @@ export class RegisterService {
         const org = await this.companyService.createCompany(createOrg);
 
         const createEmp = new CreateEmployee();
+        createEmp.empCode = data.firstName;
         createEmp.firstName = data.firstName;
         createEmp.lastName = data.lastName;
         createEmp.companyId = org.id;

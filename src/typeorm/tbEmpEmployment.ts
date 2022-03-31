@@ -45,9 +45,22 @@ export class tbEmpEmployment {
   shiftId: number;
 
   @Column({
-    default: false,
+    default: null,
+    type: 'bigint',
   })
-  IsAddressStamp: boolean;
+  empType: number;
+
+  @Column({
+    default: null,
+    type: 'bigint',
+  })
+  workingStatus: number;
+
+  @Column({
+    default: null,
+    type: 'bigint',
+  })
+  locationId: number;
 
   @Column({
     nullable: false,

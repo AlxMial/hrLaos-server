@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
+import { CreateEmpEmployment } from 'src/employee/dtos/CreateEmpEmployment.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
@@ -69,6 +70,8 @@ export class EmployeeService {
       select: [
         'id',
         'empCode',
+        'title',
+        'titleEn',
         'lastName',
         'firstName',
         'nickName',
@@ -103,21 +106,23 @@ export class EmployeeService {
     //try {
     const Image = createEmp.image;
     createEmp.image = null;
+    createEmp.createdBy = createEmp.userId;
+    createEmp.createdDate = new Date();
+    createEmp.modifiedBy = createEmp.userId;
+    createEmp.modifiedDate = new Date();
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
+
+    //Address
     if (createEmp.empAddress !== undefined && SaveEmp) {
-      createEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
-        data.empId = SaveEmp.id;
-        data.isDeleted = false;
-        data.modifiedDate = new Date();
-      });
-      // createEmp.empAddress.empId = SaveEmp.id;
-      // createEmp.empAddress.isDeleted = false;
-      const empAddress = await this.addressRepository.save(
-        createEmp.empAddress,
-      );
-      SaveEmp['empAddress'] = empAddress;
+      await this.setAddress(createEmp, SaveEmp);
     }
+
+    //Employment
+    if (createEmp.empEmployment !== undefined && SaveEmp) {
+      await this.setEmployment(createEmp, SaveEmp);
+    }
+
     if (Image) {
       const sql =
         'update tbEmployee set image = (CAST( ' +
@@ -134,6 +139,119 @@ export class EmployeeService {
     // } catch (e) {
     //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     // }
+  }
+
+  async setAddress(createEmp: CreateEmployee, SaveEmp: tbEmployee) {
+    createEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
+      data.empId = SaveEmp.id;
+      data.isDeleted = false;
+      data.modifiedDate = new Date();
+      data.modifiedBy = SaveEmp.modifiedBy;
+      const dataAddress = await this.addressRepository.findOne({
+        empId: SaveEmp.id,
+        addressType: data.addressType,
+      });
+
+      if (dataAddress === undefined && data) {
+        data.createdBy = SaveEmp.createdBy;
+        data.createdDate = new Date();
+        return await this.addressRepository.save(data);
+      } else {
+        dataAddress.addressDetail = data.addressDetail;
+        dataAddress.addressType = data.addressType;
+        dataAddress.country = data.country;
+        dataAddress.postalCode = data.postalCode;
+        dataAddress.province = data.province;
+        dataAddress.district = data.district;
+        dataAddress.subDistrict = data.subDistrict;
+        dataAddress.latitude = data.latitude;
+        dataAddress.longitude = data.longitude;
+        dataAddress.email = data.email;
+        dataAddress.phone = data.phone;
+        dataAddress.modifiedBy = SaveEmp.modifiedBy;
+        dataAddress.modifiedDate = new Date();
+        dataAddress.isDeleted = false;
+        return await this.addressRepository.save(dataAddress);
+      }
+    });
+    // const empAddress = await this.addressRepository.save(
+    //   createEmp.empAddress,
+    // );
+    // SaveEmp['empAddress'] = empAddress;
+  }
+
+  // set employment
+  async setEmployment(createEmp: CreateEmployee, SaveEmp: tbEmployee) {
+    createEmp.empEmployment.forEach(async (data: CreateEmpEmployment) => {
+      data.empId = SaveEmp.id;
+      data.isDeleted = false;
+      data.modifiedDate = new Date();
+      data.modifiedBy = SaveEmp.modifiedBy;
+      data.companyId = SaveEmp.companyId;
+      if (!data.departmentId) {
+        //Add New Department
+        const newDepartment = this.departmentRepository.create({
+          departmentCode: data.departmentSave,
+          departmentName: data.departmentSave,
+          departmentNameEn: data.departmentSave,
+          isDeleted: false,
+          companyId: createEmp.companyId,
+          createdDate: new Date(),
+          modifiedDate: new Date(),
+          createdBy: createEmp.userId,
+          modifiedBy: createEmp.userId,
+        });
+        const SaveDepartment = await this.departmentRepository.save(newDepartment);
+        data.departmentId = SaveDepartment.id;
+      }
+      if (!data.positionId) {
+        //Add New Position
+        const newPosition = this.positionRepository.create({
+          positionCode: data.positionSave,
+          positionName: data.positionSave,
+          positionNameEn: data.positionSave,
+          isDeleted: false,
+          companyId: createEmp.companyId,
+          createdDate: new Date(),
+          modifiedDate: new Date(),
+          createdBy: createEmp.userId,
+          modifiedBy: createEmp.userId,
+        });
+        const SavePosition = await this.positionRepository.save(newPosition);
+        data.positionId = SavePosition.id;
+      }
+
+      const dataEmployment = await this.employmentRepository.findOne({
+        empId: SaveEmp.id,
+        companyId: SaveEmp.companyId,
+      });
+      if (dataEmployment === undefined && data) {
+        // New case
+        data.createdBy = SaveEmp.createdBy;
+        data.createdDate = new Date();
+        return await this.employmentRepository.save(data);
+      } else {
+        dataEmployment.startWorkingDate = data.startWorkingDate;
+        dataEmployment.empId = SaveEmp.id;
+        dataEmployment.departmentId = data.departmentId;
+        dataEmployment.positionId = data.positionId;
+        dataEmployment.modifiedBy = SaveEmp.modifiedBy;
+        dataEmployment.modifiedDate = new Date();
+        dataEmployment.isDeleted = false;
+        dataEmployment.supervisorId = data.supervisorId;
+        dataEmployment.shiftId = data.shiftId;
+        dataEmployment.empType = data.empType;
+        dataEmployment.workingStatus = data.workingStatus;
+        dataEmployment.locationId = data.locationId;
+        return await this.employmentRepository.save(dataEmployment);
+      }
+    });
+
+    // Save Employment
+    // const empEmployment = await this.addressRepository.save(
+    //   createEmp.empEmployment,
+    // );
+    // SaveEmp['empEmployment'] = empEmployment;
   }
 
   async updateEmp(updateEmp: CreateEmployee) {
@@ -167,36 +285,13 @@ export class EmployeeService {
     data.passportExpire = updateEmp.passportExpire;
     data.modifiedBy = updateEmp.userId;
     data.modifiedDate = new Date();
+    const employee = await this.empRepository.save(data);
+    //Address
+    await this.setAddress(updateEmp, employee);
+    //Employment
+    await this.setEmployment(updateEmp, employee);
 
-    updateEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
-      const dataAddress = await this.addressRepository.findOne({
-        empId: updateEmp.id,
-        addressType: data.addressType,
-      });
-      if (dataAddress === undefined && data) {
-        data.empId = updateEmp.id;
-        data.isDeleted = false;
-        await this.addressRepository.save(data);
-      } else if (dataAddress && data) {
-        dataAddress.addressDetail = data.addressDetail;
-        dataAddress.addressType = data.addressType;
-        dataAddress.country = data.country;
-        dataAddress.postalCode = data.postalCode;
-        dataAddress.province = data.province;
-        dataAddress.district = data.district;
-        dataAddress.subDistrict = data.subDistrict;
-        dataAddress.latitude = data.latitude;
-        dataAddress.longitude = data.longitude;
-        dataAddress.email = data.email;
-        dataAddress.phone = data.phone;
-        dataAddress.modifiedBy = updateEmp.userId;
-        dataAddress.modifiedDate = new Date();
-        dataAddress.isDeleted = false;
-      }
-      await this.addressRepository.save(dataAddress);
-    });
-
-    return await this.empRepository.save(data);
+    return employee;
     // } catch (e) {
     //   return { message: (e as Error).message };
     // }
