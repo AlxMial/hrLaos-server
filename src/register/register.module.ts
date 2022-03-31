@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RegisterController } from './controllers/register/register.controller';
 import { RegisterService } from './services/register/register.service';
-import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbRegister, tbUser } from 'src/typeorm';
+import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbRegister, tbUser, tbEmpEmployment } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
 import { EncryptService } from 'src/utils/crypto';
@@ -19,6 +19,7 @@ import { DepartmentService } from 'src/department/services/department/department
       tbCompany,
       tbEmployee,
       tbEmpAddress,
+      tbEmpEmployment,
       tbUser,
       tbPosition,
       tbDepartment

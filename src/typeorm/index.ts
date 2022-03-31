@@ -8,6 +8,7 @@ import { tbEmpAddress } from './tbEmpAddress';
 import { tbCompany } from './tbCompany';
 import { tbDepartment } from './tbDepartment';
 import { tbPosition } from './tbPosition';
+import { tbEmpEmployment } from './tbEmpEmployment';
 
 const entities = [
   tbUser,
@@ -17,6 +18,7 @@ const entities = [
   tbOrgAddress,
   tbEmployee,
   tbEmpAddress,
+  tbEmpEmployment,
   tbCompany,
   tbDepartment,
   tbPosition,
@@ -35,6 +37,8 @@ export { tbOrgAddress };
 export { tbEmployee };
 
 export { tbEmpAddress };
+
+export { tbEmpEmployment };
 
 export { tbCompany };
 

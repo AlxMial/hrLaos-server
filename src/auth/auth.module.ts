@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
-import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbUser } from 'src/typeorm';
+import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbUser, tbEmpEmployment } from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
@@ -15,7 +15,7 @@ import { DepartmentService } from 'src/department/services/department/department
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment]),
+    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment, tbEmpEmployment]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },

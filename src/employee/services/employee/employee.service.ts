@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
-import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment } from 'src/typeorm';
+import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { StatusMessage } from 'src/utils/StatusMessage';
-import { Repository, Connection } from 'typeorm';
+import { Repository, Connection, Not } from 'typeorm';
 
 @Injectable()
 export class EmployeeService {
@@ -14,6 +14,8 @@ export class EmployeeService {
     private readonly empRepository: Repository<tbEmployee>,
     @InjectRepository(tbEmpAddress)
     private readonly addressRepository: Repository<tbEmpAddress>,
+    @InjectRepository(tbEmpEmployment)
+    private readonly employmentRepository: Repository<tbEmpEmployment>,
     @InjectRepository(tbPosition)
     private readonly positionRepository: Repository<tbPosition>,
     @InjectRepository(tbDepartment)
@@ -47,8 +49,10 @@ export class EmployeeService {
         ? Buffer.from(employee.image, 'base64').toString('utf8')
         : null;
     }
+    //Emp Address
     const empAddress = await this.addressRepository.find({ empId: empId });
-
+    // Emp Employment
+    const empEmployment = await this.employmentRepository.find({ empId: empId });
     //enum
     const empEnum = [];
     //position
@@ -58,12 +62,23 @@ export class EmployeeService {
     //supervisor
     const supervisor = await this.empRepository.find({
       where: {
-        empId: { $ne: empId },
+        id: Not(empId),
+        companyId: companyId,
         isDeleted: false,
-      }
+      },
+      select: [
+        'id',
+        'empCode',
+        'lastName',
+        'firstName',
+        'nickName',
+        'firstNameEn',
+        'lastNameEn',
+        'nickNameEn',
+      ],
     });
 
-    return { employee, empAddress, position, supervisor, department, empEnum };
+    return { employee, empAddress, position, supervisor, department, empEnum, empEmployment };
     // } catch (e) {
     //   return { message: (e as Error).message };
     // }
@@ -208,7 +223,7 @@ export class EmployeeService {
       const result = await this.connection.query(
         "up_selectAllUse @SearchStr='" +
         data.id[i] +
-        "',@Column='empId', @exceptTable='tbEmpAddress'",
+        "',@Column='empId', @exceptTable='tbEmpAddress,tbEmpEmployment'",
       );
       if (result && result.length > 0) {
         message['message'] = 'data is used';

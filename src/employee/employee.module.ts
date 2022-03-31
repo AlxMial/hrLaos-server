@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DepartmentService } from 'src/department/services/department/department.service';
 import { PositionService } from 'src/position/services/position/position.service';
-import { tbDepartment, tbEmpAddress, tbPosition } from 'src/typeorm';
+import { tbDepartment, tbEmpAddress, tbPosition, tbEmpEmployment } from 'src/typeorm';
 import { tbEmployee } from 'src/typeorm/tbEmployee';
 import { EncryptService } from 'src/utils/crypto';
 import { EmployeeController } from './controllers/employee/employee.controller';
 import { EmployeeService } from './services/employee/employee.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([tbEmployee, tbEmpAddress, tbPosition, tbDepartment])],
+  imports: [TypeOrmModule.forFeature([tbEmployee, tbEmpAddress, tbPosition, tbDepartment, tbEmpEmployment])],
   controllers: [EmployeeController],
   providers: [
     {

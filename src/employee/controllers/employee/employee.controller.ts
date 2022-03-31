@@ -49,9 +49,9 @@ export class EmployeeController {
 
   // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('getById/:empId/:companyId')
+  @Get('getById/:id/:companyId')
   getById(
-    @Param('empId', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
     return this.employeeService.getEmployeeByEmpId(id, companyId);
