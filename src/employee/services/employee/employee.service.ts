@@ -191,9 +191,9 @@ export class EmployeeService {
       if (!data.departmentId) {
         //Add New Department
         const newDepartment = this.departmentRepository.create({
-          departmentCode: data.departmentSave,
-          departmentName: data.departmentSave,
-          departmentNameEn: data.departmentSave,
+          departmentCode: data.departmentInput,
+          departmentName: data.departmentInput,
+          departmentNameEn: data.departmentInput,
           isDeleted: false,
           companyId: createEmp.companyId,
           createdDate: new Date(),
@@ -207,9 +207,9 @@ export class EmployeeService {
       if (!data.positionId) {
         //Add New Position
         const newPosition = this.positionRepository.create({
-          positionCode: data.positionSave,
-          positionName: data.positionSave,
-          positionNameEn: data.positionSave,
+          positionCode: data.positionInput,
+          positionName: data.positionInput,
+          positionNameEn: data.positionInput,
           isDeleted: false,
           companyId: createEmp.companyId,
           createdDate: new Date(),

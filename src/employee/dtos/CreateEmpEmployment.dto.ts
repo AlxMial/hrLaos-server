@@ -19,11 +19,11 @@ export class CreateEmpEmployment {
   userId: number;
 
   @Exclude()
-  positionSave: string;
+  positionInput: string;
   @Exclude()
-  departmentSave: string;
+  departmentInput: string;
   @Exclude()
-  supervisorSave: string;
+  supervisorInput: string;
   @Exclude()
-  shiftSave: string;
+  shiftInput: string;
 }
