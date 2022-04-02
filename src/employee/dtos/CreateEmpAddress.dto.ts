@@ -19,4 +19,5 @@ export class CreateEmpAddress {
   modifiedDate: Date;
   isDeleted: boolean;
   userId: number;
+  companyId: number;
 }

@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     @Inject('USER_SERVICE') private readonly userService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   // async validateUser(username: string, password: string) {
   //   const data = { data: null, isResult: true, message: '' };

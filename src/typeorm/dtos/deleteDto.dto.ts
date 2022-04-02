@@ -6,4 +6,6 @@ export class deleteDto {
 
   @IsNotEmpty()
   userId: number;
+
+  companyId: number;
 }

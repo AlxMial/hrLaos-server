@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { departmentDto } from 'src/department/dtos/department.dto';
 import { tbDepartment } from 'src/typeorm';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { getDto } from 'src/typeorm/dtos/getDto.dto';
+import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { Repository, Connection } from 'typeorm';
 
@@ -13,10 +16,10 @@ export class DepartmentService {
     private readonly connection: Connection,
   ) { }
 
-  async getDepartmentAll() {
+  async getDepartmentAll(params: getDto) {
     const department = this.departmentRepository;
     try {
-      const depart = await this.departmentRepository.find({ isDeleted: false });
+      const depart = await this.departmentRepository.find({ isDeleted: false, companyId: params.companyId });
       return StatusMessage(true, null, depart);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);
@@ -49,6 +52,7 @@ export class DepartmentService {
     const department = this.departmentRepository;
     // return StatusMessage(false, 'test', department);
     try {
+      stampAudit(createDepartment);
       const newDepartment = this.departmentRepository.create(createDepartment);
       const SaveDepartment = await this.departmentRepository.save(newDepartment);
       return StatusMessage(true, null, SaveDepartment);
@@ -60,15 +64,14 @@ export class DepartmentService {
   async updateDepartment(updateDepartment: departmentDto) {
     const department = this.departmentRepository;
     try {
-      const data = await this.departmentRepository.findOne(updateDepartment.id);
+      // updateDepartment = stampAudit(updateDepartment, 'update');
+      let data = await this.departmentRepository.findOne(updateDepartment.id);
       data.departmentCode = updateDepartment.departmentCode;
       data.departmentName = updateDepartment.departmentName;
       data.departmentNameEn = updateDepartment.departmentNameEn;
       data.mainDepartmentId = updateDepartment.mainDepartmentId;
       data.description = updateDepartment.description;
-      data.modifiedBy = updateDepartment.userId;
-      data.modifiedDate = new Date();
-      data.isDeleted = false;
+      stampAudit(data, updateDepartment, 'update');
       return StatusMessage(
         true,
         null,
@@ -79,27 +82,31 @@ export class DepartmentService {
     }
   }
 
-  async delete(data: departmentDto) {
+  async delete(data: deleteDto) {
     const department = this.departmentRepository;
-    try {
+    // try {
+    for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + data.id + "',@Column='empId'",
+        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='departmentId', @exceptTable='tbDepartment', @companyId='" + data.companyId + "'",
       );
-      if (result) {
+      if (result && result.length > 0) {
         return StatusMessage(false, 'data is used', department);
       } else {
-        const deleteEmp = await this.departmentRepository.findOne(data.id);
-        deleteEmp.isDeleted = true;
-        deleteEmp.modifiedBy = data.userId;
-        deleteEmp.modifiedDate = new Date();
-        return StatusMessage(
-          true,
-          null,
-          await this.departmentRepository.save(deleteEmp),
-        );
+        const deleteDepartment = await this.departmentRepository.findOne({ id: data.id[i], companyId: data.companyId });
+        if (deleteDepartment) {
+          stampAudit(deleteDepartment, data, 'update', true);
+          return StatusMessage(
+            true,
+            null,
+            await this.departmentRepository.save(deleteDepartment),
+          );
+        } else {
+          return StatusMessage(false, null, department);
+        }
       }
-    } catch (e) {
-      return StatusMessage(false, (e as Error).message, department);
     }
+    // } catch (e) {
+    //   return StatusMessage(false, (e as Error).message, department);
+    // }
   }
 }

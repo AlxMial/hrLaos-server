@@ -5,6 +5,8 @@ import { CreateEmpEmployment } from 'src/employee/dtos/CreateEmpEmployment.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
 import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { getDto } from 'src/typeorm/dtos/getDto.dto';
+import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { Repository, Connection, Not } from 'typeorm';
 
@@ -24,16 +26,16 @@ export class EmployeeService {
     private readonly connection: Connection,
   ) { }
 
-  async getEmployeeAll() {
+  async getEmployeeAll(params: getDto) {
     try {
-      const employee = await this.empRepository.find({ isDeleted: false });
+      const employee = await this.empRepository.find({ isDeleted: false, companyId: params.companyId });
       employee.forEach(
         (data) =>
         (data.image = data.image
           ? Buffer.from(data.image, 'base64').toString('utf8')
           : data.image),
       );
-      return employee; //StatusMessage(true, null, employee);
+      return employee;
     } catch (e) {
       return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
     }
@@ -50,17 +52,17 @@ export class EmployeeService {
         ? Buffer.from(employee.image, 'base64').toString('utf8')
         : null;
     }
-    //Emp Address
-    const empAddress = await this.addressRepository.find({ empId: empId });
+    // Emp Address
+    const empAddress = await this.addressRepository.find({ empId: empId, companyId: companyId });
     // Emp Employment
-    const empEmployment = await this.employmentRepository.find({ empId: empId });
+    const empEmployment = await this.employmentRepository.find({ empId: empId, companyId: companyId });
     //enum
     const empEnum = [];
     //position
-    const position = await this.positionRepository.find({ isDeleted: false });
+    const position = await this.positionRepository.find({ isDeleted: false, companyId: companyId });
     //department
-    const department = await this.departmentRepository.find({ isDeleted: false });
-    //supervisor
+    const department = await this.departmentRepository.find({ isDeleted: false, companyId: companyId });
+    // supervisor
     const supervisor = await this.empRepository.find({
       where: {
         id: Not(empId),
@@ -81,7 +83,15 @@ export class EmployeeService {
       ],
     });
 
-    return { employee, empAddress, position, supervisor, department, empEnum, empEmployment };
+    return {
+      employee,
+      empAddress,
+      position,
+      supervisor,
+      department,
+      empEnum,
+      empEmployment
+    };
     // } catch (e) {
     //   return { message: (e as Error).message };
     // }
@@ -106,10 +116,7 @@ export class EmployeeService {
     //try {
     const Image = createEmp.image;
     createEmp.image = null;
-    createEmp.createdBy = createEmp.userId;
-    createEmp.createdDate = new Date();
-    createEmp.modifiedBy = createEmp.userId;
-    createEmp.modifiedDate = new Date();
+    stampAudit(createEmp);
     const newEmp = this.empRepository.create(createEmp);
     const SaveEmp = await this.empRepository.save(newEmp);
 
@@ -144,17 +151,14 @@ export class EmployeeService {
   async setAddress(createEmp: CreateEmployee, SaveEmp: tbEmployee) {
     createEmp.empAddress.forEach(async (data: CreateEmpAddress) => {
       data.empId = SaveEmp.id;
-      data.isDeleted = false;
-      data.modifiedDate = new Date();
-      data.modifiedBy = SaveEmp.modifiedBy;
+      data.companyId = SaveEmp.companyId;
       const dataAddress = await this.addressRepository.findOne({
         empId: SaveEmp.id,
         addressType: data.addressType,
       });
 
       if (dataAddress === undefined && data) {
-        data.createdBy = SaveEmp.createdBy;
-        data.createdDate = new Date();
+        stampAudit(data, SaveEmp);
         return await this.addressRepository.save(data);
       } else {
         dataAddress.addressDetail = data.addressDetail;
@@ -168,9 +172,7 @@ export class EmployeeService {
         dataAddress.longitude = data.longitude;
         dataAddress.email = data.email;
         dataAddress.phone = data.phone;
-        dataAddress.modifiedBy = SaveEmp.modifiedBy;
-        dataAddress.modifiedDate = new Date();
-        dataAddress.isDeleted = false;
+        stampAudit(dataAddress, SaveEmp, 'update');
         return await this.addressRepository.save(dataAddress);
       }
     });
@@ -184,9 +186,6 @@ export class EmployeeService {
   async setEmployment(createEmp: CreateEmployee, SaveEmp: tbEmployee) {
     createEmp.empEmployment.forEach(async (data: CreateEmpEmployment) => {
       data.empId = SaveEmp.id;
-      data.isDeleted = false;
-      data.modifiedDate = new Date();
-      data.modifiedBy = SaveEmp.modifiedBy;
       data.companyId = SaveEmp.companyId;
       if (!data.departmentId) {
         //Add New Department
@@ -194,13 +193,9 @@ export class EmployeeService {
           departmentCode: data.departmentInput,
           departmentName: data.departmentInput,
           departmentNameEn: data.departmentInput,
-          isDeleted: false,
           companyId: createEmp.companyId,
-          createdDate: new Date(),
-          modifiedDate: new Date(),
-          createdBy: createEmp.userId,
-          modifiedBy: createEmp.userId,
         });
+        stampAudit(newDepartment, createEmp);
         const SaveDepartment = await this.departmentRepository.save(newDepartment);
         data.departmentId = SaveDepartment.id;
       }
@@ -210,13 +205,9 @@ export class EmployeeService {
           positionCode: data.positionInput,
           positionName: data.positionInput,
           positionNameEn: data.positionInput,
-          isDeleted: false,
           companyId: createEmp.companyId,
-          createdDate: new Date(),
-          modifiedDate: new Date(),
-          createdBy: createEmp.userId,
-          modifiedBy: createEmp.userId,
         });
+        stampAudit(newPosition, createEmp);
         const SavePosition = await this.positionRepository.save(newPosition);
         data.positionId = SavePosition.id;
       }
@@ -227,22 +218,19 @@ export class EmployeeService {
       });
       if (dataEmployment === undefined && data) {
         // New case
-        data.createdBy = SaveEmp.createdBy;
-        data.createdDate = new Date();
+        stampAudit(data, SaveEmp);
         return await this.employmentRepository.save(data);
       } else {
         dataEmployment.startWorkingDate = data.startWorkingDate;
         dataEmployment.empId = SaveEmp.id;
         dataEmployment.departmentId = data.departmentId;
         dataEmployment.positionId = data.positionId;
-        dataEmployment.modifiedBy = SaveEmp.modifiedBy;
-        dataEmployment.modifiedDate = new Date();
-        dataEmployment.isDeleted = false;
         dataEmployment.supervisorId = data.supervisorId;
         dataEmployment.shiftId = data.shiftId;
         dataEmployment.empType = data.empType;
         dataEmployment.workingStatus = data.workingStatus;
         dataEmployment.locationId = data.locationId;
+        stampAudit(dataEmployment, SaveEmp, 'update');
         return await this.employmentRepository.save(dataEmployment);
       }
     });
@@ -283,8 +271,7 @@ export class EmployeeService {
     data.identityExpire = updateEmp.identityExpire;
     data.passportNo = updateEmp.passportNo;
     data.passportExpire = updateEmp.passportExpire;
-    data.modifiedBy = updateEmp.userId;
-    data.modifiedDate = new Date();
+    stampAudit(data, updateEmp, 'update');
     const employee = await this.empRepository.save(data);
     //Address
     await this.setAddress(updateEmp, employee);
@@ -297,57 +284,61 @@ export class EmployeeService {
     // }
   }
 
-  async CheckEmp(data: any) {
-    const message = new deleteDto();
-    // const val = await data.id.forEach(async (value: any) => {
-    //   const result = await this.connection.query(
-    //     "up_selectAllUse @SearchStr='" + value + "',@Column='empId'",
-    //   );
-    //   if (result) {
-    //     message['message'] = 'data is used';
-    //     message['isResult'] = false;
-    //   } else {
-    //     this.deleteEmp(value, data.userId);
-    //     message['message'] = 'Sucessfully';
-    //     message['isResult'] = true;
-    //   }
-    // });
-
+  async CheckEmp(data: deleteDto) {
+    const message = this.empRepository;
     for (let i = 0; i < data.id.length; i++) {
-      this.deleteEmpAddress(data.id[i], data.userId);
       const result = await this.connection.query(
         "up_selectAllUse @SearchStr='" +
         data.id[i] +
-        "',@Column='empId', @exceptTable='tbEmpAddress,tbEmpEmployment'",
+        "',@Column='empId', @exceptTable='tbEmpAddress,tbEmpEmployment', @companyId='" + data.companyId + "'",
       );
       if (result && result.length > 0) {
-        message['message'] = 'data is used';
-        message['isResult'] = false;
-        break;
+        return StatusMessage(
+          false,
+          'Data is used',
+          message,
+        );
       } else {
-        this.deleteEmp(data.id[i], data.userId);
-        message['message'] = 'Sucessfully';
-        message['isResult'] = true;
+        await this.deleteEmpAddress(data.id[i], data);
+        await this.deleteEmployment(data.id[i], data);
+        return StatusMessage(
+          true,
+          'Sucessfully',
+          await this.deleteEmp(data.id[i], data),
+        );
       }
     }
     return message;
   }
 
-  async deleteEmpAddress(data: any, userId: any) {
-    const deleteAddress = await this.addressRepository.findOne({ empId: data });
-    deleteAddress.isDeleted = true;
-    deleteAddress.modifiedBy = parseInt(userId);
-    deleteAddress.modifiedDate = new Date();
-    const success = await this.addressRepository.save(deleteAddress);
-    return success ? true : false;
+  async deleteEmpAddress(empId: any, dataDelete: any) {
+    const deleteAddress = await this.addressRepository.findOne({ empId: empId, companyId: dataDelete.companyId });
+    if (deleteAddress) {
+      stampAudit(deleteAddress, dataDelete, 'update', true);
+      const success = await this.addressRepository.save(deleteAddress);
+      return success;
+    }
+    return this.empRepository;
   }
 
-  async deleteEmp(data: any, userId: any) {
-    const deleteEmp = await this.empRepository.findOne({ id: data });
-    deleteEmp.isDeleted = true;
-    deleteEmp.modifiedBy = parseInt(userId);
-    deleteEmp.modifiedDate = new Date();
-    const success = await this.empRepository.save(deleteEmp);
-    return success ? true : false;
+  async deleteEmployment(empId: any, dataDelete: any) {
+    const deleteEmployment = await this.employmentRepository.findOne({ empId: empId, companyId: dataDelete.companyId });
+    if (deleteEmployment) {
+      stampAudit(deleteEmployment, dataDelete, 'update', true);
+      const success = await this.employmentRepository.save(deleteEmployment);
+      return success;
+    }
+    return this.empRepository;
+  }
+
+
+  async deleteEmp(empId: any, dataDelete: any) {
+    const deleteEmp = await this.empRepository.findOne({ id: empId, companyId: dataDelete.companyId });
+    if (deleteEmp) {
+      stampAudit(deleteEmp, dataDelete, 'update', true);
+      const success = await this.empRepository.save(deleteEmp);
+      return success;
+    }
+    return this.empRepository;
   }
 }

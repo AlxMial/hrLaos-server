@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { positionDto } from 'src/position/dtos/position.dto';
 import { tbPosition } from 'src/typeorm';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { getDto } from 'src/typeorm/dtos/getDto.dto';
+import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { Repository, Connection } from 'typeorm';
 
@@ -13,11 +16,11 @@ export class PositionService {
         private readonly connection: Connection,
     ) { }
 
-    async getPositionAll() {
+    async getPositionAll(params: getDto) {
         const position = this.positionRepository;
         try {
-            const depart = await this.positionRepository.find({ isDeleted: false });
-            return StatusMessage(true, null, depart);
+            const pos = await this.positionRepository.find({ isDeleted: false, companyId: params.companyId });
+            return StatusMessage(true, null, pos);
         } catch (e) {
             return StatusMessage(false, (e as Error).message, position);
         }
@@ -48,6 +51,7 @@ export class PositionService {
     async createPosition(createPosition: positionDto) {
         const position = this.positionRepository;
         try {
+            stampAudit(createPosition);
             const newPosition = this.positionRepository.create(createPosition);
             const SavePosition = await this.positionRepository.save(newPosition);
             return StatusMessage(true, null, SavePosition);
@@ -65,9 +69,7 @@ export class PositionService {
             data.positionNameEn = updatePosition.positionNameEn;
             data.mainPositionId = updatePosition.mainPositionId;
             data.description = updatePosition.description;
-            data.modifiedBy = updatePosition.userId;
-            data.modifiedDate = new Date();
-            data.isDeleted = false;
+            stampAudit(data, updatePosition, 'update');
             return StatusMessage(
                 true,
                 null,
@@ -78,24 +80,26 @@ export class PositionService {
         }
     }
 
-    async delete(data: positionDto) {
+    async delete(data: deleteDto) {
         const position = this.positionRepository;
         try {
-            const result = await this.connection.query(
-                "up_selectAllUse @SearchStr='" + data.id + "',@Column='empId'",
-            );
-            if (result) {
-                return StatusMessage(false, 'data is used', position);
-            } else {
-                const deleteEmp = await this.positionRepository.findOne(data.id);
-                deleteEmp.isDeleted = true;
-                deleteEmp.modifiedBy = data.userId;
-                deleteEmp.modifiedDate = new Date();
-                return StatusMessage(
-                    true,
-                    null,
-                    await this.positionRepository.save(deleteEmp),
+            for (let i = 0; i < data.id.length; i++) {
+                const result = await this.connection.query(
+                    "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='empId', @companyId='" + data.companyId + "'",
                 );
+                if (result && result.length > 0) {
+                    return { message: 'Data is used' };
+                } else {
+                    const deletePosition = await this.positionRepository.findOne({ id: data.id[i], companyId: data.companyId });
+                    if (deletePosition) {
+                        stampAudit(deletePosition, data, 'update', true);
+                        return StatusMessage(
+                            true,
+                            null,
+                            await this.positionRepository.save(deletePosition),
+                        );
+                    }
+                }
             }
         } catch (e) {
             return StatusMessage(false, (e as Error).message, position);

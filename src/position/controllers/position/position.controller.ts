@@ -15,6 +15,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { positionDto } from 'src/position/dtos/position.dto';
 import { PositionService } from 'src/position/services/position/position.service';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 
 @Controller('position')
 export class PositionController {
@@ -24,9 +25,12 @@ export class PositionController {
     ) { }
 
     @UseGuards(JwtAuthGuard)
-    @Get('')
-    getPositionAll() {
-        return this.positionService.getPositionAll();
+    @Get('/:companyId/:viewBy/:searchText')
+    async get(
+        @Param('companyId', ParseIntPipe) companyId: number,
+        @Param('viewBy') viewBy: string,
+        @Param('searchText') searchText: string,) {
+        return this.positionService.getPositionAll({ companyId, viewBy, searchText });
     }
 
     @UseGuards(JwtAuthGuard)
@@ -36,7 +40,7 @@ export class PositionController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('getById/:id/:companyId')
+    @Get('/:id/:companyId')
     getById(
         @Param('id', ParseIntPipe) id: number,
         @Param('companyId', ParseIntPipe) companyId: number,
@@ -61,7 +65,7 @@ export class PositionController {
     @UseGuards(JwtAuthGuard)
     @Delete('delete')
     @UsePipes(ValidationPipe)
-    deleteEmp(@Body() deletePosition: positionDto) {
+    deleteEmp(@Body() deletePosition: deleteDto) {
         return this.positionService.delete(deletePosition);
     }
 }

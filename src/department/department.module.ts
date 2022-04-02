@@ -14,4 +14,4 @@ import { DepartmentService } from './services/department/department.service';
     },
   ],
 })
-export class DepartmentModule {}
+export class DepartmentModule { }

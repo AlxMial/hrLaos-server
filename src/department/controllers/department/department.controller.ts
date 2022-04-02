@@ -15,6 +15,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { departmentDto } from 'src/department/dtos/department.dto';
 import { DepartmentService } from 'src/department/services/department/department.service';
+import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 
 @Controller('department')
 export class DepartmentController {
@@ -24,9 +25,12 @@ export class DepartmentController {
   ) { }
 
   @UseGuards(JwtAuthGuard)
-  @Get('')
-  getDepartmentAll() {
-    return this.departmentService.getDepartmentAll();
+  @Get('/:companyId/:viewBy/:searchText')
+  async get(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Param('viewBy') viewBy: string,
+    @Param('searchText') searchText: string,) {
+    return this.departmentService.getDepartmentAll({ companyId, viewBy, searchText });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -36,7 +40,7 @@ export class DepartmentController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('getById/:id/:companyId')
+  @Get('/:id/:companyId')
   getById(
     @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number,
@@ -60,8 +64,8 @@ export class DepartmentController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
-  @UsePipes(ValidationPipe)
-  deleteEmp(@Body() deleteDepartment: departmentDto) {
+  // @UsePipes(ValidationPipe)
+  deleteEmp(@Body() deleteDepartment: deleteDto) {
     return this.departmentService.delete(deleteDepartment);
   }
 }

@@ -33,11 +33,12 @@ export class EmployeeController {
 
   //@UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('')
-  async get(@Req() request: Request) {
-    // const cookie = request.cookies['jwt'];
-    // const data = await this.jwtService.verifyAsync(cookie);
-    return this.employeeService.getEmployeeAll();
+  @Get('/:companyId/:viewBy/:searchText')
+  async get(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Param('viewBy') viewBy: string,
+    @Param('searchText') searchText: string,) {
+    return this.employeeService.getEmployeeAll({ companyId, viewBy, searchText });
   }
 
   // @UseGuards(AuthenticatedGuard)
@@ -49,7 +50,7 @@ export class EmployeeController {
 
   // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('getById/:id/:companyId')
+  @Get('/:id/:companyId')
   getById(
     @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number,
