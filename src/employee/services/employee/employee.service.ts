@@ -354,11 +354,10 @@ export class EmployeeService {
   }
 
   async getEnum(type: any) {
-    // type = 'gender'
     let typeWhere = []
     typeWhere = type.includes(',') ? type.split(',') : (',' + type).split(',');
     const empEnum = await this.enumRepository.find({
-      type: In(typeWhere)
+      type: type.includes('all') ? Not('') : In(typeWhere)
     });
     return empEnum;
   }
