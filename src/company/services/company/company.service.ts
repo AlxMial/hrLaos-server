@@ -17,17 +17,16 @@ export class CompanyService {
     private readonly connection: Connection,
   ) { }
 
-  async getAll(params: getDto) {
+  async getList(params: getDto) {
     //try {
-    const Organization = await this.companyRepository.find({ isDeleted: false });
-    Organization.forEach(
+    const company = await this.companyRepository.find({ isDeleted: false, id: params.companyId });
+    company.forEach(
       (data) =>
-        (data.image = Buffer.from(data.image, 'base64').toString('utf8')),
+      (data.image = data.image
+        ? Buffer.from(data.image, 'base64').toString('utf8')
+        : data.image),
     );
-    return Organization; //StatusMessage(true, null, Organization);
-    // } catch (e) {
-    //   return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
-    // }
+    return company;
   }
 
   async getCompanyByRegisterId(registerId: number) {

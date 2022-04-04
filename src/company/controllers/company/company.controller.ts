@@ -16,6 +16,7 @@ import { AuthenticatedGuard } from 'src/auth/utils/LocalGuard';
 import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
 import { CompanyService } from 'src/company/services/company/company.service';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('company')
 export class CompanyController {
@@ -24,23 +25,23 @@ export class CompanyController {
     private readonly companyService: CompanyService,
   ) { }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/getList/:companyId/:viewBy/:searchText')
   async get(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
     @Param('searchText') searchText: string,) {
-    return this.companyService.getAll({ companyId, viewBy, searchText });
+    return this.companyService.getList({ companyId, viewBy, searchText });
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createOrg(@Body() createOrg: CreateCompany) {
     return this.companyService.createCompany(createOrg);
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
   updateOrg(@Body() updateCompany: CreateCompany) {
