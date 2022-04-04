@@ -36,7 +36,7 @@ export class DepartmentService {
     }
   }
 
-  async getDepartmentByEmpId(id: number, companyId: number) {
+  async getById(id: number, companyId: number) {
     try {
       const data = await this.departmentRepository.findOne({
         id: id,

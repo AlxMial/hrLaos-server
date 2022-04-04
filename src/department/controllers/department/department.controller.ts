@@ -45,7 +45,7 @@ export class DepartmentController {
     @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number,
   ) {
-    return this.departmentService.getDepartmentByEmpId(id, companyId);
+    return this.departmentService.getById(id, companyId);
   }
 
   @UseGuards(JwtAuthGuard)

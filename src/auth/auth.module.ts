@@ -2,7 +2,11 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
-import { tbDepartment, tbEmpAddress, tbEmployee, tbPosition, tbUser, tbEmpEmployment } from 'src/typeorm';
+import {
+  tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
+  tbUser, tbEmpEmployment, tbEnum, tbCompany,
+  tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay,
+} from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
@@ -12,11 +16,12 @@ import { jwtConstants } from 'src/utils/constants';
 import { LocalStrategy } from './strategies/local.strategy';
 import { PositionService } from 'src/position/services/position/position.service';
 import { DepartmentService } from 'src/department/services/department/department.service';
-import { tbEnum } from 'src/typeorm/tbEnum';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment, tbEmpEmployment, tbEnum]),
+    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress,
+      tbPosition, tbDepartment, tbEmpEmployment, tbEnum,
+      tbCompany, tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },

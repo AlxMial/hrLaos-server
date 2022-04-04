@@ -3,19 +3,13 @@ import { IsNotEmpty, IsNotEmptyObject, ValidateNested } from 'class-validator';
 
 export class CreateCompany {
   id: number;
-
   companyCode: string;
-
   @IsNotEmpty()
   companyName: string;
-
   companyNameEn: string;
-
   @IsNotEmpty()
   companyType: string;
-
   businessType: number;
-
   programStartDate: Date;
   image: string;
   taxNo: string;
@@ -25,9 +19,7 @@ export class CreateCompany {
   createdDate: Date;
   modifiedBy: number;
   modifiedDate: Date;
-
   @IsNotEmpty()
   isDeleted: boolean;
-
   userId: number;
 }

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'tbCompanyWorkingDay' })
-export class tbCompanyWorkingDay {
+@Entity({ name: 'tbCompanyHoliday' })
+export class tbCompanyHoliday {
   @PrimaryGeneratedColumn({
     type: 'bigint',
     name: 'id',
@@ -9,65 +9,31 @@ export class tbCompanyWorkingDay {
   id: number;
 
   @Column({
+    nullable: true,
+    default: null,
+  })
+  date: Date;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  name: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  nameEn: string;
+
+  @Column({
     nullable: false,
     default: null,
     type: 'bigint',
   })
   companyId: number;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  startTime: Date;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  endTime: Date;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isMonday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isTueday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isWednesday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isThursday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isFriday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isSaturday: boolean;
-
-  @Column({
-    nullable: false,
-    default: null,
-  })
-  isSunday: boolean;
 
   @Column({
     nullable: true,

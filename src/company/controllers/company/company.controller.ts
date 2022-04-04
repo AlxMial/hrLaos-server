@@ -35,6 +35,15 @@ export class CompanyController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/getById/:id/:companyId')
+  getById(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('companyId', ParseIntPipe) companyId: number,
+  ) {
+    return this.companyService.getById(id, companyId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
   createOrg(@Body() createOrg: CreateCompany) {

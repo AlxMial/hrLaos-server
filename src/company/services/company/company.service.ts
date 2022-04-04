@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
 import { tbCompany } from 'src/typeorm/tbCompany';
@@ -8,12 +8,24 @@ import { Connection, Repository } from 'typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
+import { tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay, tbEnum, tbEmployee } from 'src/typeorm';
+import { EmployeeService } from 'src/employee/services/employee/employee.service';
 
 @Injectable()
 export class CompanyService {
   constructor(
     @InjectRepository(tbCompany)
     private readonly companyRepository: Repository<tbCompany>,
+    @InjectRepository(tbCompanyAddress)
+    private readonly addressRepository: Repository<tbCompanyAddress>,
+    @InjectRepository(tbCompanyHoliday)
+    private readonly holidayRepository: Repository<tbCompanyHoliday>,
+    @InjectRepository(tbCompanyWorkingDay)
+    private readonly workingDayRepository: Repository<tbCompanyWorkingDay>,
+    @InjectRepository(tbEnum)
+    private readonly enumRepository: Repository<tbEnum>,
+    @Inject('EMPLOYEE_SERVICE')
+    private readonly employeeService: EmployeeService,
     private readonly connection: Connection,
   ) { }
 
@@ -27,6 +39,32 @@ export class CompanyService {
         : data.image),
     );
     return company;
+  }
+
+  async getById(id: number, companyId: number) {
+    try {
+      const company = await this.companyRepository.findOne({
+        id: id,
+      });
+      if (company) {
+        company.image = company.image
+          ? Buffer.from(company.image, 'base64').toString('utf8')
+          : null;
+      }
+      //enum
+      const enumType = 'companyType';
+      const companyEnum = await this.employeeService.getEnum(enumType);
+      //company address
+      const companyAddress = await this.addressRepository.findOne({ companyId: id });
+      //company holiday
+      const companyHoliday = await this.holidayRepository.find({ companyId: id });
+      //company working day
+      const companyWorkingDay = await this.workingDayRepository.find({ companyId: id });
+
+      return { company, companyEnum, companyAddress, companyHoliday, companyWorkingDay };
+    } catch (e) {
+      return { message: (e as Error).message };
+    }
   }
 
   async getCompanyByRegisterId(registerId: number) {

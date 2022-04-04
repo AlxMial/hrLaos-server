@@ -10,6 +10,9 @@ import { tbDepartment } from './tbDepartment';
 import { tbPosition } from './tbPosition';
 import { tbEmpEmployment } from './tbEmpEmployment';
 import { tbEnum } from './tbEnum';
+import { tbCompanyAddress } from './tbCompanyAddress';
+import { tbCompanyHoliday } from './tbCompanyHoliday';
+import { tbCompanyWorkingDay } from './tbCompanyWorkingDay';
 
 const entities = [
   tbUser,
@@ -24,6 +27,9 @@ const entities = [
   tbDepartment,
   tbPosition,
   tbEnum,
+  tbCompanyAddress,
+  tbCompanyHoliday,
+  tbCompanyWorkingDay,
 ];
 
 export { tbUser };
@@ -38,5 +44,8 @@ export { tbCompany };
 export { tbDepartment };
 export { tbPosition };
 export { tbEnum };
+export { tbCompanyAddress };
+export { tbCompanyHoliday };
+export { tbCompanyWorkingDay };
 
 export default entities;

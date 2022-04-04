@@ -1,6 +1,5 @@
-export class CreateEmpAddress {
-  empId: number;
-  addressType: string;
+export class CreateCompanyAddress {
+  companyId: number;
   addressDetail: string;
   subDistrict: string;
   district: string;
@@ -9,6 +8,8 @@ export class CreateEmpAddress {
   country: string;
   phone: string;
   email: string;
+  fax: string;
+  website: string;
   latitude: number;
   longitude: number;
   createdBy: number;
@@ -17,5 +18,4 @@ export class CreateEmpAddress {
   modifiedDate: Date;
   isDeleted: boolean;
   userId: number;
-  companyId: number;
 }
