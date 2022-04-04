@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNotEmptyObject, ValidateNested } from 'class-validator';
+import { Exclude, Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { CreateEmpAddress } from './CreateEmpAddress.dto';
 import { CreateEmpEmployment } from './CreateEmpEmployment.dto';
 
@@ -46,4 +46,13 @@ export class CreateEmployee {
   @Type(() => CreateEmpEmployment)
   // @IsNotEmptyObject()
   empEmployment: CreateEmpEmployment[];
+
+  @Exclude()
+  positionName: string;
+  @Exclude()
+  positionNameEn: string;
+  @Exclude()
+  departmentName: string;
+  @Exclude()
+  departmentNameEn: string;
 }

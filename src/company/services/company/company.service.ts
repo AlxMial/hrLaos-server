@@ -19,7 +19,7 @@ export class CompanyService {
 
   async getList(params: getDto) {
     //try {
-    const company = await this.companyRepository.find({ isDeleted: false, id: params.companyId });
+    const company = await this.companyRepository.find({ isDeleted: false });
     company.forEach(
       (data) =>
       (data.image = data.image

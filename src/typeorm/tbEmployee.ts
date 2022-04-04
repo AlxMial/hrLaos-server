@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'tbEmployee' })
@@ -164,4 +165,13 @@ export class tbEmployee {
     default: false,
   })
   isDeleted: boolean;
+
+  @Exclude()
+  positionName: string;
+  @Exclude()
+  positionNameEn: string;
+  @Exclude()
+  departmentName: string;
+  @Exclude()
+  departmentNameEn: string;
 }

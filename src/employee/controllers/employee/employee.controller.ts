@@ -38,7 +38,7 @@ export class EmployeeController {
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
     @Param('searchText') searchText: string,) {
-    return this.employeeService.getEmployeeAll({ companyId, viewBy, searchText });
+    return this.employeeService.getList({ companyId, viewBy, searchText });
   }
 
   @UseGuards(JwtAuthGuard)

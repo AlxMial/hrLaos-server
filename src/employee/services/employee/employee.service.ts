@@ -28,15 +28,29 @@ export class EmployeeService {
     private readonly connection: Connection,
   ) { }
 
-  async getEmployeeAll(params: getDto) {
+  async getList(params: getDto) {
     try {
       const employee = await this.empRepository.find({ isDeleted: false, companyId: params.companyId });
-      employee.forEach(
-        (data) =>
-        (data.image = data.image
-          ? Buffer.from(data.image, 'base64').toString('utf8')
-          : data.image),
-      );
+      if (employee.length > 0) {
+        for (let i = 0; i < employee.length; i++) {
+          employee[i].image = employee[i].image
+            ? Buffer.from(employee[i].image, 'base64').toString('utf8')
+            : null;
+          const employment = await this.employmentRepository.findOne({ empId: employee[i].id, companyId: params.companyId });
+          if (employment) {
+            const position = await this.positionRepository.findOne({ id: employment.positionId ?? 0, companyId: params.companyId });
+            if (position) {
+              employee[i].positionName = position.positionName;
+              employee[i].positionNameEn = position.positionNameEn;
+            }
+            const department = await this.departmentRepository.findOne({ id: employment.departmentId ?? 0, companyId: params.companyId });
+            if (position) {
+              employee[i].departmentName = department.departmentName;
+              employee[i].departmentNameEn = department.departmentNameEn;
+            }
+          }
+        }
+      }
       return employee;
     } catch (e) {
       return { message: (e as Error).message }; //StatusMessage(false, (e as Error).message, null);
@@ -59,14 +73,6 @@ export class EmployeeService {
     // Emp Employment
     const empEmployment = await this.employmentRepository.find({ empId: empId, companyId: companyId });
     //enum
-    // const enumType = [
-    //   'title',
-    //   'gender',
-    //   'nationality',
-    //   'religion',
-    //   'workingStatus',
-    //   'empType',
-    //   'none']
     const enumType = 'title,gender,nationality,religion,workingStatus,empType,none';
     const empEnum = await this.getEnum(enumType);
     //position
