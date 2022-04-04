@@ -12,10 +12,11 @@ import { jwtConstants } from 'src/utils/constants';
 import { LocalStrategy } from './strategies/local.strategy';
 import { PositionService } from 'src/position/services/position/position.service';
 import { DepartmentService } from 'src/department/services/department/department.service';
+import { tbEnum } from 'src/typeorm/tbEnum';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment, tbEmpEmployment]),
+    TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress, tbPosition, tbDepartment, tbEmpEmployment, tbEnum]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },

@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmpEmployment } from 'src/employee/dtos/CreateEmpEmployment.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
-import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment } from 'src/typeorm';
+import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment, tbEnum } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
 import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
-import { Repository, Connection, Not } from 'typeorm';
+import { Repository, Connection, Not, In } from 'typeorm';
 
 @Injectable()
 export class EmployeeService {
@@ -23,6 +23,8 @@ export class EmployeeService {
     private readonly positionRepository: Repository<tbPosition>,
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
+    @InjectRepository(tbEnum)
+    private readonly enumRepository: Repository<tbEnum>,
     private readonly connection: Connection,
   ) { }
 
@@ -57,7 +59,16 @@ export class EmployeeService {
     // Emp Employment
     const empEmployment = await this.employmentRepository.find({ empId: empId, companyId: companyId });
     //enum
-    const empEnum = [];
+    // const enumType = [
+    //   'title',
+    //   'gender',
+    //   'nationality',
+    //   'religion',
+    //   'workingStatus',
+    //   'empType',
+    //   'none']
+    const enumType = 'title,gender,nationality,religion,workingStatus,empType,none';
+    const empEnum = await this.getEnum(enumType);
     //position
     const position = await this.positionRepository.find({ isDeleted: false, companyId: companyId });
     //department
@@ -340,5 +351,15 @@ export class EmployeeService {
       return success;
     }
     return this.empRepository;
+  }
+
+  async getEnum(type: any) {
+    // type = 'gender'
+    let typeWhere = []
+    typeWhere = type.includes(',') ? type.split(',') : (',' + type).split(',');
+    const empEnum = await this.enumRepository.find({
+      type: In(typeWhere)
+    });
+    return empEnum;
   }
 }

@@ -6,6 +6,7 @@ import {
   Get,
   Inject,
   Param,
+  ParseArrayPipe,
   ParseIntPipe,
   Post,
   Put,
@@ -31,9 +32,8 @@ export class EmployeeController {
     private readonly employeeService: EmployeeService, // private jwtService: JwtService,
   ) { }
 
-  //@UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('/:companyId/:viewBy/:searchText')
+  @Get('getList/:companyId/:viewBy/:searchText')
   async get(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
@@ -41,24 +41,26 @@ export class EmployeeController {
     return this.employeeService.getEmployeeAll({ companyId, viewBy, searchText });
   }
 
-  // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
-  @Get('/:companyId')
+  @Get('getByCompanyId/:companyId')
   getByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.employeeService.getEmployeeByCompanyId(id);
   }
 
-  // @UseGuards(AuthenticatedGuard)
+  @Get('getEnum/:type')
+  async getEnum(@Param('type', ParseArrayPipe) type: string[]) {
+    return this.employeeService.getEnum(type);
+  }
+
+
   @UseGuards(JwtAuthGuard)
-  @Get('/:id/:companyId')
+  @Get('getById/:id/:companyId')
   getById(
     @Param('id', ParseIntPipe) id: number,
-    @Param('companyId', ParseIntPipe) companyId: number,
-  ) {
+    @Param('companyId', ParseIntPipe) companyId: number) {
     return this.employeeService.getEmployeeByEmpId(id, companyId);
   }
 
-  // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
@@ -66,7 +68,6 @@ export class EmployeeController {
     return this.employeeService.createEmp(createEmp);
   }
 
-  // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
@@ -74,7 +75,6 @@ export class EmployeeController {
     return this.employeeService.updateEmp(updateEmp);
   }
 
-  // @UseGuards(AuthenticatedGuard)
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   async deleteEmp(@Body() deleteEmp: deleteDto) {

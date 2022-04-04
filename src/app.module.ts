@@ -47,4 +47,4 @@ import { DepartmentModule } from './department/department.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

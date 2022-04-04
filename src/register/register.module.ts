@@ -11,6 +11,7 @@ import { tbCompany } from 'src/typeorm/tbCompany';
 import { CompanyService } from 'src/company/services/company/company.service';
 import { PositionService } from 'src/position/services/position/position.service';
 import { DepartmentService } from 'src/department/services/department/department.service';
+import { tbEnum } from 'src/typeorm/tbEnum';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { DepartmentService } from 'src/department/services/department/department
       tbEmpEmployment,
       tbUser,
       tbPosition,
-      tbDepartment
+      tbDepartment,
+      tbEnum
     ]),
     MailModule,
   ],

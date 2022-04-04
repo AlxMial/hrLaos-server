@@ -25,7 +25,7 @@ export class DepartmentController {
   ) { }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:companyId/:viewBy/:searchText')
+  @Get('/getList/:companyId/:viewBy/:searchText')
   async get(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
@@ -34,13 +34,13 @@ export class DepartmentController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:companyId')
+  @Get('/getByCompanyId/:companyId')
   getDepartmentByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
     return this.departmentService.getDepartmentByCompanyId(id);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:id/:companyId')
+  @Get('/getById/:id/:companyId')
   getById(
     @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number,

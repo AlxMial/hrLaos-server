@@ -25,7 +25,7 @@ export class CompanyController {
   ) { }
 
   @UseGuards(AuthenticatedGuard)
-  @Get('/:companyId/:viewBy/:searchText')
+  @Get('/getList/:companyId/:viewBy/:searchText')
   async get(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
