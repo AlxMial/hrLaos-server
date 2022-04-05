@@ -91,7 +91,7 @@ export class RegisterService {
 
   async activateRegister(data: any) {
     try {
-      const CheckRegister = await this.companyService.getCompanyByRegisterId(
+      const CheckRegister = await this.companyService.getByRegisterId(
         data.id,
       );
       if (CheckRegister.toString() !== '') {
@@ -110,7 +110,7 @@ export class RegisterService {
         createOrg.companyType = '1';
         createOrg.programStartDate = data.registerDate;
         createOrg.createdDate = new Date();
-        const org = await this.companyService.createCompany(createOrg);
+        const org = await this.companyService.create(createOrg);
 
         const createEmp = new CreateEmployee();
         createEmp.empCode = data.firstName;
@@ -119,7 +119,7 @@ export class RegisterService {
         createEmp.companyId = org.id;
         createEmp.isDeleted = false;
         createEmp.createdDate = new Date();
-        const emp = await this.employeeService.createEmp(createEmp);
+        const emp = await this.employeeService.create(createEmp);
 
         const createUser = new CreateUserDto();
         createUser.companyId = org.id;

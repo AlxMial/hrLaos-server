@@ -57,7 +57,7 @@ export class EmployeeService {
     }
   }
 
-  async getEmployeeByEmpId(empId: number, companyId: number) {
+  async getById(empId: number, companyId: number) {
     //try {
     const employee = await this.empRepository.findOne({
       id: empId,
@@ -114,7 +114,7 @@ export class EmployeeService {
     // }
   }
 
-  async getEmployeeByCompanyId(companyId: number) {
+  async getByCompanyId(companyId: number) {
     try {
       const employee = await this.empRepository.find({ companyId: companyId });
       employee.forEach(
@@ -129,7 +129,7 @@ export class EmployeeService {
     }
   }
 
-  async createEmp(createEmp: CreateEmployee) {
+  async create(createEmp: CreateEmployee) {
     //try {
     const Image = createEmp.image;
     createEmp.image = null;
@@ -259,7 +259,7 @@ export class EmployeeService {
     // SaveEmp['empEmployment'] = empEmployment;
   }
 
-  async updateEmp(updateEmp: CreateEmployee) {
+  async update(updateEmp: CreateEmployee) {
     //try {
     const sql =
       'update tbEmployee set image = (CAST( ' +
@@ -270,7 +270,7 @@ export class EmployeeService {
       updateEmp.id +
       '';
     const result = await this.connection.query(sql);
-    const data = await this.empRepository.findOne(updateEmp.id);
+    const data = await this.empRepository.findOne({ id: updateEmp.id, companyId: updateEmp.companyId });
     data.empCode = updateEmp.empCode;
     data.title = updateEmp.title;
     data.firstName = updateEmp.firstName;
@@ -301,7 +301,7 @@ export class EmployeeService {
     // }
   }
 
-  async CheckEmp(data: deleteDto) {
+  async delete(data: deleteDto) {
     const message = this.empRepository;
     for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(

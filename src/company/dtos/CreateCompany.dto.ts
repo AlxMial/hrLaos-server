@@ -1,5 +1,8 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNotEmptyObject, ValidateNested } from 'class-validator';
+import { CreateCompanyAddress } from './CreateCompanyAddress';
+import { CreateCompanyHoliday } from './CreateCompanyHoliday';
+import { CreateCompanyWorkingDay } from './CreateCompanyWorkingDay';
 
 export class CreateCompany {
   id: number;
@@ -22,4 +25,19 @@ export class CreateCompany {
   @IsNotEmpty()
   isDeleted: boolean;
   userId: number;
+
+  @ValidateNested()
+  @Type(() => CreateCompanyAddress)
+  @IsNotEmptyObject()
+  companyAddress: CreateCompanyAddress;
+
+  @ValidateNested()
+  @Type(() => CreateCompanyHoliday)
+  @IsNotEmptyObject()
+  companyHoliday: CreateCompanyHoliday;
+
+  @ValidateNested()
+  @Type(() => CreateCompanyWorkingDay)
+  @IsNotEmptyObject()
+  companyWorking: CreateCompanyWorkingDay;
 }

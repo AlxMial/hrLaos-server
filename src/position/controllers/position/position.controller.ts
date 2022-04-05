@@ -26,17 +26,17 @@ export class PositionController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/getList/:companyId/:viewBy/:searchText')
-    async get(
+    async getList(
         @Param('companyId', ParseIntPipe) companyId: number,
         @Param('viewBy') viewBy: string,
         @Param('searchText') searchText: string,) {
-        return this.positionService.getPositionAll({ companyId, viewBy, searchText });
+        return this.positionService.getList({ companyId, viewBy, searchText });
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/getByCompanyId/:companyId')
-    getPositionByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
-        return this.positionService.getPositionByCompanyId(id);
+    getByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
+        return this.positionService.getByCompanyId(id);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -45,27 +45,27 @@ export class PositionController {
         @Param('id', ParseIntPipe) id: number,
         @Param('companyId', ParseIntPipe) companyId: number,
     ) {
-        return this.positionService.getPositionByEmpId(id, companyId);
+        return this.positionService.getById(id, companyId);
     }
 
     @UseGuards(JwtAuthGuard)
     @Post('create')
     @UsePipes(ValidationPipe)
-    createPosition(@Body() createPosition: positionDto) {
-        return this.positionService.createPosition(createPosition);
+    create(@Body() createPosition: positionDto) {
+        return this.positionService.create(createPosition);
     }
 
     @UseGuards(JwtAuthGuard)
     @Put('update')
     @UsePipes(ValidationPipe)
-    updatePosition(@Body() updatePosition: positionDto) {
-        return this.positionService.updatePosition(updatePosition);
+    update(@Body() updatePosition: positionDto) {
+        return this.positionService.update(updatePosition);
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('delete')
     @UsePipes(ValidationPipe)
-    deleteEmp(@Body() deletePosition: deleteDto) {
+    delete(@Body() deletePosition: deleteDto) {
         return this.positionService.delete(deletePosition);
     }
 }

@@ -44,7 +44,7 @@ export class EmployeeController {
   @UseGuards(JwtAuthGuard)
   @Get('getByCompanyId/:companyId')
   getByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
-    return this.employeeService.getEmployeeByCompanyId(id);
+    return this.employeeService.getByCompanyId(id);
   }
 
   @Get('getEnum/:type')
@@ -58,27 +58,27 @@ export class EmployeeController {
   getById(
     @Param('id', ParseIntPipe) id: number,
     @Param('companyId', ParseIntPipe) companyId: number) {
-    return this.employeeService.getEmployeeByEmpId(id, companyId);
+    return this.employeeService.getById(id, companyId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
-  createEmp(@Body() createEmp: CreateEmployee) {
-    return this.employeeService.createEmp(createEmp);
+  create(@Body() createEmp: CreateEmployee) {
+    return this.employeeService.create(createEmp);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
-  updateEmp(@Body() updateEmp: CreateEmployee) {
-    return this.employeeService.updateEmp(updateEmp);
+  update(@Body() updateEmp: CreateEmployee) {
+    return this.employeeService.update(updateEmp);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
-  async deleteEmp(@Body() deleteEmp: deleteDto) {
-    const del = await this.employeeService.CheckEmp(deleteEmp);
+  async delete(@Body() deleteEmp: deleteDto) {
+    const del = await this.employeeService.delete(deleteEmp);
     return del;
   }
 }

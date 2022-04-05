@@ -13,6 +13,8 @@ import { tbEnum } from './tbEnum';
 import { tbCompanyAddress } from './tbCompanyAddress';
 import { tbCompanyHoliday } from './tbCompanyHoliday';
 import { tbCompanyWorkingDay } from './tbCompanyWorkingDay';
+import { tbShift } from './tbShift';
+import { tbShiftDetail } from './tbShiftDetail';
 
 const entities = [
   tbUser,
@@ -30,6 +32,8 @@ const entities = [
   tbCompanyAddress,
   tbCompanyHoliday,
   tbCompanyWorkingDay,
+  tbShift,
+  tbShiftDetail
 ];
 
 export { tbUser };
@@ -47,5 +51,7 @@ export { tbEnum };
 export { tbCompanyAddress };
 export { tbCompanyHoliday };
 export { tbCompanyWorkingDay };
+export { tbShift };
+export { tbShiftDetail };
 
 export default entities;

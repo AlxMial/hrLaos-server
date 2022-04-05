@@ -26,17 +26,17 @@ export class DepartmentController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/getList/:companyId/:viewBy/:searchText')
-  async get(
+  async getList(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
     @Param('searchText') searchText: string,) {
-    return this.departmentService.getDepartmentAll({ companyId, viewBy, searchText });
+    return this.departmentService.getList({ companyId, viewBy, searchText });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/getByCompanyId/:companyId')
-  getDepartmentByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
-    return this.departmentService.getDepartmentByCompanyId(id);
+  getByCompanyId(@Param('companyId', ParseIntPipe) id: number) {
+    return this.departmentService.getByCompanyId(id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -51,21 +51,21 @@ export class DepartmentController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
-  createDepartment(@Body() createDepartment: departmentDto) {
-    return this.departmentService.createDepartment(createDepartment);
+  create(@Body() createDepartment: departmentDto) {
+    return this.departmentService.create(createDepartment);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
-  updateDepartment(@Body() updateDepartment: departmentDto) {
-    return this.departmentService.updateDepartment(updateDepartment);
+  update(@Body() updateDepartment: departmentDto) {
+    return this.departmentService.update(updateDepartment);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   // @UsePipes(ValidationPipe)
-  deleteEmp(@Body() deleteDepartment: deleteDto) {
+  delete(@Body() deleteDepartment: deleteDto) {
     return this.departmentService.delete(deleteDepartment);
   }
 }

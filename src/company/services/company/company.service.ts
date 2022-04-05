@@ -8,7 +8,7 @@ import { Connection, Repository } from 'typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { StatusMessage } from 'src/utils/StatusMessage';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
-import { tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay, tbEnum, tbEmployee } from 'src/typeorm';
+import { tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay } from 'src/typeorm';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
 
 @Injectable()
@@ -22,8 +22,6 @@ export class CompanyService {
     private readonly holidayRepository: Repository<tbCompanyHoliday>,
     @InjectRepository(tbCompanyWorkingDay)
     private readonly workingDayRepository: Repository<tbCompanyWorkingDay>,
-    @InjectRepository(tbEnum)
-    private readonly enumRepository: Repository<tbEnum>,
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService,
     private readonly connection: Connection,
@@ -67,7 +65,7 @@ export class CompanyService {
     }
   }
 
-  async getCompanyByRegisterId(registerId: number) {
+  async getByRegisterId(registerId: number) {
     //try {
     const Organization = await this.companyRepository.find({
       registerId: registerId,
@@ -84,7 +82,7 @@ export class CompanyService {
     // }
   }
 
-  async createCompany(createCompany: CreateCompany) {
+  async create(createCompany: CreateCompany) {
     //try {
     const Image = createCompany.image;
     createCompany.image = null;
@@ -109,7 +107,7 @@ export class CompanyService {
     // }
   }
 
-  async updateCompany(updateCompany: CreateCompany) {
+  async update(updateCompany: CreateCompany) {
     try {
       // updateOrg.modifiedBy = updateOrg.userId;
       // updateOrg.modifiedDate = new Date();
@@ -142,7 +140,7 @@ export class CompanyService {
     }
   }
 
-  async deleteCompany(data: deleteDto) {
+  async delete(data: deleteDto) {
     try {
       for (let i = 0; i < data.id.length; i++) {
         const result = await this.connection.query(

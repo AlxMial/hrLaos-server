@@ -16,7 +16,7 @@ export class PositionService {
         private readonly connection: Connection,
     ) { }
 
-    async getPositionAll(params: getDto) {
+    async getList(params: getDto) {
         const position = this.positionRepository;
         try {
             const pos = await this.positionRepository.find({ isDeleted: false, companyId: params.companyId });
@@ -26,7 +26,7 @@ export class PositionService {
         }
     }
 
-    async getPositionByCompanyId(id: any) {
+    async getByCompanyId(id: any) {
         const position = this.positionRepository;
         try {
             const data = await this.positionRepository.find({ id: id });
@@ -36,7 +36,7 @@ export class PositionService {
         }
     }
 
-    async getPositionByEmpId(id: number, companyId: number) {
+    async getById(id: number, companyId: number) {
         try {
             const data = await this.positionRepository.findOne({
                 id: id,
@@ -48,7 +48,7 @@ export class PositionService {
         }
     }
 
-    async createPosition(createPosition: positionDto) {
+    async create(createPosition: positionDto) {
         const position = this.positionRepository;
         try {
             stampAudit(createPosition);
@@ -60,10 +60,10 @@ export class PositionService {
         }
     }
 
-    async updatePosition(updatePosition: positionDto) {
+    async update(updatePosition: positionDto) {
         const position = this.positionRepository;
         try {
-            const data = await this.positionRepository.findOne(updatePosition.id);
+            const data = await this.positionRepository.findOne({ id: updatePosition.id, companyId: updatePosition.companyId });
             data.positionCode = updatePosition.positionCode;
             data.positionName = updatePosition.positionName;
             data.positionNameEn = updatePosition.positionNameEn;

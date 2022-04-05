@@ -7,13 +7,16 @@ import {
   tbEmpAddress, tbEmpEmployment, tbEmployee, tbEnum, tbPosition
 } from 'src/typeorm';
 import { tbCompany } from 'src/typeorm/tbCompany';
+import { tbShift } from 'src/typeorm/tbShift';
+import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
 import { CompanyController } from './controllers/company/company.controller';
 import { CompanyService } from './services/company/company.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([tbCompany, tbCompanyAddress, tbCompanyHoliday,
     tbCompanyWorkingDay, tbEnum, tbEmployee, tbEmpAddress,
-    tbEmpEmployment, tbPosition, tbDepartment])],
+    tbEmpEmployment, tbPosition, tbDepartment,
+    tbShift, tbShiftDetail])],
   controllers: [CompanyController],
   providers: [
     {

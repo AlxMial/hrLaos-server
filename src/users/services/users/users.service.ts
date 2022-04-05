@@ -15,7 +15,7 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     @Inject('EMPLOYEE_SERVICE')
     private readonly employeeService: EmployeeService,
-  ) {}
+  ) { }
 
   private users: User[] = [];
 
@@ -81,7 +81,7 @@ export class UsersService {
     //try {
     const User = await this.userRepository.findOne({ userName: username });
     if (User) {
-      const emp = await this.employeeService.getEmployeeByEmpId(
+      const emp = await this.employeeService.getById(
         User.empId,
         User.companyId,
       );

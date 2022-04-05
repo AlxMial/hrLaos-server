@@ -14,6 +14,9 @@ import { UsersService } from 'src/users/services/users/users.service';
 import { CompanyService } from 'src/company/services/company/company.service';
 import { PositionService } from 'src/position/services/position/position.service';
 import { DepartmentService } from 'src/department/services/department/department.service';
+import { tbShift } from 'src/typeorm/tbShift';
+import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
+import { ShiftService } from 'src/shift/services/shift/shift.service';
 
 @Module({
   imports: [
@@ -29,7 +32,9 @@ import { DepartmentService } from 'src/department/services/department/department
       tbEnum,
       tbCompanyAddress,
       tbCompanyHoliday,
-      tbCompanyWorkingDay
+      tbCompanyWorkingDay,
+      tbShift,
+      tbShiftDetail
     ]),
     MailModule,
   ],
@@ -58,6 +63,10 @@ import { DepartmentService } from 'src/department/services/department/department
     {
       provide: 'DEPARTMENT_SERVICE',
       useClass: DepartmentService,
+    },
+    {
+      provide: 'SHIFT_SERVICE',
+      useClass: ShiftService,
     },
     EncryptService,
   ],

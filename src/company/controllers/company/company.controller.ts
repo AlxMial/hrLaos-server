@@ -27,7 +27,7 @@ export class CompanyController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/getList/:companyId/:viewBy/:searchText')
-  async get(
+  async getList(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('viewBy') viewBy: string,
     @Param('searchText') searchText: string,) {
@@ -46,20 +46,20 @@ export class CompanyController {
   @UseGuards(JwtAuthGuard)
   @Post('create')
   @UsePipes(ValidationPipe)
-  createOrg(@Body() createOrg: CreateCompany) {
-    return this.companyService.createCompany(createOrg);
+  create(@Body() createOrg: CreateCompany) {
+    return this.companyService.create(createOrg);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put('update')
   @UsePipes(ValidationPipe)
-  updateOrg(@Body() updateCompany: CreateCompany) {
-    return this.companyService.updateCompany(updateCompany);
+  update(@Body() updateCompany: CreateCompany) {
+    return this.companyService.update(updateCompany);
   }
 
   @Delete('delete')
   @UsePipes(ValidationPipe)
-  deleteOrg(@Body() data: deleteDto) {
-    return this.companyService.deleteCompany(data);
+  delete(@Body() data: deleteDto) {
+    return this.companyService.delete(data);
   }
 }

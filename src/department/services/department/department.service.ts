@@ -16,7 +16,7 @@ export class DepartmentService {
     private readonly connection: Connection,
   ) { }
 
-  async getDepartmentAll(params: getDto) {
+  async getList(params: getDto) {
     const department = this.departmentRepository;
     try {
       const depart = await this.departmentRepository.find({ isDeleted: false, companyId: params.companyId });
@@ -26,7 +26,7 @@ export class DepartmentService {
     }
   }
 
-  async getDepartmentByCompanyId(id: any) {
+  async getByCompanyId(id: any) {
     const department = this.departmentRepository;
     try {
       const depart = await this.departmentRepository.find({ id: id });
@@ -48,7 +48,7 @@ export class DepartmentService {
     }
   }
 
-  async createDepartment(createDepartment: departmentDto) {
+  async create(createDepartment: departmentDto) {
     const department = this.departmentRepository;
     // return StatusMessage(false, 'test', department);
     try {
@@ -61,11 +61,11 @@ export class DepartmentService {
     }
   }
 
-  async updateDepartment(updateDepartment: departmentDto) {
+  async update(updateDepartment: departmentDto) {
     const department = this.departmentRepository;
     try {
       // updateDepartment = stampAudit(updateDepartment, 'update');
-      let data = await this.departmentRepository.findOne(updateDepartment.id);
+      let data = await this.departmentRepository.findOne({ id: updateDepartment.id, companyId: updateDepartment.companyId });
       data.departmentCode = updateDepartment.departmentCode;
       data.departmentName = updateDepartment.departmentName;
       data.departmentNameEn = updateDepartment.departmentNameEn;
