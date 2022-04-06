@@ -14,6 +14,8 @@ import { tbCompanyWorkingDay } from './tbCompanyWorkingDay';
 import { tbShift } from './tbShift';
 import { tbShiftDetail } from './tbShiftDetail';
 import { tbLocation } from './tbLocation';
+import { tbSetTimeStamp } from './tbSetTimeStamp';
+import { tbSetTimeStampDt } from './tbSetTimeStampDt';
 
 const entities = [
   tbUser,
@@ -32,6 +34,8 @@ const entities = [
   tbShift,
   tbShiftDetail,
   tbLocation,
+  tbSetTimeStamp,
+  tbSetTimeStampDt
 ];
 
 export { tbUser };
@@ -50,5 +54,7 @@ export { tbCompanyWorkingDay };
 export { tbShift };
 export { tbShiftDetail };
 export { tbLocation };
+export { tbSetTimeStamp };
+export { tbSetTimeStampDt };
 
 export default entities;

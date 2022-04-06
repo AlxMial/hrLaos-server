@@ -35,20 +35,35 @@ export class EmployeeService {
 
   async getList(params: getDto) {
     try {
-      const employee = await this.empRepository.find({ isDeleted: false, companyId: params.companyId });
+      const employee = await this.empRepository.find({
+        isDeleted: false,
+        companyId: params.companyId
+      });
       if (employee.length > 0) {
         for (let i = 0; i < employee.length; i++) {
           employee[i].image = employee[i].image
             ? Buffer.from(employee[i].image, 'base64').toString('utf8')
             : null;
-          const employment = await this.employmentRepository.findOne({ empId: employee[i].id, companyId: params.companyId });
+          const employment = await this.employmentRepository.findOne({
+            isDeleted: false,
+            empId: employee[i].id,
+            companyId: params.companyId
+          });
           if (employment) {
-            const position = await this.positionRepository.findOne({ id: employment.positionId ?? 0, companyId: params.companyId });
+            const position = await this.positionRepository.findOne({
+              isDeleted: false, id:
+                employment.positionId ?? 0,
+              companyId: params.companyId
+            });
             if (position) {
               employee[i].positionName = position.positionName;
               employee[i].positionNameEn = position.positionNameEn;
             }
-            const department = await this.departmentRepository.findOne({ id: employment.departmentId ?? 0, companyId: params.companyId });
+            const department = await this.departmentRepository.findOne({
+              isDeleted: false,
+              id: employment.departmentId ?? 0,
+              companyId: params.companyId
+            });
             if (position) {
               employee[i].departmentName = department.departmentName;
               employee[i].departmentNameEn = department.departmentNameEn;
@@ -74,20 +89,37 @@ export class EmployeeService {
         : null;
     }
     // Emp Address
-    const empAddress = await this.addressRepository.find({ empId: empId, companyId: companyId });
+    const empAddress = await this.addressRepository.find({
+      isDeleted: false,
+      empId: empId,
+      companyId: companyId
+    });
     // Emp Employment
-    const empEmployment = await this.employmentRepository.find({ empId: empId, companyId: companyId });
+    const empEmployment = await this.employmentRepository.find({
+      isDeleted: false,
+      empId: empId,
+      companyId: companyId
+    });
     //enum
     const enumType = 'title,gender,nationality,religion,workingStatus,empType,none';
     const empEnum = await this.getEnum(enumType);
     //position
-    const position = await this.positionRepository.find({ isDeleted: false, companyId: companyId });
+    const position = await this.positionRepository.find({
+      isDeleted: false,
+      companyId: companyId
+    });
     //department
-    const department = await this.departmentRepository.find({ isDeleted: false, companyId: companyId });
+    const department = await this.departmentRepository.find({
+      isDeleted: false,
+      companyId: companyId
+    });
     //shift
     const shift = await this.shiftService.getList({ companyId, viewBy: '', searchText: '' });
     //location
-    const location = await this.locationRepository.find({ isDeleted: false, companyId: companyId });
+    const location = await this.locationRepository.find({
+      isDeleted: false,
+      companyId: companyId
+    });
     // supervisor
     const supervisor = await this.empRepository.find({
       where: {
@@ -127,7 +159,10 @@ export class EmployeeService {
 
   async getByCompanyId(companyId: number) {
     try {
-      const employee = await this.empRepository.find({ companyId: companyId });
+      const employee = await this.empRepository.find({
+        isDeleted: false,
+        companyId: companyId
+      });
       employee.forEach(
         (data) =>
         (data.image = data.image
@@ -181,6 +216,7 @@ export class EmployeeService {
       data.empId = SaveEmp.id;
       data.companyId = SaveEmp.companyId;
       const dataAddress = await this.addressRepository.findOne({
+        isDeleted: false,
         empId: SaveEmp.id,
         addressType: data.addressType,
       });
@@ -241,6 +277,7 @@ export class EmployeeService {
       }
 
       const dataEmployment = await this.employmentRepository.findOne({
+        isDeleted: false,
         empId: SaveEmp.id,
         companyId: SaveEmp.companyId,
       });
@@ -281,7 +318,11 @@ export class EmployeeService {
       updateEmp.id +
       '';
     const result = await this.connection.query(sql);
-    const data = await this.empRepository.findOne({ id: updateEmp.id, companyId: updateEmp.companyId });
+    const data = await this.empRepository.findOne({
+      isDeleted: false, id:
+        updateEmp.id,
+      companyId: updateEmp.companyId
+    });
     data.empCode = updateEmp.empCode;
     data.title = updateEmp.title;
     data.firstName = updateEmp.firstName;
@@ -340,7 +381,11 @@ export class EmployeeService {
   }
 
   async deleteEmpAddress(empId: any, dataDelete: any) {
-    const deleteAddress = await this.addressRepository.findOne({ empId: empId, companyId: dataDelete.companyId });
+    const deleteAddress = await this.addressRepository.findOne({
+      isDeleted: false,
+      empId: empId,
+      companyId: dataDelete.companyId
+    });
     if (deleteAddress) {
       stampAudit(deleteAddress, dataDelete, 'update', true);
       const success = await this.addressRepository.save(deleteAddress);
@@ -350,7 +395,11 @@ export class EmployeeService {
   }
 
   async deleteEmployment(empId: any, dataDelete: any) {
-    const deleteEmployment = await this.employmentRepository.findOne({ empId: empId, companyId: dataDelete.companyId });
+    const deleteEmployment = await this.employmentRepository.findOne({
+      isDeleted: false,
+      empId: empId,
+      companyId: dataDelete.companyId
+    });
     if (deleteEmployment) {
       stampAudit(deleteEmployment, dataDelete, 'update', true);
       const success = await this.employmentRepository.save(deleteEmployment);
@@ -361,7 +410,11 @@ export class EmployeeService {
 
 
   async deleteEmp(empId: any, dataDelete: any) {
-    const deleteEmp = await this.empRepository.findOne({ id: empId, companyId: dataDelete.companyId });
+    const deleteEmp = await this.empRepository.findOne({
+      isDeleted: false,
+      id: empId,
+      companyId: dataDelete.companyId
+    });
     if (deleteEmp) {
       stampAudit(deleteEmp, dataDelete, 'update', true);
       const success = await this.empRepository.save(deleteEmp);

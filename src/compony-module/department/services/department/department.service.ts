@@ -19,7 +19,10 @@ export class DepartmentService {
   async getList(params: getDto) {
     const department = this.departmentRepository;
     try {
-      const depart = await this.departmentRepository.find({ isDeleted: false, companyId: params.companyId });
+      const depart = await this.departmentRepository.find({
+        isDeleted: false,
+        companyId: params.companyId
+      });
       return StatusMessage(true, null, depart);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);
@@ -29,7 +32,10 @@ export class DepartmentService {
   async getByCompanyId(id: any) {
     const department = this.departmentRepository;
     try {
-      const depart = await this.departmentRepository.find({ id: id });
+      const depart = await this.departmentRepository.find({
+        isDeleted: false,
+        id: id
+      });
       return StatusMessage(true, null, depart);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);
@@ -39,6 +45,7 @@ export class DepartmentService {
   async getById(id: number, companyId: number) {
     try {
       const data = await this.departmentRepository.findOne({
+        isDeleted: false,
         id: id,
         companyId: companyId,
       });
@@ -65,7 +72,11 @@ export class DepartmentService {
     const department = this.departmentRepository;
     try {
       // updateDepartment = stampAudit(updateDepartment, 'update');
-      let data = await this.departmentRepository.findOne({ id: updateDepartment.id, companyId: updateDepartment.companyId });
+      let data = await this.departmentRepository.findOne({
+        isDeleted: false,
+        id: updateDepartment.id,
+        companyId: updateDepartment.companyId
+      });
       data.departmentCode = updateDepartment.departmentCode;
       data.departmentName = updateDepartment.departmentName;
       data.departmentNameEn = updateDepartment.departmentNameEn;
@@ -92,7 +103,11 @@ export class DepartmentService {
       if (result && result.length > 0) {
         return StatusMessage(false, 'data is used', department);
       } else {
-        const deleteDepartment = await this.departmentRepository.findOne({ id: data.id[i], companyId: data.companyId });
+        const deleteDepartment = await this.departmentRepository.findOne({
+          isDeleted: false,
+          id: data.id[i],
+          companyId: data.companyId
+        });
         if (deleteDepartment) {
           stampAudit(deleteDepartment, data, 'update', true);
           return StatusMessage(

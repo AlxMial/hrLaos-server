@@ -13,6 +13,7 @@ import { PositionModule } from './compony-module/position/position.module';
 import { DepartmentModule } from './compony-module/department/department.module';
 import { ShiftModule } from './time-attendance-module/shift/shift.module';
 import { LocationModule } from './time-attendance-module/location/location.module';
+import { TSSettingModule } from './time-attendance-module/tsSetting/tsSetting.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { LocationModule } from './time-attendance-module/location/location.modul
     DepartmentModule,
     ShiftModule,
     LocationModule,
+    TSSettingModule
   ],
   controllers: [],
   providers: [],

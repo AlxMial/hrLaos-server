@@ -41,6 +41,7 @@ export class CompanyService {
   async getById(id: number, companyId: number) {
     try {
       const company = await this.companyRepository.findOne({
+        isDeleted: false,
         id: id,
       });
       if (company) {
@@ -52,11 +53,20 @@ export class CompanyService {
       const enumType = 'companyType';
       const companyEnum = await this.employeeService.getEnum(enumType);
       //company address
-      const companyAddress = await this.addressRepository.findOne({ companyId: id });
+      const companyAddress = await this.addressRepository.findOne({
+        isDeleted: false,
+        companyId: id
+      });
       //company holiday
-      const companyHoliday = await this.holidayRepository.find({ companyId: id });
+      const companyHoliday = await this.holidayRepository.find({
+        isDeleted: false,
+        companyId: id
+      });
       //company working day
-      const companyWorkingDay = await this.workingDayRepository.find({ companyId: id });
+      const companyWorkingDay = await this.workingDayRepository.find({
+        isDeleted: false,
+        companyId: id
+      });
 
       return { company, companyEnum, companyAddress, companyHoliday, companyWorkingDay };
     } catch (e) {
@@ -67,6 +77,7 @@ export class CompanyService {
   async getByRegisterId(registerId: number) {
     //try {
     const Organization = await this.companyRepository.find({
+      isDeleted: false,
       registerId: registerId,
     });
     Organization.forEach(
@@ -123,7 +134,10 @@ export class CompanyService {
         updateCompany.id +
         '';
       const result = await this.connection.query(sql);
-      const data = await this.companyRepository.findOne(updateCompany.id);
+      const data = await this.companyRepository.findOne({
+        isDeleted: false,
+        id: updateCompany.id
+      });
       data.companyCode = updateCompany.companyCode;
       data.companyName = updateCompany.companyName;
       data.companyNameEn = updateCompany.companyNameEn;
@@ -148,7 +162,10 @@ export class CompanyService {
         if (result && result.length > 0) {
           return { message: 'data is used' };
         } else {
-          const deleteCompany = await this.companyRepository.findOne(data.id[i]);
+          const deleteCompany = await this.companyRepository.findOne({
+            isDeleted: false,
+            id: data.id[i]
+          });
           stampAudit(deleteCompany, data, 'update', true);
           return StatusMessage(
             true,

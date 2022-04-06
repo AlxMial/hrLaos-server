@@ -25,7 +25,7 @@ export class ShiftService {
         const shift = await this.shiftRepository.find({ isDeleted: false, companyId: params.companyId });
         if (shift.length > 0) {
             for (let i = 0; i < shift.length; i++) {
-                const shiftDetail = await this.shiftDetailRepository.find({ shiftId: shift[i].id });
+                const shiftDetail = await this.shiftDetailRepository.find({ isDeleted: false, shiftId: shift[i].id });
                 if (shiftDetail) {
                     shift[i].periodTimes = numberToTime(shiftDetail[0].in1) + ' - '
                         + (shiftDetail[0].timesStamp === 2 ? numberToTime(shiftDetail[0].out1) : numberToTime(shiftDetail[0].out2))
@@ -39,11 +39,16 @@ export class ShiftService {
     async getById(id: number, companyId: number) {
         try {
             const shift = await this.shiftRepository.findOne({
+                isDeleted: false,
                 id: id,
                 companyId: companyId,
             });
             //shift detail
-            const shiftDetail = await this.shiftDetailRepository.findOne({ shiftId: id, companyId: companyId });
+            const shiftDetail = await this.shiftDetailRepository.findOne({
+                isDeleted: false,
+                shiftId: id,
+                companyId: companyId
+            });
             return { shift, shiftDetail };
         } catch (e) {
             return { message: (e as Error).message };
@@ -68,6 +73,7 @@ export class ShiftService {
             data.shiftId = saveShift.id;
             data.companyId = saveShift.companyId;
             const dataShiftDetail = await this.shiftDetailRepository.findOne({
+                isDeleted: false,
                 shiftId: saveShift.id,
                 companyId: saveShift.companyId,
             });
@@ -93,7 +99,11 @@ export class ShiftService {
 
     async update(updateShift: shiftDto) {
         try {
-            const data = await this.shiftRepository.findOne({ id: updateShift.id, companyId: updateShift.companyId });
+            const data = await this.shiftRepository.findOne({
+                isDeleted: false,
+                id: updateShift.id,
+                companyId: updateShift.companyId
+            });
             data.shiftCode = updateShift.shiftCode;
             data.shiftName = updateShift.shiftName;
             stampAudit(data, updateShift, 'update');
@@ -112,7 +122,7 @@ export class ShiftService {
             const result = await this.connection.query(
                 "up_selectAllUse @SearchStr='" +
                 data.id[i] +
-                "',@Column='empId', @exceptTable='tbShiftDetail', @companyId='" + data.companyId + "'",
+                "',@Column='shiftId', @exceptTable='tbShiftDetail', @companyId='" + data.companyId + "'",
             );
             if (result && result.length > 0) {
                 return StatusMessage(
@@ -133,7 +143,11 @@ export class ShiftService {
     }
 
     async deleteShiftDetail(shiftId: any, dataDelete: any) {
-        const deleteShiftDetail = await this.shiftDetailRepository.findOne({ shiftId: shiftId, companyId: dataDelete.companyId });
+        const deleteShiftDetail = await this.shiftDetailRepository.findOne({
+            isDeleted: false,
+            shiftId: shiftId,
+            companyId: dataDelete.companyId
+        });
         if (deleteShiftDetail) {
             stampAudit(deleteShiftDetail, dataDelete, 'update', true);
             const success = await this.shiftDetailRepository.save(deleteShiftDetail);
@@ -144,7 +158,11 @@ export class ShiftService {
 
 
     async deleteShift(shiftId: any, dataDelete: any) {
-        const deleteShift = await this.shiftRepository.findOne({ id: shiftId, companyId: dataDelete.companyId });
+        const deleteShift = await this.shiftRepository.findOne({
+            isDeleted: false,
+            id: shiftId,
+            companyId: dataDelete.companyId
+        });
         if (deleteShift) {
             stampAudit(deleteShift, dataDelete, 'update', true);
             const success = await this.shiftRepository.save(deleteShift);

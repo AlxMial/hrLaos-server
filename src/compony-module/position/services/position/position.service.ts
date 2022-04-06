@@ -32,7 +32,10 @@ export class PositionService {
   async getByCompanyId(id: any) {
     const position = this.positionRepository;
     try {
-      const data = await this.positionRepository.find({ id: id });
+      const data = await this.positionRepository.find({
+        isDeleted: false,
+        id: id
+      });
       return StatusMessage(true, null, data);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, position);
@@ -42,6 +45,7 @@ export class PositionService {
   async getById(id: number, companyId: number) {
     try {
       const data = await this.positionRepository.findOne({
+        isDeleted: false,
         id: id,
         companyId: companyId,
       });
@@ -67,6 +71,7 @@ export class PositionService {
     const position = this.positionRepository;
     try {
       const data = await this.positionRepository.findOne({
+        isDeleted: false,
         id: updatePosition.id,
         companyId: updatePosition.companyId,
       });
@@ -101,6 +106,7 @@ export class PositionService {
           return { message: 'Data is used' };
         } else {
           const deletePosition = await this.positionRepository.findOne({
+            isDeleted: false,
             id: data.id[i],
             companyId: data.companyId,
           });

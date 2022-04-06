@@ -31,7 +31,7 @@ export class LocationService {
     async getByCompanyId(id: any) {
         const location = this.locationRepository;
         try {
-            const depart = await this.locationRepository.find({ id: id });
+            const depart = await this.locationRepository.find({ isDeleted: false, id: id });
             return StatusMessage(true, null, depart);
         } catch (e) {
             return StatusMessage(false, (e as Error).message, location);
@@ -41,6 +41,7 @@ export class LocationService {
     async getById(id: number, companyId: number) {
         try {
             const location = await this.locationRepository.findOne({
+                isDeleted: false,
                 id: id,
                 companyId: companyId,
             });
@@ -73,7 +74,7 @@ export class LocationService {
         const location = this.locationRepository;
         try {
             // updateLocation = stampAudit(updateLocation, 'update');
-            let data = await this.locationRepository.findOne({ id: updateLocation.id, companyId: updateLocation.companyId });
+            let data = await this.locationRepository.findOne({ isDeleted: false, id: updateLocation.id, companyId: updateLocation.companyId });
             data.locationCode = updateLocation.locationCode;
             data.locationName = updateLocation.locationName;
             data.locationNameEn = updateLocation.locationNameEn;
@@ -101,7 +102,7 @@ export class LocationService {
             if (result && result.length > 0) {
                 return StatusMessage(false, 'data is used', location);
             } else {
-                const deleteLocation = await this.locationRepository.findOne({ id: data.id[i], companyId: data.companyId });
+                const deleteLocation = await this.locationRepository.findOne({ isDeleted: false, id: data.id[i], companyId: data.companyId });
                 if (deleteLocation) {
                     stampAudit(deleteLocation, data, 'update', true);
                     return StatusMessage(
