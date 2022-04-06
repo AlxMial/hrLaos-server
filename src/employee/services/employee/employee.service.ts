@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmpEmployment } from 'src/employee/dtos/CreateEmpEmployment.dto';
 import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
-import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment, tbEnum } from 'src/typeorm';
+import { ShiftService } from 'src/shift/services/shift/shift.service';
+import { tbEmpAddress, tbEmployee, tbPosition, tbDepartment, tbEmpEmployment, tbEnum, tbLocation } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
 import { stampAudit } from 'src/utils/stamp-audit';
@@ -23,8 +24,12 @@ export class EmployeeService {
     private readonly positionRepository: Repository<tbPosition>,
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
+    @InjectRepository(tbLocation)
+    private readonly locationRepository: Repository<tbLocation>,
     @InjectRepository(tbEnum)
     private readonly enumRepository: Repository<tbEnum>,
+    @Inject('SHIFT_SERVICE')
+    private readonly shiftService: ShiftService,
     private readonly connection: Connection,
   ) { }
 
@@ -79,6 +84,10 @@ export class EmployeeService {
     const position = await this.positionRepository.find({ isDeleted: false, companyId: companyId });
     //department
     const department = await this.departmentRepository.find({ isDeleted: false, companyId: companyId });
+    //shift
+    const shift = await this.shiftService.getList({ companyId, viewBy: '', searchText: '' });
+    //location
+    const location = await this.locationRepository.find({ isDeleted: false, companyId: companyId });
     // supervisor
     const supervisor = await this.empRepository.find({
       where: {
@@ -107,7 +116,9 @@ export class EmployeeService {
       supervisor,
       department,
       empEnum,
-      empEmployment
+      empEmployment,
+      shift,
+      location
     };
     // } catch (e) {
     //   return { message: (e as Error).message };

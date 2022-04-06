@@ -4,7 +4,7 @@ import { RegisterService } from './services/register/register.service';
 import {
   tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
   tbRegister, tbUser, tbEmpEmployment, tbEnum,
-  tbCompany, tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay
+  tbCompany, tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay, tbLocation
 } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
@@ -34,7 +34,8 @@ import { ShiftService } from 'src/shift/services/shift/shift.service';
       tbCompanyHoliday,
       tbCompanyWorkingDay,
       tbShift,
-      tbShiftDetail
+      tbShiftDetail,
+      tbLocation
     ]),
     MailModule,
   ],

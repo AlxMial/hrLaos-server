@@ -14,6 +14,7 @@ import { CompanyModule } from './company/company.module';
 import { PositionModule } from './position/position.module';
 import { DepartmentModule } from './department/department.module';
 import { ShiftModule } from './shift/shift.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ShiftModule } from './shift/shift.module';
     PositionModule,
     DepartmentModule,
     ShiftModule,
+    LocationModule,
   ],
   controllers: [],
   providers: [],

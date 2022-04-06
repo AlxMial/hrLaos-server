@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNotEmptyObject, ValidateNested } from 'class-validator';
-import { shiftDetail } from './shiftDetailDto.dto';
+import { shiftDetailDto } from './shiftDetailDto.dto';
 
 export class shiftDto {
   id: number;
@@ -18,7 +18,7 @@ export class shiftDto {
   userId: number;
 
   @ValidateNested()
-  @Type(() => shiftDetail)
-  @IsNotEmptyObject()
-  shiftDetail: shiftDetail[];
+  @Type(() => shiftDetailDto)
+  // @IsNotEmptyObject()
+  shiftDetail: shiftDetailDto[];
 }

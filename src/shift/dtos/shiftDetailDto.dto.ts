@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class shiftDetail {
+export class shiftDetailDto {
   id: number;
   shiftId: number;
   @IsNotEmpty()

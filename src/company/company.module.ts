@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { ShiftService } from 'src/shift/services/shift/shift.service';
 import {
   tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay,
   tbDepartment,
-  tbEmpAddress, tbEmpEmployment, tbEmployee, tbEnum, tbPosition
+  tbEmpAddress, tbEmpEmployment, tbEmployee, tbEnum, tbLocation, tbPosition
 } from 'src/typeorm';
 import { tbCompany } from 'src/typeorm/tbCompany';
 import { tbShift } from 'src/typeorm/tbShift';
@@ -16,7 +17,7 @@ import { CompanyService } from './services/company/company.service';
   imports: [TypeOrmModule.forFeature([tbCompany, tbCompanyAddress, tbCompanyHoliday,
     tbCompanyWorkingDay, tbEnum, tbEmployee, tbEmpAddress,
     tbEmpEmployment, tbPosition, tbDepartment,
-    tbShift, tbShiftDetail])],
+    tbShift, tbShiftDetail, tbLocation])],
   controllers: [CompanyController],
   providers: [
     {
@@ -26,6 +27,10 @@ import { CompanyService } from './services/company/company.service';
     {
       provide: 'EMPLOYEE_SERVICE',
       useClass: EmployeeService,
+    },
+    {
+      provide: 'SHIFT_SERVICE',
+      useClass: ShiftService,
     },
   ],
 })

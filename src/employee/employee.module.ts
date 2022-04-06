@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DepartmentService } from 'src/department/services/department/department.service';
 import { PositionService } from 'src/position/services/position/position.service';
 import { ShiftService } from 'src/shift/services/shift/shift.service';
-import { tbDepartment, tbEmpAddress, tbPosition, tbEmpEmployment } from 'src/typeorm';
+import { tbDepartment, tbEmpAddress, tbPosition, tbEmpEmployment, tbLocation } from 'src/typeorm';
 import { tbEmployee } from 'src/typeorm/tbEmployee';
 import { tbEnum } from 'src/typeorm/tbEnum';
 import { tbShift } from 'src/typeorm/tbShift';
@@ -15,7 +15,7 @@ import { EmployeeService } from './services/employee/employee.service';
 @Module({
   imports: [TypeOrmModule.forFeature([tbEmployee, tbEmpAddress,
     tbPosition, tbDepartment, tbEmpEmployment, tbEnum,
-    tbShift, tbShiftDetail])],
+    tbShift, tbShiftDetail, tbLocation])],
   controllers: [EmployeeController],
   providers: [
     {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { shiftDto } from 'src/shift/dtos/shiftDto.dto';
-import { shiftDetail } from 'src/shift/dtos/shiftDetailDto.dto';
+import { shiftDetailDto } from 'src/shift/dtos/shiftDetailDto.dto';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
 import { tbShift } from 'src/typeorm/tbShift';
 import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
@@ -28,8 +28,8 @@ export class ShiftService {
                 const shiftDetail = await this.shiftDetailRepository.find({ shiftId: shift[i].id });
                 if (shiftDetail) {
                     shift[i].periodTimes = numberToTime(shiftDetail[0].in1) + ' - '
-                        + (shiftDetail[0].timesStamp === 1 ? numberToTime(shiftDetail[0].out1) : numberToTime(shiftDetail[0].out2))
-                        + ';' + shiftDetail[0].timesStamp + ' times stamp';
+                        + (shiftDetail[0].timesStamp === 2 ? numberToTime(shiftDetail[0].out1) : numberToTime(shiftDetail[0].out2))
+                        + '; ' + shiftDetail[0].timesStamp + ' times stamp';
                 }
             }
         }
@@ -64,7 +64,7 @@ export class ShiftService {
 
     // set shift detail
     async setShiftDetail(createShift: shiftDto, saveShift: tbShift) {
-        createShift.shiftDetail.forEach(async (data: shiftDetail) => {
+        createShift.shiftDetail.forEach(async (data: shiftDetailDto) => {
             data.shiftId = saveShift.id;
             data.companyId = saveShift.companyId;
             const dataShiftDetail = await this.shiftDetailRepository.findOne({
@@ -100,7 +100,6 @@ export class ShiftService {
             const saveShift = await this.shiftRepository.save(data);
             //shift detail
             await this.setShiftDetail(updateShift, saveShift);
-
             return saveShift;
         } catch (e) {
             return { message: (e as Error).message };

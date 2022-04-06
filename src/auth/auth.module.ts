@@ -5,7 +5,7 @@ import { EmployeeService } from 'src/employee/services/employee/employee.service
 import {
   tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
   tbUser, tbEmpEmployment, tbEnum, tbCompany,
-  tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay,
+  tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay, tbLocation,
 } from 'src/typeorm';
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthController } from './controllers/auth/auth.controller';
@@ -18,13 +18,14 @@ import { PositionService } from 'src/position/services/position/position.service
 import { DepartmentService } from 'src/department/services/department/department.service';
 import { tbShift } from 'src/typeorm/tbShift';
 import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
+import { ShiftService } from 'src/shift/services/shift/shift.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([tbUser, tbEmployee, tbEmpAddress,
       tbPosition, tbDepartment, tbEmpEmployment, tbEnum,
       tbCompany, tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay,
-      tbShift, tbShiftDetail]),
+      tbShift, tbShiftDetail, tbLocation]),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
@@ -56,6 +57,10 @@ import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
     {
       provide: 'DEPARTMENT_SERVICE',
       useClass: DepartmentService,
+    },
+    {
+      provide: 'SHIFT_SERVICE',
+      useClass: ShiftService,
     },
   ],
   // providers: [
