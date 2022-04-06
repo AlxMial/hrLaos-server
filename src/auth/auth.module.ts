@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { EmployeeService } from 'src/employee-module/employee/services/employee/employee.service';
 import {
   tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
   tbUser, tbEmpEmployment, tbEnum, tbCompany,
@@ -10,15 +10,14 @@ import {
 import { UsersService } from 'src/users/services/users/users.service';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { jwtConstants } from 'src/utils/constants';
 import { LocalStrategy } from './strategies/local.strategy';
-import { PositionService } from 'src/position/services/position/position.service';
-import { DepartmentService } from 'src/department/services/department/department.service';
+import { PositionService } from 'src/compony-module/position/services/position/position.service';
+import { DepartmentService } from 'src/compony-module/department/services/department/department.service';
 import { tbShift } from 'src/typeorm/tbShift';
 import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
-import { ShiftService } from 'src/shift/services/shift/shift.service';
+import { ShiftService } from 'src/time-attendance-module/shift/services/shift/shift.service';
 
 @Module({
   imports: [

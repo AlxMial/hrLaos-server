@@ -9,14 +9,14 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
 import { EncryptService } from 'src/utils/crypto';
-import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { EmployeeService } from 'src/employee-module/employee/services/employee/employee.service';
 import { UsersService } from 'src/users/services/users/users.service';
-import { CompanyService } from 'src/company/services/company/company.service';
-import { PositionService } from 'src/position/services/position/position.service';
-import { DepartmentService } from 'src/department/services/department/department.service';
+import { CompanyService } from 'src/compony-module/company/services/company/company.service';
+import { PositionService } from 'src/compony-module/position/services/position/position.service';
+import { DepartmentService } from 'src/compony-module/department/services/department/department.service';
 import { tbShift } from 'src/typeorm/tbShift';
 import { tbShiftDetail } from 'src/typeorm/tbShiftDetail';
-import { ShiftService } from 'src/shift/services/shift/shift.service';
+import { ShiftService } from 'src/time-attendance-module/shift/services/shift/shift.service';
 
 @Module({
   imports: [

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomersModule } from './customers/customers.module';
 import entities from './typeorm';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -8,17 +7,15 @@ import { PassportModule } from '@nestjs/passport';
 import { PaymentsModule } from './payments/payments.module';
 import { RegisterModule } from './register/register.module';
 import { ConfigModule } from '@nestjs/config';
-import { EmployeeModule } from './employee/employee.module';
-import { OrganizationModule } from './organization/organization.module';
-import { CompanyModule } from './company/company.module';
-import { PositionModule } from './position/position.module';
-import { DepartmentModule } from './department/department.module';
-import { ShiftModule } from './shift/shift.module';
-import { LocationModule } from './location/location.module';
+import { EmployeeModule } from './employee-module/employee/employee.module';
+import { CompanyModule } from './compony-module/company/company.module';
+import { PositionModule } from './compony-module/position/position.module';
+import { DepartmentModule } from './compony-module/department/department.module';
+import { ShiftModule } from './time-attendance-module/shift/shift.module';
+import { LocationModule } from './time-attendance-module/location/location.module';
 
 @Module({
   imports: [
-    CustomersModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: `undefined.ddns.net\\sql2019`,

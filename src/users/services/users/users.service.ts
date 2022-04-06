@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { encodePassword } from 'src/utils/bcrypt';
 import { StatusMessage } from 'src/utils/StatusMessage';
-import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { EmployeeService } from 'src/employee-module/employee/services/employee/employee.service';
 
 @Injectable()
 export class UsersService {

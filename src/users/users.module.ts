@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DepartmentService } from 'src/department/services/department/department.service';
-import { EmployeeService } from 'src/employee/services/employee/employee.service';
-import { PositionService } from 'src/position/services/position/position.service';
-import { ShiftService } from 'src/shift/services/shift/shift.service';
+import { DepartmentService } from 'src/compony-module/department/services/department/department.service';
+import { EmployeeService } from 'src/employee-module/employee/services/employee/employee.service';
+import { PositionService } from 'src/compony-module/position/services/position/position.service';
+import { ShiftService } from 'src/time-attendance-module/shift/services/shift/shift.service';
 import {
   tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
   tbUser, tbEmpEmployment, tbEnum, tbCompany, tbCompanyAddress,

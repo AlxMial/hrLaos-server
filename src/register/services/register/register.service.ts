@@ -7,12 +7,12 @@ import { CreateRegisterDto } from 'src/register/dtos/CreateRegister.dto';
 import { encodePassword } from 'src/utils/bcrypt';
 import { MailService } from '../../../mail/services/mail/mail.service';
 import { EncryptService } from 'src/utils/crypto';
-import { CreateEmployee } from 'src/employee/dtos/CreateEmployee.dto';
-import { EmployeeService } from 'src/employee/services/employee/employee.service';
+import { CreateEmployee } from 'src/employee-module/employee/dtos/CreateEmployee.dto';
+import { EmployeeService } from 'src/employee-module/employee/services/employee/employee.service';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
-import { CompanyService } from 'src/company/services/company/company.service';
-import { CreateCompany } from 'src/company/dtos/CreateCompany.dto';
+import { CompanyService } from 'src/compony-module/company/services/company/company.service';
+import { CreateCompany } from 'src/compony-module/company/dtos/CreateCompany.dto';
 import { StatusMessage } from 'src/utils/StatusMessage';
 
 @Injectable()
