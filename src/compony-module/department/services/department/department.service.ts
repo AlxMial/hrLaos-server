@@ -14,14 +14,14 @@ export class DepartmentService {
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
-  ) { }
+  ) {}
 
   async getList(params: getDto) {
     const department = this.departmentRepository;
     try {
       const depart = await this.departmentRepository.find({
         isDeleted: false,
-        companyId: params.companyId
+        companyId: params.companyId,
       });
       return StatusMessage(true, null, depart);
     } catch (e) {
@@ -34,7 +34,7 @@ export class DepartmentService {
     try {
       const depart = await this.departmentRepository.find({
         isDeleted: false,
-        id: id
+        id: id,
       });
       return StatusMessage(true, null, depart);
     } catch (e) {
@@ -49,7 +49,7 @@ export class DepartmentService {
         id: id,
         companyId: companyId,
       });
-      return StatusMessage(true, null, data);;
+      return StatusMessage(true, null, data);
     } catch (e) {
       return { message: (e as Error).message };
     }
@@ -61,7 +61,9 @@ export class DepartmentService {
     try {
       stampAudit(createDepartment);
       const newDepartment = this.departmentRepository.create(createDepartment);
-      const SaveDepartment = await this.departmentRepository.save(newDepartment);
+      const SaveDepartment = await this.departmentRepository.save(
+        newDepartment,
+      );
       return StatusMessage(true, null, SaveDepartment);
     } catch (e) {
       return StatusMessage(false, (e as Error).message, department);
@@ -72,10 +74,10 @@ export class DepartmentService {
     const department = this.departmentRepository;
     try {
       // updateDepartment = stampAudit(updateDepartment, 'update');
-      let data = await this.departmentRepository.findOne({
+      const data = await this.departmentRepository.findOne({
         isDeleted: false,
         id: updateDepartment.id,
-        companyId: updateDepartment.companyId
+        companyId: updateDepartment.companyId,
       });
       data.departmentCode = updateDepartment.departmentCode;
       data.departmentName = updateDepartment.departmentName;
@@ -98,7 +100,11 @@ export class DepartmentService {
     // try {
     for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(
-        "up_selectAllUse @SearchStr='" + data.id[i] + "',@Column='departmentId', @exceptTable='tbDepartment', @companyId='" + data.companyId + "'",
+        "up_selectAllUse @SearchStr='" +
+          data.id[i] +
+          "',@Column='departmentId', @exceptTable='tbDepartment', @companyId='" +
+          data.companyId +
+          "'",
       );
       if (result && result.length > 0) {
         return StatusMessage(false, 'data is used', department);
@@ -106,7 +112,7 @@ export class DepartmentService {
         const deleteDepartment = await this.departmentRepository.findOne({
           isDeleted: false,
           id: data.id[i],
-          companyId: data.companyId
+          companyId: data.companyId,
         });
         if (deleteDepartment) {
           stampAudit(deleteDepartment, data, 'update', true);
