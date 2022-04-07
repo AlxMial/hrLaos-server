@@ -4,10 +4,10 @@ import { tbRegister as Entity } from '../../../typeorm';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(private mailerService: MailerService) { }
 
   async sendUserConfirmation(register: Entity, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+    const url = `http://localhost:3000/confirmregister/${token}`;
 
     await this.mailerService.sendMail({
       to: register.email,
