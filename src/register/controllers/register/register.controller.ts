@@ -24,7 +24,7 @@ export class RegisterController {
     @Inject('REGISTER_SERVICE')
     private readonly registerService: RegisterService,
     private encryptService: EncryptService,
-  ) {}
+  ) { }
   @Post('create')
   @UsePipes(ValidationPipe)
   createUser(@Body() createUserDto: CreateRegisterDto) {

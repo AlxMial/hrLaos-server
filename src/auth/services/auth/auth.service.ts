@@ -50,18 +50,23 @@ export class AuthService {
       }
     }
     data.isResult = false;
-    data.message = 'User Validation Failed!';
+    data.message = 'User Validation Failed!' + ' : username: ' + username;
     return data;
   }
 
   async login(user: any) {
-    const payload = {
-      username: user.user.data.userName,
-      sub: user.user.data.id,
-    };
-    return {
-      data: user.user.data,
-      access_token: this.jwtService.sign(payload),
-    };
+    const validate = await this.validateUser(user.body.username, user.body.password);
+    if (validate.isResult) {
+      const payload = {
+        username: user.user.data.userName,
+        sub: user.user.data.id,
+      };
+      return {
+        data: user.user.data,
+        access_token: this.jwtService.sign(payload),
+      };
+    } else {
+      return validate;
+    }
   }
 }
