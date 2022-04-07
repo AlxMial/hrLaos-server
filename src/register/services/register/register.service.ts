@@ -28,7 +28,7 @@ export class RegisterService {
     private readonly employeeService: EmployeeService,
     @Inject('USER_SERVICE')
     private readonly userService: UsersService,
-  ) { }
+  ) {}
 
   private register: Register[] = [];
 
@@ -91,9 +91,7 @@ export class RegisterService {
 
   async activateRegister(data: any) {
     try {
-      const CheckRegister = await this.companyService.getByRegisterId(
-        data.id,
-      );
+      const CheckRegister = await this.companyService.getByRegisterId(data.id);
       if (CheckRegister.toString() !== '') {
         return { status: false, message: 'You have been already registered.' }; //StatusMessage(false, 'has already been registered', null);
         // return StatusMessage(false, 'You have been already registered', null);

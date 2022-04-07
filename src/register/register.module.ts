@@ -2,9 +2,19 @@ import { Module } from '@nestjs/common';
 import { RegisterController } from './controllers/register/register.controller';
 import { RegisterService } from './services/register/register.service';
 import {
-  tbDepartment, tbEmpAddress, tbEmployee, tbPosition,
-  tbRegister, tbUser, tbEmpEmployment, tbEnum,
-  tbCompany, tbCompanyAddress, tbCompanyHoliday, tbCompanyWorkingDay, tbLocation
+  tbDepartment,
+  tbEmpAddress,
+  tbEmployee,
+  tbPosition,
+  tbRegister,
+  tbUser,
+  tbEmpEmployment,
+  tbEnum,
+  tbCompany,
+  tbCompanyAddress,
+  tbCompanyHoliday,
+  tbCompanyWorkingDay,
+  tbLocation,
 } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/mail.module';
@@ -35,7 +45,7 @@ import { ShiftService } from 'src/time-attendance-module/shift/services/shift/sh
       tbCompanyWorkingDay,
       tbShift,
       tbShiftDetail,
-      tbLocation
+      tbLocation,
     ]),
     MailModule,
   ],
@@ -72,4 +82,4 @@ import { ShiftService } from 'src/time-attendance-module/shift/services/shift/sh
     EncryptService,
   ],
 })
-export class RegisterModule { }
+export class RegisterModule {}

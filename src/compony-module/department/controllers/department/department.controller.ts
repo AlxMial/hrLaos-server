@@ -22,7 +22,7 @@ export class DepartmentController {
   constructor(
     @Inject('DEPARTMENT_SERVICE')
     private readonly departmentService: DepartmentService,
-  ) { }
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('/getList/:companyId/:viewBy/:searchText')
