@@ -97,10 +97,10 @@ export class RegisterService {
         // return StatusMessage(false, 'You have been already registered', null);
       } else {
 
-        // const Update = await this.findRegisterByID(data.id);
-        // Update.activateDate = new Date();
-        // Update.isActivate = true;
-        // await this.registerRepository.save(Update);
+        const Update = await this.findRegisterByID(data.id);
+        Update.activateDate = new Date();
+        Update.isActivate = true;
+        await this.registerRepository.save(Update);
 
         const comType = await this.employeeService.getEnum('companyType');
 
