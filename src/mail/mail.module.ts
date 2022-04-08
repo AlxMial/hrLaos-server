@@ -14,11 +14,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => ({
         transport: {
-          host: 'smtp.gmail.com',
+          host: 'outlook.office365.com',
+          port: 587,
           secure: false,
           auth: {
-            user: 'undefined.hr@gmail.com',
-            pass: 'undefined@12345',
+            user: 'undefined@outlook.co.th',
+            pass: 'Definition2021',
           },
         },
         defaults: {
