@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { locationDto } from 'src/time-attendance-module/location/dtos/locationDto.dto';
 import { tbEmpEmployment, tbEmployee, tbLocation } from 'src/typeorm';
@@ -85,6 +85,17 @@ export class LocationService {
     }
 
     async create(createLocation: locationDto) {
+        const tableName = 'tbLocation';
+        const columnName = 'locationName';
+        const columnText = 'Location Name';
+        const valueCheck = createLocation.locationName;
+        const companyId = createLocation.companyId;
+        const result = await this.connection.query(
+            "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "' and companyId='" + companyId + "'",
+        );
+        if (result && result.length > 0) {
+            throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+        }
         const location = this.locationRepository;
         try {
             stampAudit(createLocation);

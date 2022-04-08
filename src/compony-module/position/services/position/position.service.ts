@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { positionDto } from 'src/compony-module/position/dtos/position.dto';
 import { tbPosition } from 'src/typeorm';
@@ -56,6 +56,17 @@ export class PositionService {
   }
 
   async create(createPosition: positionDto) {
+    const tableName = 'tbPosition';
+    const columnName = 'positionCode';
+    const columnText = 'Position Code';
+    const valueCheck = createPosition.positionCode;
+    const companyId = createPosition.companyId;
+    const result = await this.connection.query(
+      "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "' and companyId='" + companyId + "'",
+    );
+    if (result && result.length > 0) {
+      throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+    }
     const position = this.positionRepository;
     try {
       stampAudit(createPosition);

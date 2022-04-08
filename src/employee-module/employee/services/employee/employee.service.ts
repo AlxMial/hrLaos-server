@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmpAddress } from 'src/employee-module/employee/dtos/CreateEmpAddress.dto';
 import { CreateEmpEmployment } from 'src/employee-module/employee/dtos/CreateEmpEmployment.dto';
@@ -176,6 +176,17 @@ export class EmployeeService {
   }
 
   async create(createEmp: CreateEmployee) {
+    const tableName = 'tbEmployee';
+    const columnName = 'empCode';
+    const columnText = 'Emplpoyee Code';
+    const valueCheck = createEmp.empCode;
+    const companyId = createEmp.companyId;
+    const result = await this.connection.query(
+      "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "' and companyId='" + companyId + "'",
+    );
+    if (result && result.length > 0) {
+      throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+    }
     //try {
     const Image = createEmp.image;
     createEmp.image = null;

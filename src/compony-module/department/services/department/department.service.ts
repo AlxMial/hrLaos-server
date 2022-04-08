@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { departmentDto } from 'src/compony-module/department/dtos/department.dto';
 import { tbDepartment } from 'src/typeorm';
@@ -14,7 +14,7 @@ export class DepartmentService {
     @InjectRepository(tbDepartment)
     private readonly departmentRepository: Repository<tbDepartment>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async getList(params: getDto) {
     const department = this.departmentRepository;
@@ -56,6 +56,17 @@ export class DepartmentService {
   }
 
   async create(createDepartment: departmentDto) {
+    const tableName = 'tbDepartment';
+    const columnName = 'departmentCode';
+    const columnText = 'Department Code';
+    const valueCheck = createDepartment.departmentCode;
+    const companyId = createDepartment.companyId;
+    const result = await this.connection.query(
+      "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "' and companyId='" + companyId + "'",
+    );
+    if (result && result.length > 0) {
+      throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+    }
     const department = this.departmentRepository;
     // return StatusMessage(false, 'test', department);
     try {
@@ -101,10 +112,10 @@ export class DepartmentService {
     for (let i = 0; i < data.id.length; i++) {
       const result = await this.connection.query(
         "up_selectAllUse @SearchStr='" +
-          data.id[i] +
-          "',@Column='departmentId', @exceptTable='tbDepartment', @companyId='" +
-          data.companyId +
-          "'",
+        data.id[i] +
+        "',@Column='departmentId', @exceptTable='tbDepartment', @companyId='" +
+        data.companyId +
+        "'",
       );
       if (result && result.length > 0) {
         return StatusMessage(false, 'data is used', department);

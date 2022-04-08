@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { shiftDto } from 'src/time-attendance-module/shift/dtos/shiftDto.dto';
 import { shiftDetailDto } from 'src/time-attendance-module/shift/dtos/shiftDetailDto.dto';
@@ -56,6 +56,17 @@ export class ShiftService {
     }
 
     async create(createShift: shiftDto) {
+        const tableName = 'tbShift';
+        const columnName = 'shiftCode';
+        const columnText = 'Shift Code';
+        const valueCheck = createShift.shiftCode;
+        const companyId = createShift.companyId;
+        const result = await this.connection.query(
+            "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "' and companyId='" + companyId + "'",
+        );
+        if (result && result.length > 0) {
+            throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+        }
         stampAudit(createShift);
         const newShift = this.shiftRepository.create(createShift);
         const saveShift = await this.shiftRepository.save(newShift);

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCompany } from 'src/compony-module/company/dtos/CreateCompany.dto';
 import { tbCompany } from 'src/typeorm/tbCompany';
@@ -93,6 +93,16 @@ export class CompanyService {
   }
 
   async create(createCompany: CreateCompany) {
+    const tableName = 'tbCompany';
+    const columnName = 'companyName';
+    const columnText = 'Company Name';
+    const valueCheck = createCompany.companyName;
+    const result = await this.connection.query(
+      "select 1 from " + tableName + " where " + columnName + " = '" + valueCheck + "'",
+    );
+    if (result && result.length > 0) {
+      throw new HttpException(columnText + ' is already exists', HttpStatus.CREATED);
+    }
     //try {
     const Image = createCompany.image;
     createCompany.image = null;
