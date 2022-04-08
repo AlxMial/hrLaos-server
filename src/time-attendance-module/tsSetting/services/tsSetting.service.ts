@@ -140,7 +140,7 @@ export class TSSettingService {
             companyId: dataDelete.companyId
         });
         if (deleteSettingDt) {
-            stampAudit(deleteSettingDt, dataDelete, 'update', true);
+            stampAudit(deleteSettingDt, dataDelete, 'delete', true);
             const success = await this.tsSettingDtRepository.save(deleteSettingDt);
             return success;
         }
@@ -155,7 +155,7 @@ export class TSSettingService {
             companyId: dataDelete.companyId
         });
         if (deleteSetting) {
-            stampAudit(deleteSetting, dataDelete, 'update', true);
+            stampAudit(deleteSetting, dataDelete, 'delete', true);
             const success = await this.tsSettingRepository.save(deleteSetting);
             return success;
         }

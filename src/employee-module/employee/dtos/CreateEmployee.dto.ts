@@ -37,8 +37,6 @@ export class CreateEmployee {
   createdDate: Date;
   modifiedBy: number;
   modifiedDate: Date;
-
-  @IsNotEmpty()
   isDeleted: boolean;
 
   userId: number;

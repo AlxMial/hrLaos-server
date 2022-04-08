@@ -8,6 +8,6 @@ export function stampAudit(dataSave: any, data: any = dataSave, state: string = 
         dataSave.modifiedBy = data.userId;
         dataSave.modifiedDate = new Date();
     }
-    dataSave.isDeleted = isDeleted ?? false;
+    dataSave.isDeleted = state === 'delete' ? true : false;
     return dataSave
 }

@@ -130,7 +130,7 @@ export class LocationService {
             } else {
                 const deleteLocation = await this.locationRepository.findOne({ isDeleted: false, id: data.id[i], companyId: data.companyId });
                 if (deleteLocation) {
-                    stampAudit(deleteLocation, data, 'update', true);
+                    stampAudit(deleteLocation, data, 'delete', true);
                     return StatusMessage(
                         true,
                         null,

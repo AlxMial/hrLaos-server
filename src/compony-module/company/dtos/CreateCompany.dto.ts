@@ -22,7 +22,6 @@ export class CreateCompany {
   createdDate: Date;
   modifiedBy: number;
   modifiedDate: Date;
-  @IsNotEmpty()
   isDeleted: boolean;
   @IsNotEmpty()
   isActive: boolean;

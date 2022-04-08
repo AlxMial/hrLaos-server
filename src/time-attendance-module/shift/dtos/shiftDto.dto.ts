@@ -13,7 +13,6 @@ export class shiftDto {
   createdDate: Date;
   modifiedBy: number;
   modifiedDate: Date;
-  @IsNotEmpty()
   isDeleted: boolean;
   userId: number;
 

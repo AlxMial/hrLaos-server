@@ -166,7 +166,7 @@ export class CompanyService {
             isDeleted: false,
             id: data.id[i]
           });
-          stampAudit(deleteCompany, data, 'update', true);
+          stampAudit(deleteCompany, data, 'delete', true);
           return StatusMessage(
             true,
             'Successfully deleted',

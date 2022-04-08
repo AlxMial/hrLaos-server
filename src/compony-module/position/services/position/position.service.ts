@@ -111,7 +111,7 @@ export class PositionService {
             companyId: data.companyId,
           });
           if (deletePosition) {
-            stampAudit(deletePosition, data, 'update', true);
+            stampAudit(deletePosition, data, 'delete', true);
             return StatusMessage(
               true,
               null,

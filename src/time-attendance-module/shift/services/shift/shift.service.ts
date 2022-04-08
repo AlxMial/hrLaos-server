@@ -164,7 +164,7 @@ export class ShiftService {
             companyId: dataDelete.companyId
         });
         if (deleteShift) {
-            stampAudit(deleteShift, dataDelete, 'update', true);
+            stampAudit(deleteShift, dataDelete, 'delete', true);
             const success = await this.shiftRepository.save(deleteShift);
             return success;
         }

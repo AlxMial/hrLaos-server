@@ -393,7 +393,7 @@ export class EmployeeService {
       companyId: dataDelete.companyId
     });
     if (deleteAddress) {
-      stampAudit(deleteAddress, dataDelete, 'update', true);
+      stampAudit(deleteAddress, dataDelete, 'delete', true);
       const success = await this.addressRepository.save(deleteAddress);
       return success;
     }
@@ -407,7 +407,7 @@ export class EmployeeService {
       companyId: dataDelete.companyId
     });
     if (deleteEmployment) {
-      stampAudit(deleteEmployment, dataDelete, 'update', true);
+      stampAudit(deleteEmployment, dataDelete, 'delete', true);
       const success = await this.employmentRepository.save(deleteEmployment);
       return success;
     }
@@ -422,7 +422,7 @@ export class EmployeeService {
       companyId: dataDelete.companyId
     });
     if (deleteEmp) {
-      stampAudit(deleteEmp, dataDelete, 'update', true);
+      stampAudit(deleteEmp, dataDelete, 'delete', true);
       const success = await this.empRepository.save(deleteEmp);
       return success;
     }
