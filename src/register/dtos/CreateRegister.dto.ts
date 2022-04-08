@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CreateRegisterDto {
@@ -27,4 +27,6 @@ export class CreateRegisterDto {
   isActivate: boolean;
 
   activateDate: Date;
+  @Exclude()
+  clientUrl: string;
 }

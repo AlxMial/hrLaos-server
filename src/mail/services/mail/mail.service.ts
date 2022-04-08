@@ -4,10 +4,11 @@ import { tbRegister as Entity, tbUser } from '../../../typeorm';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(private mailerService: MailerService) { }
 
-  async sendUserConfirmation(register: Entity, token: string) {
-    const url = `http://localhost:3000/confirmregister/${token}`;
+  async sendUserConfirmation(clientUrl: string, register: Entity, token: string) {
+    // const url = `http://localhost:3000/confirmregister/${token}`;
+    const url = `${clientUrl}/confirmregister/${token}`;
 
     await this.mailerService.sendMail({
       to: register.email,
@@ -21,8 +22,9 @@ export class MailService {
     });
   }
 
-  async sendForgotPassword(user: tbUser, token: string) {
-    const url = `http://localhost:3000/resetPassword/${token}`;
+  async sendForgotPassword(clientUrl: string, user: tbUser, token: string) {
+    // const url = `http://localhost:3000/resetPassword/${token}`;
+    const url = `${clientUrl}/forgotpassword/${token}`;
 
     await this.mailerService.sendMail({
       to: user.email,

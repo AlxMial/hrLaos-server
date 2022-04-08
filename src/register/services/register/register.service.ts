@@ -78,7 +78,7 @@ export class RegisterService {
       });
       await this.registerRepository.save(newRegister).then((e) => {
         const token = this.encryptService.EncodeKey(e.id);
-        this.mailService.sendUserConfirmation(e, token);
+        this.mailService.sendUserConfirmation(createRegisterDto.clientUrl, e, token);
         console.log(token);
       });
       newRegister['isResult'] = true;
@@ -151,14 +151,14 @@ export class RegisterService {
     }
   }
 
-  async forgotPassword(email: string) {
+  async forgotPassword(clientUrl: string, email: string) {
     //try {
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
       return { status: false, message: 'Email is not registered.' }; //StatusMessage(false, 'Email is not registered', null);
     } else {
       const token = this.encryptService.EncodeKey(user.id);
-      this.mailService.sendForgotPassword(user, token);
+      this.mailService.sendForgotPassword(clientUrl, user, token);
       return { status: true, message: 'Please check your email.' }; //StatusMessage(true, 'Please check your email.', null);
     }
   }

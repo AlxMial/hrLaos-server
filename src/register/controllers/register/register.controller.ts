@@ -31,10 +31,11 @@ export class RegisterController {
     return this.registerService.createUser(createUserDto);
   }
 
-  @Post('forgotPassword')
-  @UsePipes(ValidationPipe)
-  forgotPassword(@Body() email: string) {
-    return this.registerService.forgotPassword(email);
+  @Get('forgotPassword/:email/:clientUrl')
+  forgotPassword(
+    @Param('email') email: any,
+    @Param('clientUrl') clientUrl: string,) {
+    return this.registerService.forgotPassword(clientUrl, email);
   }
 
   @Get('/activate/:id')

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'tbRegister' })
@@ -80,4 +81,11 @@ export class tbRegister {
     default: null,
   })
   numberOfEmp: number;
+
+  @Exclude()
+  @Column({
+    default: '',
+    length: 1000,
+  })
+  clientUrl: string;
 }
