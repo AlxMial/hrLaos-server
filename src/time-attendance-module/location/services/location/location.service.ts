@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { locationDto } from 'src/time-attendance-module/location/dtos/locationDto.dto';
-import { tbEmpEmployment, tbLocation } from 'src/typeorm';
+import { tbEmpEmployment, tbEmployee, tbLocation } from 'src/typeorm';
 import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
 import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
-import { Repository, Connection } from 'typeorm';
+import { Repository, Connection, In } from 'typeorm';
 
 @Injectable()
 export class LocationService {
@@ -15,6 +15,8 @@ export class LocationService {
         private readonly locationRepository: Repository<tbLocation>,
         @InjectRepository(tbEmpEmployment)
         private readonly employmentRepository: Repository<tbEmpEmployment>,
+        @InjectRepository(tbEmployee)
+        private readonly employeeRepository: Repository<tbEmployee>,
         private readonly connection: Connection,
     ) { }
 
@@ -46,13 +48,37 @@ export class LocationService {
                 companyId: companyId,
             });
 
-            const empLocation = await this.employmentRepository.find({
-                locationId: id,
+
+            const employementLocation = await this.employmentRepository.find({
                 companyId: companyId,
                 isDeleted: false,
+                locationId: id,
             });
 
-            return { location, empLocation };
+            // พนักงานทั้งหมดใน company [สำหรับ dropdown]
+            const allEmpLocation = await this.employeeRepository.find({
+                where: {
+                    companyId: companyId,
+                    isDeleted: false,
+                },
+                select: [
+                    'id',
+                    'empCode',
+                    'title',
+                    'titleEn',
+                    'lastName',
+                    'firstName',
+                    'nickName',
+                    'firstNameEn',
+                    'lastNameEn',
+                    'nickNameEn',
+                ],
+            });
+
+            // พนักงานที่อยู่ในสถานที่นี้
+            const empLocation = allEmpLocation.filter(e => employementLocation.some(employ => employ.empId === e.id))
+
+            return { location, allEmpLocation, empLocation };
         } catch (e) {
             return { message: (e as Error).message };
         }

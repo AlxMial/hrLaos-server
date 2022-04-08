@@ -11,7 +11,7 @@ export class CreateCompany {
   companyName: string;
   companyNameEn: string;
   @IsNotEmpty()
-  companyType: string;
+  companyType: number;
   businessType: number;
   programStartDate: Date;
   image: string;
@@ -24,20 +24,22 @@ export class CreateCompany {
   modifiedDate: Date;
   @IsNotEmpty()
   isDeleted: boolean;
+  @IsNotEmpty()
+  isActive: boolean;
   userId: number;
 
   @ValidateNested()
   @Type(() => CreateCompanyAddress)
-  @IsNotEmptyObject()
+  // @IsNotEmptyObject()
   companyAddress: CreateCompanyAddress;
 
   @ValidateNested()
   @Type(() => CreateCompanyHoliday)
-  @IsNotEmptyObject()
+  // @IsNotEmptyObject()
   companyHoliday: CreateCompanyHoliday;
 
   @ValidateNested()
   @Type(() => CreateCompanyWorkingDay)
-  @IsNotEmptyObject()
+  // @IsNotEmptyObject()
   companyWorking: CreateCompanyWorkingDay;
 }

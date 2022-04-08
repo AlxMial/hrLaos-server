@@ -16,14 +16,13 @@ export class tbCompany {
   companyCode: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
     default: '',
     length: 100,
   })
   companyName: string;
 
   @Column({
-    nullable: false,
     default: '',
     length: 100,
   })
@@ -31,74 +30,64 @@ export class tbCompany {
 
   @Column({
     nullable: false,
-    default: '',
-    length: 25,
+    default: null,
+    type: 'bigint',
   })
-  companyType: string;
+  companyType: number;
 
   @Column({
-    nullable: false,
     default: null,
     type: 'bigint',
   })
   businessType: number;
 
   @Column({
-    nullable: false,
     default: null,
   })
   programStartDate: Date;
 
   @Column({
-    nullable: false,
     default: null,
     type: 'varbinary',
   })
   image: string;
 
   @Column({
-    nullable: false,
     default: '',
     length: 25,
   })
   taxNo: string;
 
   @Column({
-    nullable: false,
     default: '',
     length: 25,
   })
   taxBranchNo: string;
 
   @Column({
-    nullable: false,
     default: null,
     type: 'bigint',
   })
   registerId: number;
 
   @Column({
-    nullable: true,
     default: null,
     type: 'bigint',
   })
   createdBy: number;
 
   @Column({
-    nullable: true,
     default: null,
   })
   createdDate: Date;
 
   @Column({
-    nullable: true,
     default: null,
     type: 'bigint',
   })
   modifiedBy: number;
 
   @Column({
-    nullable: true,
     default: null,
   })
   modifiedDate: Date;
@@ -108,4 +97,10 @@ export class tbCompany {
     default: false,
   })
   isDeleted: boolean;
+
+  @Column({
+    nullable: false,
+    default: false,
+  })
+  isActive: boolean;
 }

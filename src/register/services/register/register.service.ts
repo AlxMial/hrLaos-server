@@ -28,7 +28,7 @@ export class RegisterService {
     private readonly employeeService: EmployeeService,
     @Inject('USER_SERVICE')
     private readonly userService: UsersService,
-  ) {}
+  ) { }
 
   private register: Register[] = [];
 
@@ -96,18 +96,28 @@ export class RegisterService {
         return { status: false, message: 'You have been already registered.' }; //StatusMessage(false, 'has already been registered', null);
         // return StatusMessage(false, 'You have been already registered', null);
       } else {
-        const Update = await this.findRegisterByID(data.id);
-        Update.activateDate = new Date();
-        Update.isActivate = true;
-        await this.registerRepository.save(Update);
+
+        // const Update = await this.findRegisterByID(data.id);
+        // Update.activateDate = new Date();
+        // Update.isActivate = true;
+        // await this.registerRepository.save(Update);
+
+        const comType = await this.employeeService.getEnum('companyType');
 
         const createOrg = new CreateCompany();
         createOrg.registerId = data.id;
         createOrg.isDeleted = false;
+        createOrg.isActive = true;
+        createOrg.companyCode = data.companyName;
         createOrg.companyName = data.companyName;
-        createOrg.companyType = '1';
+        createOrg.companyType = comType.filter((e) => e.name === 'headOffice')[0].id;
         createOrg.programStartDate = data.registerDate;
         createOrg.createdDate = new Date();
+        createOrg.createdBy = data.userId;
+        createOrg.modifiedBy = data.userId;
+        createOrg.modifiedDate = new Date();
+        createOrg.image = '';
+        createOrg.userId = null;
         const org = await this.companyService.create(createOrg);
 
         const createEmp = new CreateEmployee();
@@ -130,7 +140,7 @@ export class RegisterService {
         createUser.isDeleted = false;
         createUser.createdDate = new Date();
         const user = await this.userService.createUserActivate(createUser);
-        // return StatusMessage(true, 'Confirmation register successfully.', null);
+
         return {
           status: true,
           message: 'Confirmation register is successfully.',
@@ -138,6 +148,18 @@ export class RegisterService {
       }
     } catch (e) {
       return StatusMessage(false, (e as Error).message, null);
+    }
+  }
+
+  async forgotPassword(email: string) {
+    //try {
+    const user = await this.userService.findUserByEmail(email);
+    if (!user) {
+      return { status: false, message: 'Email is not registered.' }; //StatusMessage(false, 'Email is not registered', null);
+    } else {
+      const token = this.encryptService.EncodeKey(user.id);
+      this.mailService.sendForgotPassword(user, token);
+      return { status: true, message: 'Please check your email.' }; //StatusMessage(true, 'Please check your email.', null);
     }
   }
 }

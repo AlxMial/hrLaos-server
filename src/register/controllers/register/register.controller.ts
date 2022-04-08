@@ -31,6 +31,12 @@ export class RegisterController {
     return this.registerService.createUser(createUserDto);
   }
 
+  @Post('forgotPassword')
+  @UsePipes(ValidationPipe)
+  forgotPassword(@Body() email: string) {
+    return this.registerService.forgotPassword(email);
+  }
+
   @Get('/activate/:id')
   async activeRegister(@Param('id') id: any) {
     const Register = await this.registerService.findRegisterByID(
