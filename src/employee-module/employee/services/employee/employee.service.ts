@@ -340,6 +340,12 @@ export class EmployeeService {
     data.identityExpire = updateEmp.identityExpire;
     data.passportNo = updateEmp.passportNo;
     data.passportExpire = updateEmp.passportExpire;
+    data.phone = updateEmp.phone;
+    data.email = updateEmp.email;
+    data.lineId = updateEmp.lineId;
+    data.emergencyName = updateEmp.emergencyName;
+    data.emergencyRelate = updateEmp.emergencyRelate;
+    data.emergencyPhone = updateEmp.emergencyPhone;
     stampAudit(data, updateEmp, 'update');
     const employee = await this.empRepository.save(data);
     //Address

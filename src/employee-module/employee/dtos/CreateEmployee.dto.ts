@@ -23,6 +23,12 @@ export class CreateEmployee {
   identityExpire: Date;
   passportNo: string;
   passportExpire: Date;
+  phone: string;
+  email: string;
+  lineId: string;
+  emergencyName: string;
+  emergencyRelate: string;
+  emergencyPhone: string;
 
   @IsNotEmpty()
   companyId: number;

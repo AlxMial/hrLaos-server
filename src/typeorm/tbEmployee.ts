@@ -128,6 +128,48 @@ export class tbEmployee {
   passportExpire: Date;
 
   @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  phone: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  email: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  lineId: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  emergencyName: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  emergencyRelate: string;
+
+  @Column({
+    nullable: true,
+    default: '',
+    length: 100,
+  })
+  emergencyPhone: string;
+
+  @Column({
     nullable: false,
     default: null,
     type: 'bigint',
