@@ -23,7 +23,7 @@ export class tbPosition {
   positionName: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
     default: '',
     length: 50,
   })
@@ -37,14 +37,12 @@ export class tbPosition {
   mainPositionId: number;
 
   @Column({
-    nullable: false,
     default: '',
     length: 500,
   })
   description: string;
 
   @Column({
-    nullable: false,
     default: '',
     length: 500,
   })

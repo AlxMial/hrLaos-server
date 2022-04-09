@@ -23,7 +23,6 @@ export class tbDepartment {
   departmentName: string;
 
   @Column({
-    nullable: false,
     default: '',
     length: 50,
   })
@@ -37,7 +36,6 @@ export class tbDepartment {
   mainDepartmentId: number;
 
   @Column({
-    nullable: false,
     default: '',
     length: 500,
   })

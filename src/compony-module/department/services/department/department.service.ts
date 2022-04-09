@@ -6,7 +6,7 @@ import { deleteDto } from 'src/typeorm/dtos/deleteDto.dto';
 import { getDto } from 'src/typeorm/dtos/getDto.dto';
 import { stampAudit } from 'src/utils/stamp-audit';
 import { StatusMessage } from 'src/utils/StatusMessage';
-import { Repository, Connection } from 'typeorm';
+import { Repository, Connection, Not } from 'typeorm';
 
 @Injectable()
 export class DepartmentService {
@@ -49,7 +49,13 @@ export class DepartmentService {
         id: id,
         companyId: companyId,
       });
-      return StatusMessage(true, null, data);
+
+      const main = await this.departmentRepository.find({
+        isDeleted: false,
+        id: Not(id),
+        companyId: companyId,
+      });
+      return { data, main }
     } catch (e) {
       return { message: (e as Error).message };
     }
