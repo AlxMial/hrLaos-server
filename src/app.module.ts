@@ -45,9 +45,9 @@ import { TSSettingModule } from './time-attendance-module/tsSetting/tsSetting.mo
     DepartmentModule,
     ShiftModule,
     LocationModule,
-    TSSettingModule
+    TSSettingModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
